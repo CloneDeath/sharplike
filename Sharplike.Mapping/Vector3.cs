@@ -140,6 +140,11 @@ namespace Sharplike.Mapping
 			return (this.x == other.x && this.y == other.y && this.z == other.z);
 		}
 
+		public override int GetHashCode()
+		{
+			return (x << 22) + (y << 11) + (z << 0);
+		}
+
 		public bool IntersectsWith(Rectangle r)
 		{
 			return this.x >= r.Left && this.x < r.Right && this.y >= r.Top && this.y < r.Bottom;

@@ -1,0 +1,5 @@
+bin
+obj
+StyleCop.Cache
+Thumbs.db
+*.suo
