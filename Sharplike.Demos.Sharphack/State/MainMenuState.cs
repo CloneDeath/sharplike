@@ -57,8 +57,13 @@ namespace Sharplike.Demos.Sharphack.State
 
 		protected override void CommandTriggered(InputSystem.CommandEventArgs e)
 		{
-			if (e.CommandData.Command == "new_game") {
-				Console.WriteLine("New Game!");
+			switch (e.CommandData.Command) {
+				case "new_game":
+					this.StateMachine.PushState(new DungeonState());
+					break;
+				case "quit":
+					this.StateMachine.PopState();
+					break;
 			}
 		}
 	}
