@@ -78,6 +78,12 @@
     <Compile Include="Rendering\TKWindow.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sharplike.Core\Sharplike.Core.csproj">
+      <Project>{564891ED-C475-48C7-99F9-F3801C06EB14}</Project>
+      <Name>Sharplike.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
     <EmbeddedResource Include="FrontendTK.addin">
       <SubType>Designer</SubType>
     </EmbeddedResource>
