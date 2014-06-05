@@ -19,21 +19,37 @@ namespace Sharplike.Demos.Sharphack.State
 
 		Window dialogBox;
 
-		public MainMenuState()
-			: base()
+		public MainMenuState() : base()
 		{
 			Window = Game.RenderSystem.Window;
 
-			dialogBox = new Window(new Size(40, 40), new Point(30, 5));
+			dialogBox = new Window(Window);
+			dialogBox.Size = Window.Size;
+			dialogBox.Title = "New Character";
 			dialogBox.Style = BorderStyle.Double;
 			dialogBox.ForegroundColor = Color.DarkGray;
 
-			Window.AddRegion(dialogBox);
+			Label lbl = new Label("[N]ew Game", dialogBox);
+			lbl.Location = new Point(1, 1);
+			lbl.Text = "[N]ew Game";
+			lbl.Color = Color.Yellow;
+		}
+
+		protected override void StateStarted()
+		{
+			Game.InputSystem.CommandSetKey = "MainMenu";
+
+			base.StateStarted();
 		}
 
 		protected override void GameLoopTick(Core.Runtime.AbstractGameLoop loop)
 		{
 			Window.InvalidateTiles();
+		}
+
+		protected override void CommandTriggered(InputSystem.CommandEventArgs e)
+		{
+			base.CommandTriggered(e);
 		}
 	}
 }

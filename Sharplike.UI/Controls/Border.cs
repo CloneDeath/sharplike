@@ -29,8 +29,7 @@ namespace Sharplike.UI.Controls
 
     public class Border : AbstractRegion
     {
-        public Border(Size extents, Point location)
-            : base(extents, location)
+        public Border(AbstractRegion parent) : base(parent)
         {
             Draw();
 			this.Resize += new EmptyDelegate(Border_Resize);

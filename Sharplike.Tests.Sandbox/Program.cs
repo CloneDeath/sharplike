@@ -69,7 +69,7 @@ namespace Sharplike.Tests.Sandbox
 
 			gwin.Clear();
 
-			map = new MapStack(Game.RenderSystem.Window.WindowSize, 20, 15, "SandboxMap");
+			map = new MapStack(Game.RenderSystem.Window.WindowSize, 20, 15, "SandboxMap", gwin);
 			map.AddPage(new YellowWallPage(map.PageSize), new Vector3(0, 0, 0));
 			map.AddPage(new YellowWallPage(map.PageSize), new Vector3(1, 0, 0));
 			map.AddPage(new YellowWallPage(map.PageSize), new Vector3(0, 1, 0));
@@ -84,17 +84,16 @@ namespace Sharplike.Tests.Sandbox
 			ent.Location = new Vector3(2, 2, 0);
 			ent.Map = map;
 
-
-			gwin.AddRegion(map);
-
-			Sharplike.UI.Controls.Label l = new UI.Controls.Label(new Size(50, 1), new Point(0, 0));
+			Sharplike.UI.Controls.Label l = new UI.Controls.Label(map);
+			l.Size = new Size(50, 1);
+			l.Location = new Point(0, 0);
 			l.Text = "Label on the map.";
-			map.AddRegion(l);
 
-            Sharplike.UI.Controls.Window win = new UI.Controls.Window(new Size(20, 10), new Point(5, 5));
+            Sharplike.UI.Controls.Window win = new UI.Controls.Window(map);
+			win.Size = new Size(20, 10);
+			win.Location = new Point(5, 5);
             win.Title = "Dialog Window";
 			win.BackgroundColor = Color.FromArgb(100, 0, 0, 200);
-            map.AddRegion(win);
 
 			Game.OnGameInitialization += new EventHandler<EventArgs>(game_OnGameInitialization);
 			Game.GameProcessing += new EventHandler<EventArgs>(game_GameProcessing);

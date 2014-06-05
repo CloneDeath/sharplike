@@ -62,31 +62,31 @@ namespace Sharplike.Core.Input
 			System.StartCommand(cmd);
         }
 
-		protected void MouseUp(Keys k, Point screenCoords, Point tileCoords,
+		protected void MouseUp(Keys key, Point screenCoords, Point tileCoords,
 			Boolean shift, Boolean control, Boolean alt)
         {
 			if (shift)
-				k = k | Keys.Shift;
+				key = key | Keys.Shift;
 			if (control)
-				k = k | Keys.Control;
+				key = key | Keys.Control;
 			if (alt)
-				k = k | Keys.Alt;
+				key = key | Keys.Alt;
 
-			CommandData cmd = System.rootcstate.GetCommand(k, System.CommandSetKey, true);
+			CommandData cmd = System.rootcstate.GetCommand(key, System.CommandSetKey, true);
 			System.EndCommand(cmd);
         }
 
-		protected void MouseWheel(Keys k, Point screenCoords, Point tileCoords,
+		protected void MouseWheel(Keys key, Point screenCoords, Point tileCoords,
 			Boolean shift, Boolean control, Boolean alt)
 		{
 			if (shift)
-				k = k | Keys.Shift;
+				key = key | Keys.Shift;
 			if (control)
-				k = k | Keys.Control;
+				key = key | Keys.Control;
 			if (alt)
-				k = k | Keys.Alt;
+				key = key | Keys.Alt;
 
-			CommandData cmd = System.rootcstate.GetCommand(k, System.CommandSetKey, true);
+			CommandData cmd = System.rootcstate.GetCommand(key, System.CommandSetKey, true);
 			System.StartCommand(cmd);
 			System.EndCommand(cmd);
 		}

@@ -85,21 +85,25 @@ namespace Sharplike.Core.Rendering
             }
         }
 
-		[NonSerialized]
-        private AbstractRegion parent;
-        public AbstractRegion Parent
-        {
-            get { return this.parent; }
-        }
+		public AbstractRegion Parent
+		{
+			get;
+			private set;
+		}
 
 		[NonSerialized]
         private SortedDictionary<Int32, AbstractRegion> childRegions = new SortedDictionary<int,AbstractRegion>();
 
-        public AbstractRegion(Size size, Point location)
+        public AbstractRegion(AbstractRegion parent)
         {
             this.ZOrder = 0;
-            this.Size = size;
-            this.Location = location;
+            this.Size = new Size(10, 10);
+            this.Location = new Point(0, 0);
+			this.RegionAnchor = Anchor.Top | Anchor.Left;
+
+			if (parent != null) {
+				parent.AddRegion(this);
+			}
         }
 
 
@@ -144,9 +148,9 @@ namespace Sharplike.Core.Rendering
 				child.Size = new Size(childwidth, childheight);
 			}
 
-            if (parent != null)
+            if (Parent != null)
             {
-                parent.InvalidateTiles(new Rectangle(this.location,
+                Parent.InvalidateTiles(new Rectangle(this.location,
                     new Size(Math.Max(this.Size.Width, dimensions.Width),
                         Math.Max(this.Size.Height, dimensions.Height))));
             }
@@ -179,7 +183,7 @@ namespace Sharplike.Core.Rendering
         {
             InvalidateTiles();
             this.location = newLocation;
-            parent.InvalidateTiles(new Rectangle(this.location, this.size));
+            Parent.InvalidateTiles(new Rectangle(this.location, this.size));
         }
 
         /// <summary>
@@ -242,7 +246,7 @@ namespace Sharplike.Core.Rendering
         /// <param name="zOrder">The ZOrder of the new region.</param>
         public void AddRegion(AbstractRegion childRegion, Int32 zOrder)
         {
-            AbstractRegion oldP = this.parent;
+            AbstractRegion oldP = this.Parent;
             if (childRegion.Parent != null)
                 childRegion.Parent.RemoveRegion(childRegion);
 
@@ -250,10 +254,10 @@ namespace Sharplike.Core.Rendering
             if (this.ChildRegionAdded != null)
                 this.ChildRegionAdded(childRegion);
 
-            childRegion.parent = this;
+            childRegion.Parent = this;
 
             if (this.Reparent != null)
-                this.Reparent(oldP, this.parent);
+                this.Reparent(oldP, this.Parent);
 
             InvalidateTiles(new Rectangle(childRegion.Location, childRegion.Size));
         }
@@ -314,7 +318,7 @@ namespace Sharplike.Core.Rendering
                     {
                         r.InvalidateTiles();
                         this.childRegions.Remove(i);
-                        r.parent = null;
+                        r.Parent = null;
                         if (this.ChildRegionRemoved != null)
                             this.ChildRegionRemoved(r);
                         return true;
@@ -374,7 +378,7 @@ namespace Sharplike.Core.Rendering
         }
 
 		/// <summary>
-		/// Gets or sets the region's anchor setting within it's parent region.
+		/// Gets or sets the region's anchor setting within its parent region.
 		/// </summary>
 		public Anchor RegionAnchor
 		{
@@ -412,8 +416,8 @@ namespace Sharplike.Core.Rendering
 
         public virtual void Dispose()
         {
-            if (parent != null)
-                parent.RemoveRegion(this);
+            if (Parent != null)
+                Parent.RemoveRegion(this);
             SortedDictionary<int, AbstractRegion> children = new SortedDictionary<int, AbstractRegion>(childRegions);
             foreach (KeyValuePair<int, AbstractRegion> r in children)
                 RemoveRegion(r.Value);

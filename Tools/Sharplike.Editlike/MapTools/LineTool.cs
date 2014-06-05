@@ -44,10 +44,10 @@ namespace Sharplike.Editlike.MapTools
 
 		public void Start(Point tile)
 		{
-			region = new EmptyControl(form.Map.Size, new Point(0,0));
-			change = new SquareChange(form.Map);
+			region = new EmptyControl(form.Map);
+			region.Size = form.Map.Size;
 
-			form.Map.AddRegion(region);
+			change = new SquareChange(form.Map);
 
 			start = oldend = tile;
 		}

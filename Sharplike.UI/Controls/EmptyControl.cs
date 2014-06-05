@@ -21,8 +21,7 @@ namespace Sharplike.UI.Controls
 {
     public class EmptyControl : AbstractRegion
     {
-        public EmptyControl(Size extents, Point location)
-            : base(extents, location)
+        public EmptyControl(AbstractRegion parent) : base(parent)
         {
         }
     }

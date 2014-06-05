@@ -159,7 +159,7 @@ namespace Sharplike.Editlike
 
 			window.Clear();
 
-			ReplaceMap(new MapStack(window.Size, 20, 15, "EditorMap"));
+			ReplaceMap(new MapStack(window.Size, 20, 15, "EditorMap", null));
 			Map.ViewFrom(new Vector3(0, 0, 0), true);
 
 			Bitmap glyphs = Game.RenderSystem.Window.GlyphPalette.SourceBitmap;
@@ -355,7 +355,7 @@ namespace Sharplike.Editlike
 
 		private void newToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			ReplaceMap(new MapStack(window.Size, 20, 15, "EditorMap"));
+			ReplaceMap(new MapStack(window.Size, 20, 15, "EditorMap", null));
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)

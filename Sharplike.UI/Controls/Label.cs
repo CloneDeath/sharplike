@@ -21,10 +21,15 @@ namespace Sharplike.UI.Controls
 {
     public class Label : AbstractRegion
     {
-        public Label(Size extents, Point location)
-            : base(extents, location)
+        public Label(AbstractRegion parent): base(parent)
         {
         }
+
+		public Label(string text, AbstractRegion parent) : base(parent)
+		{
+			this.Text = text;
+			this.Size = new Size(this.Text.Length, 1);
+		}
 
         public void SetText(String text)
         {

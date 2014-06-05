@@ -26,6 +26,10 @@ namespace Sharplike.Core.Rendering
 		{
 			return CreateWindow(displayDimensions, palette, null);
 		}
+
+		/// <summary>
+		/// Primary window for the renderer.
+		/// </summary>
         public abstract AbstractWindow Window
         {
             get;

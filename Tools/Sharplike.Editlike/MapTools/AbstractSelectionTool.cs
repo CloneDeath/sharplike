@@ -51,12 +51,13 @@ namespace Sharplike.Editlike.MapTools
 
 		public virtual void SetActive(Main screen, string tag)
 		{
-			border = new Border(new Size(1, 1), new Point(0, 0));
+			form = screen;
+
+			border = new Border(form.Map);
+			border.Size = new Size(1, 1);
+			border.Location = new Point(0, 0);
 			border.BackgroundColor = Color.Transparent;
 			border.ForegroundColor = Color.Transparent;
-
-			form = screen;
-			form.Map.AddRegion(border);
 		}
 
 		public virtual void SetInactive()

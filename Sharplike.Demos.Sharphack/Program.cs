@@ -14,7 +14,6 @@ namespace Sharplike.Demos.Sharphack
 	class Program
 	{
 		public static Size WindowSize = new Size(120, 40);
-		public static Size WindowDimensions;
 
 		[STAThread]
 		static void Main(String[] args)
@@ -30,7 +29,7 @@ namespace Sharplike.Demos.Sharphack
 				GlyphPalette glyphPalette = new GlyphPalette(imgStream, 16, 16);
 
 				// the size, in pixels, of the game window
-				WindowDimensions = new Size(glyphPalette.GlyphDimensions.Width * WindowSize.Width,
+				Size WindowDimensions = new Size(glyphPalette.GlyphDimensions.Width * WindowSize.Width,
 												 glyphPalette.GlyphDimensions.Height * WindowSize.Height);
 #if !DEBUG
 				try
@@ -39,7 +38,7 @@ namespace Sharplike.Demos.Sharphack
 					Game.SetRenderSystem("OpenTK"); // no other render systems exist
 					gameWindow = Game.RenderSystem.CreateWindow(WindowDimensions, glyphPalette);
 					Game.SetInputSystem("OpenTK");
-//					Game.SetAudioSystem("OpenTK"); // audio still has trouble starting
+					// Game.SetAudioSystem("OpenTK"); // audio still has trouble starting
 #if !DEBUG
 				}
 				catch (NullReferenceException e)

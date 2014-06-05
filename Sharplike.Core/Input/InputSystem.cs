@@ -271,20 +271,17 @@ namespace Sharplike.Core.Input
 
         Dictionary<String, Timer> keytimers = new Dictionary<String, Timer>();
 
-        public delegate void CommandTriggeredEventHandler(object sender, CommandEventArgs e);
 		/// <summary>
 		/// Invoked when a command first reaches the InputSystem (analogous to the
 		/// WinForms KeyPress event).
 		/// </summary>
         public event EventHandler<CommandEventArgs> CommandTriggered;
 
-        public delegate void CommandStartedEventHandler(object sender, CommandEventArgs e);
 		/// <summary>
 		/// Invoked when a command begins (analogous to the WinForms KeyDown event).
 		/// </summary>
         public event EventHandler<CommandEventArgs> CommandStarted;
 
-        public delegate void CommandEndedEventHandler(object sender, CommandEventArgs e);
 		/// <summary>
 		/// Invoked when a command begins (analogous to the WinForms KeyDown event).
 		/// </summary>

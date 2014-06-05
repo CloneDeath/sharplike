@@ -66,10 +66,11 @@ namespace Sharplike.Core.Rendering
 		/// <param name="palette">
 		/// The GlyphPalette for the Window.
 		/// </param>
-		public AbstractWindow(Size displayDimensions, GlyphPalette palette)
-            : base(new Size(displayDimensions.Width / palette.GlyphDimensions.Width, 
-                displayDimensions.Height / palette.GlyphDimensions.Height), new Point(0, 0))
+		public AbstractWindow(Size displayDimensions, GlyphPalette palette) : base(null)
 		{
+			this.Size = new Size(displayDimensions.Width / palette.GlyphDimensions.Width, 
+			    displayDimensions.Height / palette.GlyphDimensions.Height);
+			
 			this.GlyphPalette = palette;
 			this.WindowSize = displayDimensions;
 
@@ -79,7 +80,7 @@ namespace Sharplike.Core.Rendering
 				for (Int32 y = 0; y < this.Size.Height; y++)
 				{
 					this.tiles[x, y] = new DisplayTile(this.GlyphPalette, this, new Point(x, y));
-                    this.tiles[x, y].MakeStackDirty();
+					this.tiles[x, y].MakeStackDirty();
 				}
 			}
 		}

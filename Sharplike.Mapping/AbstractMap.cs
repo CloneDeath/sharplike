@@ -36,8 +36,7 @@ namespace Sharplike.Mapping
 
 		private IScheduler scheduler;
 
-		public AbstractMap(Size displayRegionSize, Vector3 pageSize, string Name)
-            : base(displayRegionSize, new Point(0,0))
+		public AbstractMap(Vector3 pageSize, string Name, AbstractRegion parent) : base(parent)
 		{
 			this.pageSize = pageSize;
 			this.Name = Name;
