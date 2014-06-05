@@ -29,10 +29,18 @@ namespace Sharplike.Demos.Sharphack.State
 			dialogBox.Style = BorderStyle.Double;
 			dialogBox.ForegroundColor = Color.DarkGray;
 
-			Label lbl = new Label("[N]ew Game", dialogBox);
-			lbl.Location = new Point(1, 1);
-			lbl.Text = "[N]ew Game";
-			lbl.Color = Color.Yellow;
+			Label welcome = new Label(dialogBox);
+			welcome.Text = "Welcome to Sharphack, where is ale is sharp, and the swords are strong.";
+			welcome.Location = new Point(2, 2);
+			welcome.Size = new Size(dialogBox.Size.Width - 4, 5);
+
+			Label lblNewGame = new Label("[N]ew Game", dialogBox);
+			lblNewGame.Location = new Point(2, 8);
+			lblNewGame.Color = Color.Yellow;
+
+			Label lblQuit = new Label("[Q]uit Game", dialogBox);
+			lblQuit.Location = new Point(2, 9);
+			lblQuit.Color = Color.Yellow;
 		}
 
 		protected override void StateStarted()
@@ -49,7 +57,9 @@ namespace Sharplike.Demos.Sharphack.State
 
 		protected override void CommandTriggered(InputSystem.CommandEventArgs e)
 		{
-			base.CommandTriggered(e);
+			if (e.CommandData.Command == "new_game") {
+				Console.WriteLine("New Game!");
+			}
 		}
 	}
 }

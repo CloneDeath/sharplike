@@ -34,7 +34,7 @@ namespace Sharplike.Tests.Sandbox
 		static ZColdCachingAlgorithm cache;
 
 
-		[STAThread]
+		//[STAThread]
 		static void Main()
 		{
 
@@ -166,8 +166,10 @@ namespace Sharplike.Tests.Sandbox
 						cameraMoved = true;
 						break;
 					case "spacebar":
-						ent.Dispose();
-						ent = null;
+						if (ent != null) {
+							ent.Dispose();
+							ent = null;
+						}
 						break;
 				}
 			} while (cmd.Command != "quit");

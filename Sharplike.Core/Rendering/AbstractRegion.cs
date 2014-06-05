@@ -41,6 +41,7 @@ namespace Sharplike.Core.Rendering
             set
 			{
 				InvalidateTiles();
+				this.AutoSizeToContents = false;
                 this.ResizeRegion(value);
                 size = value;
                 if (this.Resize != null)
@@ -48,6 +49,8 @@ namespace Sharplike.Core.Rendering
 				InvalidateTiles();
             }
         }
+
+		public bool AutoSizeToContents { get; set; }
 
 		[NonSerialized]
         private Point location;
@@ -96,6 +99,7 @@ namespace Sharplike.Core.Rendering
 
         public AbstractRegion(AbstractRegion parent)
         {
+			this.AutoSizeToContents = false;
             this.ZOrder = 0;
             this.Size = new Size(10, 10);
             this.Location = new Point(0, 0);

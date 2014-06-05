@@ -70,8 +70,10 @@ namespace Sharplike.Core.Runtime
 
 		private CommandData DoWait()
 		{
-			while (lastcommands.Count == 0)
+			while (lastcommands.Count == 0) {
 				Game.Process();
+				Application.DoEvents();
+			}
 			return lastcommands.Dequeue();
 		}
         

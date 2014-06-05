@@ -23,12 +23,13 @@ namespace Sharplike.UI.Controls
     {
         public Label(AbstractRegion parent): base(parent)
         {
+			this.AutoSizeToContents = true;
         }
 
 		public Label(string text, AbstractRegion parent) : base(parent)
 		{
+			this.AutoSizeToContents = true;
 			this.Text = text;
-			this.Size = new Size(this.Text.Length, 1);
 		}
 
         public void SetText(String text)
@@ -37,14 +38,26 @@ namespace Sharplike.UI.Controls
             int y = 0;
             foreach (String line in Wrap(text))
             {
-                if (y > this.Size.Height - 1)
-                    break;
+				if (y > this.Size.Height - 1) {
+					if (this.AutoSizeToContents == false) {
+						break;
+					} else {
+						this.Size = new Size(this.Size.Width, this.Size.Height + 1);
+						this.AutoSizeToContents = true;
+					}
+				}
 
                 int x = 0;
                 foreach (char c in line)
                 {
-                    if (x > this.Size.Width - 1)
-                        break;
+					if (x > this.Size.Width - 1) {
+						if (this.AutoSizeToContents == false) {
+							break;
+						} else {
+							this.Size = new Size(this.Size.Width + 1, this.Size.Height);
+							this.AutoSizeToContents = true;
+						}
+					}
                     RegionTile tile = this.RegionTiles[x, y];
                     tile.ClearGlyphs();
                     tile.AddGlyph((int)c, Color, Background);

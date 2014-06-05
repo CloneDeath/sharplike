@@ -38,6 +38,7 @@ namespace Sharplike.Core.Scheduling
 		static void RunTask(Object data)
 		{
 			((ThreadTask)data).Task.ScheduledAction();
+			((ThreadTask)data).DoneEvent.Set();
 		}
 	}
 }
