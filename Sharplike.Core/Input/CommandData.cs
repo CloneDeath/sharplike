@@ -13,11 +13,7 @@ namespace Sharplike.Core.Input
 		/// The invoked command.
 		/// </summary>
 		public readonly String Command;
-		/// <summary>
-		/// Set to True if the command is a valid mouse event. If False,
-		/// ScreenCoordinates and TileCoordinates will not hold meaningful data.
-		/// </summary>
-		public readonly Boolean IsMouseEvent;
+
 		/// <summary>
 		/// The point on screen where the mouse command occurred.
 		/// </summary>
@@ -25,9 +21,10 @@ namespace Sharplike.Core.Input
         {
             get
             {
-                return Game.InputSystem.GetMousePosition();
+                return Game.InputSystem.Input.MousePosition;
             }
         }
+
 		/// <summary>
 		/// The screen tile on which the mouse command occurred.
 		/// </summary>
@@ -45,23 +42,16 @@ namespace Sharplike.Core.Input
 		public CommandData(String command)
 		{
 			this.Command = command;
-			this.IsMouseEvent = false;
-		}
-		public CommandData(String command, Boolean isMouseEvent)
-		{
-			this.Command = command;
-			this.IsMouseEvent = isMouseEvent;
 		}
 
 		public override string ToString()
 		{
 			String str = "CommandData: { " + this.Command;
-			if (this.IsMouseEvent)
-			{
-				str += " (mouse) ";
-				str += "TileXY: " + this.TileCoordinates.ToString() + " ";
-				str += "ScreenXY: " + this.ScreenCoordinates.ToString();
-			}
+			//{
+			//    str += " (mouse) ";
+			//    str += "TileXY: " + this.TileCoordinates.ToString() + " ";
+			//    str += "ScreenXY: " + this.ScreenCoordinates.ToString();
+			//}
 			str += " }";
 			return str;
 		}

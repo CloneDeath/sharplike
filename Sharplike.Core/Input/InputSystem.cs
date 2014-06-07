@@ -12,28 +12,77 @@ namespace Sharplike.Core.Input
 {
     public sealed class InputSystem
     {
-        internal InputSystem()
-        {
-        }
+		internal Dictionary<String, String> winEvents = new Dictionary<string, string>();
+		public CommandBroker Command { get; private set; }
+		public InputManager Input { get; private set; }
 
-        /// <summary>
-        /// Clears all current control bindings.
-        /// </summary>
-        public void ClearBindings()
-        {
-            rootcstate = new ControlState();
-        }
+		private AbstractInputProvider _provider;
+		public AbstractInputProvider Provider
+		{
+			get
+			{
+				return _provider;
+			}
+			internal set
+			{
+				_provider = value;
+				Command.InputProvider = value;
+				Input.InputProvider = value;
+			}
+		}
 
-        #region Load/Save Helpers
+		
+        internal InputSystem() {
+			Command = new CommandBroker();
+			Input = new InputManager();
+		}
+
         /// <summary>
         /// Loads control bindings from a specified path.
         /// </summary>
         /// <param name="filename">The path to load from. Note: This does NOT automatically use Game.PathTo()</param>
         public void LoadConfiguration(String filename)
         {
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
-                LoadConfiguration(fs);
+			using (FileStream fs = new FileStream(filename, FileMode.Open)) {
+				using (IniReader r = new IniReader(fs)) {
+					while (true) {
+						if (r.Type != IniType.Section) {
+							if (!r.MoveToNextSection())
+								break;
+						}
+						String[] parts = r.Name.Split(' ');
+						if (parts[0] == "KeyBindings") {
+							if (parts.Length > 1) {
+								CommandControls cs = Command.commands.GetChild(parts[1], true);
+								cs.ReadIni(r);
+							} else {
+								Command.commands.ReadIni(r);
+							}
+						}
+						/*else if (parts[0] == "MouseButtons")
+						{
+						}*/
+						else if (parts[0] == "WindowEvents") {
+							while (r.Read()) {
+								if (r.Type == IniType.Section)
+									break;
+
+								if (r.Type == IniType.Key)
+									winEvents[r.Name] = r.Value;
+							}
+						} else
+							r.MoveToNextSection();
+					}
+				}
+			}
         }
+
+		internal void Update()
+		{
+			Input.Update();
+
+			Provider.Poll();
+		}
 
         /// <summary>
         /// Saves the current control bindings to a path on the filesystem.
@@ -41,176 +90,13 @@ namespace Sharplike.Core.Input
         /// <param name="filename">The location of the file to write to. NOTE: This does NOT automatically use Game.PathTo()</param>
         public void SaveConfiguration(String filename)
         {
-            using (FileStream fs = new FileStream(filename, FileMode.Create))
-                SaveConfiguration(fs);
-        }
-        #endregion
-
-        #region Load/Save
-        /// <summary>
-        /// Load control bindings from an arbitrary stream.
-        /// If there are already bindings, the new ones will be added.
-        /// New bindings overwrite old bindings.
-        /// </summary>
-        /// <param name="file">The source of the INI data</param>
-        public void LoadConfiguration(Stream file)
-        {
-            using (IniReader r = new IniReader(file))
-            {
-                while (true)
-                {
-                    if (r.Type != IniType.Section)
-                    {
-                        if (!r.MoveToNextSection())
-                            break;
-                    }
-                    String[] parts = r.Name.Split(' ');
-                    if (parts[0] == "KeyBindings")
-                    {
-                        if (parts.Length > 1)
-                        {
-                            ControlState cs = rootcstate.GetChild(parts[1], true);
-                            cs.ReadIni(r);
-                        }
-                        else
-                        {
-                            rootcstate.ReadIni(r);
-                        }
-					}
-					/*else if (parts[0] == "MouseButtons")
-					{
-					}*/
-					else if (parts[0] == "WindowEvents")
-					{
-						while (r.Read())
-						{
-							if (r.Type == IniType.Section)
-								break;
-
-							if (r.Type == IniType.Key)
-								winEvents[r.Name] = r.Value;
-						}
-					}
-					else
-						r.MoveToNextSection();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Saves the current control bindings to an arbitrary stream.
-        /// </summary>
-        /// <param name="file">The writable stream to save to.</param>
-        public void SaveConfiguration(Stream file)
-        {
-            using (IniWriter w = new IniWriter(file))
-            {
-                w.WriteSection("KeyBindings");
-                rootcstate.WriteIni(w);
-            }
-        }
-
-        internal ControlState rootcstate = new ControlState();
-		internal Dictionary<String, String> winEvents = new Dictionary<string, string>();
-        #endregion
-
-        /// <summary>
-        /// Retrieves the current screen-space mouse position.
-        /// </summary>
-        /// <returns>The mouse position in screen pixel space.</returns>
-        public Point GetMousePosition()
-        {
-            return Provider.GetMousePosition();
-        }
-
-        #region Properties
-		/// <summary>
-		/// Gets or sets the current command set key. Command sets are hierarchical
-		/// input systems (so that any active commands in Foo are active in Foo.Bar
-		/// unless explicitly denied).
-		/// 
-		/// A null value or an empty string indicates to InputSystem to look only
-		/// at the root command set.
-		/// </summary>
-		public String CommandSetKey
-		{
-			get;
-			set;
-		}
-
-        public AbstractInputProvider Provider
-        {
-            get 
-            { 
-                return iprovider; 
-            }
-            internal set 
-            { 
-                iprovider = value; iprovider.System = this; 
-            }
-        }
-        private AbstractInputProvider iprovider;
-        #endregion
-
-        #region Command Events
-
-        /// <summary>
-        /// Performs a one-shot trigger of a given command.
-        /// </summary>
-        /// <param name="command">The command to trigger.</param>
-        public void TriggerCommand(CommandData command)
-        {
-            if (command == null)
-                return;
-            if (this.CommandTriggered != null)
-                CommandTriggered(this, new CommandEventArgs(command));
-        }
-
-        /// <summary>
-        /// Starts a game command. This command will be duplicated as a trigger, and will be
-        /// re-triggered as a key-repeat until it is ended by a call to EndCommand().
-        /// </summary>
-        /// <param name="command">The command to start.</param>
-        public void StartCommand(CommandData command)
-        {
-            if (command == null)
-                return;
-            if (!keytimers.ContainsKey(command.Command))
-            {
-                if (this.CommandStarted != null)
-                    CommandStarted(this, new CommandEventArgs(command));
-
-                TriggerCommand(command);
-                Timer t = new Timer();
-                t.Interval = 250;
-                t.Start();
-                t.Tick += delegate(object sender, EventArgs e)
-                {
-                    TriggerCommand(command);
-                    t.Interval = 100;
-                    t.Stop();
-                    t.Start();
-                };
-                keytimers.Add(command.Command, t);
-            }
-        }
-
-        /// <summary>
-        /// Ends a command that was previously started. This will stop the command from being repeat-triggered.
-        /// </summary>
-        /// <param name="command">The name of the command to stop</param>
-        public void EndCommand(CommandData command)
-        {
-            if (command == null)
-                return;
-            if (this.CommandEnded != null)
-                CommandEnded(this, new CommandEventArgs(command));
-
-            if (keytimers.ContainsKey(command.Command))
-            {
-                keytimers[command.Command].Dispose();
-                keytimers.Remove(command.Command);
-            }
+            using (FileStream fs = new FileStream(filename, FileMode.Create)){
+				using (IniWriter w = new IniWriter(fs))
+				{
+					w.WriteSection("KeyBindings");
+					Command.commands.WriteIni(w);
+				}
+			}
         }
 
 		/// <summary>
@@ -221,7 +107,7 @@ namespace Sharplike.Core.Input
 		{
 			String cmd;
 			if (winEvents.TryGetValue(eventname, out cmd))
-				TriggerCommand(new CommandData(cmd));
+				Command.TriggerCommand(new CommandData(cmd));
 		}
 
 		/// <summary>
@@ -233,46 +119,5 @@ namespace Sharplike.Core.Input
 		{
 			return winEvents.ContainsKey(eventname);
 		}
-
-        public sealed class CommandEventArgs : EventArgs
-        {
-
-            public CommandEventArgs(CommandData cmdData)
-            {
-                Handled = false;
-                CommandData = cmdData;
-            }
-
-            public Boolean Handled
-            {
-                get;
-                set;
-            }
-
-            public CommandData CommandData
-            {
-                get;
-                private set;
-            }
-        }
-
-        Dictionary<String, Timer> keytimers = new Dictionary<String, Timer>();
-
-		/// <summary>
-		/// Invoked when a command first reaches the InputSystem (analogous to the
-		/// WinForms KeyPress event).
-		/// </summary>
-        public event EventHandler<CommandEventArgs> CommandTriggered;
-
-		/// <summary>
-		/// Invoked when a command begins (analogous to the WinForms KeyDown event).
-		/// </summary>
-        public event EventHandler<CommandEventArgs> CommandStarted;
-
-		/// <summary>
-		/// Invoked when a command begins (analogous to the WinForms KeyDown event).
-		/// </summary>
-        public event EventHandler<CommandEventArgs> CommandEnded;
-        #endregion //Command events
     }
 }

@@ -45,7 +45,7 @@ namespace Sharplike.Demos.Sharphack.State
 
 		protected override void StateStarted()
 		{
-			Game.InputSystem.CommandSetKey = "MainMenu";
+			Game.InputSystem.Command.CommandSet = "MainMenu";
 
 			base.StateStarted();
 		}
@@ -55,8 +55,9 @@ namespace Sharplike.Demos.Sharphack.State
 			Window.InvalidateTiles();
 		}
 
-		protected override void CommandTriggered(InputSystem.CommandEventArgs e)
+		protected override void CommandTriggered(CommandEventArgs e)
 		{
+			Console.WriteLine("Got a command!");
 			switch (e.CommandData.Command) {
 				case "new_game":
 					this.StateMachine.PushState(new DungeonState());

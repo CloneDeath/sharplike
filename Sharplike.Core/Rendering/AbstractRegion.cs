@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using Sharplike.Core.Messaging;
+using System.Collections;
 
 namespace Sharplike.Core.Rendering
 {
@@ -319,6 +320,15 @@ namespace Sharplike.Core.Rendering
 
             return false;
         }
+
+		public void RemoveAllRegions()
+		{
+			List<AbstractRegion> allregions = new List<AbstractRegion>(this.ChildRegions);
+
+			foreach (AbstractRegion r in allregions) {
+				this.RemoveRegion(r);
+			}
+		}
 
         /// <summary>
         /// Gets a child region by ZOrder.

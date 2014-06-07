@@ -1,83 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Linq;
 using System.Text;
-using System.Drawing;
+using System.Windows.Forms;
 
 namespace Sharplike.Core.Input
 {
-    public abstract class AbstractInputProvider : IDisposable
-    {
-        public abstract void Poll();
-        public abstract Point GetMousePosition();
+	/// <summary>
+	/// The base class for an input provider. The provider should trigger each event as soon as they
+	/// can. If the implementation is not event based, then the Poll method is where state changes
+	/// should be monitored.
+	/// </summary>
+	public abstract class AbstractInputProvider : IDisposable
+	{
+		/// <summary>
+		/// An optional chance to poll the current state of input devices, and trigger the appropriate events.
+		/// If your implementation is event based, then this option can be ignored.
+		/// </summary>
+		public virtual void Poll() { }
 
-        public InputSystem System
-        {
-            get;
-            internal set;
-        }
+		public KeyEventHandler OnKeyPressed;
+		public KeyEventHandler OnKeyReleased;
+		public MouseEventHandler OnMouseMove;
+		public MouseEventHandler OnMousePressed;
+		public MouseEventHandler OnMouseReleased;
+		public MouseEventHandler OnMouseWheel;
 
-		protected void KeyDown(Keys keycode)
-        {
-			CommandData cmd = System.rootcstate.GetCommand(keycode, System.CommandSetKey);
-            System.StartCommand(cmd);
-        }
-
-        protected void KeyUp(Keys keycode)
-        {
-            CommandData cmd = System.rootcstate.GetCommand(keycode, System.CommandSetKey);
-            System.EndCommand(cmd);
-        }
-
-        protected void KeyPress(Keys keycode)
-        {
-            CommandData cmd = System.rootcstate.GetCommand(keycode, System.CommandSetKey);
-            System.TriggerCommand(cmd);
-        }
-
-        protected void MouseDown(Keys k, Point screenCoords, Point tileCoords,
-			Boolean shift, Boolean control, Boolean alt)
-        {
-			if (shift)
-				k = k | Keys.Shift;
-			if (control)
-				k = k | Keys.Control;
-			if (alt)
-				k = k | Keys.Alt;
-
-			CommandData cmd = System.rootcstate.GetCommand(k, System.CommandSetKey, true);
-			System.StartCommand(cmd);
-        }
-
-		protected void MouseUp(Keys key, Point screenCoords, Point tileCoords,
-			Boolean shift, Boolean control, Boolean alt)
-        {
-			if (shift)
-				key = key | Keys.Shift;
-			if (control)
-				key = key | Keys.Control;
-			if (alt)
-				key = key | Keys.Alt;
-
-			CommandData cmd = System.rootcstate.GetCommand(key, System.CommandSetKey, true);
-			System.EndCommand(cmd);
-        }
-
-		protected void MouseWheel(Keys key, Point screenCoords, Point tileCoords,
-			Boolean shift, Boolean control, Boolean alt)
-		{
-			if (shift)
-				key = key | Keys.Shift;
-			if (control)
-				key = key | Keys.Control;
-			if (alt)
-				key = key | Keys.Alt;
-
-			CommandData cmd = System.rootcstate.GetCommand(key, System.CommandSetKey, true);
-			System.StartCommand(cmd);
-			System.EndCommand(cmd);
-		}
-
-        public abstract void Dispose();
-    }
+		public abstract void Dispose();
+	}
 }

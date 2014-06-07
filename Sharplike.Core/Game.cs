@@ -36,11 +36,6 @@ namespace Sharplike.Core
     public static class Game
     {
 		private static readonly EventArgs internedEventArg = new EventArgs();
-
-		private static InputSystem inputSystem = null;
-        private static AbstractRenderSystem renderSystem = null;
-        private static AbstractAudioEngine audioSystem = null;
-
         private static GameMessenger messenger = new GameMessenger();
 
 		private static PostOffice post = new PostOffice();
@@ -228,7 +223,7 @@ namespace Sharplike.Core
         /// <param name="sys">The name of the input system to use.</param>
         public static void SetInputSystem(String sys)
         {
-            if (Game.inputSystem.Provider != null)
+            if (Game.InputSystem.Provider != null)
                 throw new InvalidOperationException("Game.SetInputSystem() may only be called once.");
             TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Input/{0}", sys));
 			if (node == null)
@@ -242,7 +237,7 @@ namespace Sharplike.Core
         /// <param name="sys">The name of the rendering engine. Default is "OpenTK".</param>
         public static void SetRenderSystem(String sys)
         {
-            if (Game.renderSystem != null)
+            if (Game.RenderSystem != null)
                 throw new InvalidOperationException("Game.SetRenderSystem() may only be called once.");
 			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Rendering/{0}", sys));
 			if (node == null)
@@ -256,7 +251,7 @@ namespace Sharplike.Core
         /// <param name="sys">The name of the audio engine. Default is "OpenTK".</param>
         public static void SetAudioSystem(String sys)
         {
-            if (Game.audioSystem != null)
+            if (Game.AudioSystem != null)
                 throw new InvalidOperationException("Game.SetAudioSystem() may only be called once.");
             ExtensionNodeList en = AddinManager.GetExtensionNodes("/Sharplike/Audio");
 			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Audio/{0}", sys));
@@ -308,8 +303,6 @@ namespace Sharplike.Core
         /// </summary>
         public static void Process()
         {
-			
-
             if (GameProcessing != null)
                 GameProcessing(null, internedEventArg);
 
@@ -351,29 +344,29 @@ namespace Sharplike.Core
         /// <summary>
         /// The system in charge of graphical output.
         /// </summary>
-        public static AbstractRenderSystem RenderSystem
-        {
-            get { return Game.renderSystem; }
-			private set { Game.renderSystem = value; }
-        }
+		public static AbstractRenderSystem RenderSystem
+		{
+			get;
+			private set;
+		}
 
         /// <summary>
         /// The system in charge of audio playback.
         /// </summary>
-        public static AbstractAudioEngine AudioSystem
-        {
-			get { return Game.audioSystem; }
-			private set { Game.audioSystem = value; }
-        }
+		public static AbstractAudioEngine AudioSystem
+		{
+			get;
+			private set;
+		}
 
         /// <summary>
         /// The system in charge of user input.
         /// </summary>
-        public static InputSystem InputSystem
-        {
-			get { return Game.inputSystem; }
-			private set { Game.inputSystem = value; }
-        }
+		public static InputSystem InputSystem
+		{
+			get;
+			private set;
+		}
 
 		public static IScheduler Scheduler
 		{

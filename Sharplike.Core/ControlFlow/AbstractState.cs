@@ -4,6 +4,7 @@ using System.Text;
 
 using Sharplike.Core.Runtime;
 using Sharplike.Core.Input;
+using System.Windows.Forms;
 
 namespace Sharplike.Core.ControlFlow
 {
@@ -145,7 +146,7 @@ namespace Sharplike.Core.ControlFlow
 		/// games using the RealtimeGameLoop.
 		/// </summary>
 		/// <param name="e">The command event details for the CommandTriggered event.</param>
-		protected internal virtual void CommandTriggered(InputSystem.CommandEventArgs e) { }
+		protected internal virtual void CommandTriggered(CommandEventArgs e) { }
 
 		/// <summary>
 		/// Invoked when the InputSystem detects a CommandStarted event. This should NOT
@@ -153,7 +154,7 @@ namespace Sharplike.Core.ControlFlow
 		/// games using the RealtimeGameLoop.
 		/// </summary>
 		/// <param name="e">The command event details for the CommandStarted event.</param>
-		protected internal virtual void CommandStarted(InputSystem.CommandEventArgs e) { }
+		protected internal virtual void CommandStarted(CommandEventArgs e) { }
 
 		/// <summary>
 		/// Invoked when the InputSystem detects a CommandEnded event. This should NOT
@@ -161,6 +162,12 @@ namespace Sharplike.Core.ControlFlow
 		/// games using the RealtimeGameLoop.
 		/// </summary>
 		/// <param name="e">The command event details for the CommandEnded event.</param>
-		protected internal virtual void CommandEnded(InputSystem.CommandEventArgs e) { }
+		protected internal virtual void CommandEnded(CommandEventArgs e) { }
+
+		/// <summary>
+		/// Triggers once when a key is pressed.
+		/// </summary>
+		/// <param name="Key">String representation of the key that is pressed.</param>
+		protected internal virtual void KeyPressed(Keys Key) { }
 	}
 }

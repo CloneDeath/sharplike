@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
+using Sharplike.Core.Input;
 
 namespace Sharplike.Core.ControlFlow
 {
@@ -22,11 +24,10 @@ namespace Sharplike.Core.ControlFlow
 
 			Game.GameProcessing += new EventHandler<EventArgs>(GameProcessing);
 
-			Game.InputSystem.CommandStarted += new EventHandler<Input.InputSystem.CommandEventArgs>(InputSystem_CommandStarted);
-			Game.InputSystem.CommandEnded += new EventHandler<Input.InputSystem.CommandEventArgs>(InputSystem_CommandEnded);
-			Game.InputSystem.CommandTriggered += new EventHandler<Input.InputSystem.CommandEventArgs>(InputSystem_CommandTriggered);
+			Game.InputSystem.Command.CommandStarted += new EventHandler<CommandEventArgs>(InputSystem_CommandStarted);
+			Game.InputSystem.Command.CommandEnded += new EventHandler<CommandEventArgs>(InputSystem_CommandEnded);
+			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
 		}
-
 		
 		/// <summary>
 		/// The current state active in the StateMachine.
@@ -196,17 +197,17 @@ namespace Sharplike.Core.ControlFlow
 		}
 
 
-		void InputSystem_CommandTriggered(object sender, Input.InputSystem.CommandEventArgs e)
+		void InputSystem_CommandTriggered(object sender, CommandEventArgs e)
 		{
 			this.stackDictionary[currentStack].Peek().CommandTriggered(e);
 		}
 
-		void InputSystem_CommandStarted(object sender, Input.InputSystem.CommandEventArgs e)
+		void InputSystem_CommandStarted(object sender, CommandEventArgs e)
 		{
 			this.stackDictionary[currentStack].Peek().CommandStarted(e);
 		}
 
-		void InputSystem_CommandEnded(object sender, Input.InputSystem.CommandEventArgs e)
+		void InputSystem_CommandEnded(object sender, CommandEventArgs e)
 		{
 			this.stackDictionary[currentStack].Peek().CommandEnded(e);
 		}

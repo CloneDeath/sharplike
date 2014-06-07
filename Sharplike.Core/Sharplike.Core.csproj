@@ -81,7 +81,10 @@
     <Compile Include="ControlFlow\AbstractState.cs" />
     <Compile Include="ControlFlow\StateMachine.cs" />
     <Compile Include="Input\CommandData.cs" />
+    <Compile Include="Input\CommandEventArgs.cs" />
     <Compile Include="Input\ControlState.cs" />
+    <Compile Include="Input\AbstractInputProvider.cs" />
+    <Compile Include="Input\InputManager.cs" />
     <Compile Include="Messaging\ChannelSubscriberAttribute.cs" />
     <Compile Include="Messaging\IMessageReceiver.cs" />
     <Compile Include="Messaging\IMessageRouter.cs" />
@@ -97,7 +100,7 @@
     <Compile Include="Audio\AbstractAudioCue.cs" />
     <Compile Include="Audio\AbstractAudioEngine.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="Input\AbstractInputProvider.cs" />
+    <Compile Include="Input\CommandBroker.cs" />
     <Compile Include="Input\InputSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\AbstractRenderSystem.cs" />

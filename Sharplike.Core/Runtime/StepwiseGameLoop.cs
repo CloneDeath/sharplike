@@ -17,7 +17,7 @@ namespace Sharplike.Core.Runtime
         public StepwiseGameLoop(Execute callback)
         {
             usercode = callback;
-            Game.InputSystem.CommandTriggered += new EventHandler<Input.InputSystem.CommandEventArgs>(InputSystem_CommandTriggered);
+            Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
 			Game.Time = 0;
         }
 
@@ -30,7 +30,7 @@ namespace Sharplike.Core.Runtime
 		public StepwiseGameLoop(Execute callback, Int64 startTime)
 		{
 			usercode = callback;
-			Game.InputSystem.CommandTriggered += new EventHandler<Input.InputSystem.CommandEventArgs>(InputSystem_CommandTriggered);
+			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
 			Game.Time = startTime;
 		}
 
@@ -95,7 +95,7 @@ namespace Sharplike.Core.Runtime
 			return ret;
         }
 
-        void InputSystem_CommandTriggered(object sender, Input.InputSystem.CommandEventArgs e)
+        void InputSystem_CommandTriggered(object sender, CommandEventArgs e)
         {
             lastcommands.Enqueue(e.CommandData);
         }

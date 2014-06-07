@@ -7,29 +7,28 @@ using Nini.Ini;
 
 namespace Sharplike.Core.Input
 {
-    public class ControlState
+	/// <summary>
+	/// A tree representing a list of valid commands.
+	/// Commands are inherited from parent CommandControls.
+	/// </summary>
+    public class CommandControls
     {
-        public ControlState()
+		private CommandControls parent = null;
+		private Dictionary<Keys, String> keycommands = new Dictionary<Keys, string>();
+		private Dictionary<String, CommandControls> children = new Dictionary<string, CommandControls>();
+
+        internal CommandControls(CommandControls parent = null)
         {
-            parent = null;
+            this.parent = parent;
         }
 
-        private ControlState(ControlState p)
+        public CommandData GetCommand(Keys keypress, String state)
         {
-            parent = p;
-        }
-
-		public CommandData GetCommand(Keys keypress, String state)
-		{
-			return this.GetCommand(keypress, state, false);
-		}
-        public CommandData GetCommand(Keys keypress, String state, Boolean isMouse)
-        {
-            if (state == null || state == String.Empty)
+            if (String.IsNullOrEmpty(state))
             {
 				if (keycommands.ContainsKey(keypress))
 				{
-					CommandData cmd = new CommandData(keycommands[keypress], isMouse);
+					CommandData cmd = new CommandData(keycommands[keypress]);
 					return cmd;
 				}
 				else
@@ -41,23 +40,24 @@ namespace Sharplike.Core.Input
             int dotindex = state.IndexOf('.');
             String childname = null;
             String childns = null;
-            if (dotindex == -1)
-                childname = state;
-            else
-            {
-                childname = state.Substring(0, dotindex);
-                childns = state.Substring(dotindex + 1);
-            }
+
+			if (dotindex == -1) {
+				childname = state;
+			} else {
+				childname = state.Substring(0, dotindex);
+				childns = state.Substring(dotindex + 1);
+			}
 
             CommandData childresult = null;
-            if (children.ContainsKey(childname))
-                childresult = children[childname].GetCommand(keypress, childns);
+			if (children.ContainsKey(childname)) {
+				childresult = children[childname].GetCommand(keypress, childns);
+			}
 
             if (childresult == null)
             {
 				if (keycommands.ContainsKey(keypress))
 				{
-					CommandData cmd = new CommandData(keycommands[keypress], isMouse);
+					CommandData cmd = new CommandData(keycommands[keypress]);
 					return cmd;
 				}
 				else
@@ -70,7 +70,7 @@ namespace Sharplike.Core.Input
 
         public void SetCommand(Keys keycode, String command, String statename)
         {
-            ControlState cs = GetChild(statename, true);
+            CommandControls cs = GetChild(statename, true);
             if (cs == null)
                 keycommands[keycode] = command;
             cs.keycommands[keycode] = command;
@@ -87,7 +87,7 @@ namespace Sharplike.Core.Input
             return keycommands[keypress];
         }
 
-        internal ControlState GetChild(String location, bool create)
+        internal CommandControls GetChild(String location, bool create)
         {
             if (location == null)
                 return this;
@@ -105,7 +105,7 @@ namespace Sharplike.Core.Input
 
             if (!children.ContainsKey(childname) && create)
             {
-                ControlState cs = new ControlState(this);
+                CommandControls cs = new CommandControls(this);
                 children[childname] = cs;
             }
 
@@ -129,7 +129,7 @@ namespace Sharplike.Core.Input
 
             w.WriteEmpty();
 
-            foreach (KeyValuePair<String, ControlState> kvp in children)
+            foreach (KeyValuePair<String, CommandControls> kvp in children)
             {
                 String childns = kvp.Key;
                 if (ownns != null)
@@ -145,11 +145,6 @@ namespace Sharplike.Core.Input
             while (r.MoveToNextKey())
                 keycommands.Add((Keys)Enum.Parse(typeof(Keys), r.Name), r.Value);
         }
-        #endregion
-
-        private Dictionary<Keys, String> keycommands = new Dictionary<Keys, string>();
-
-        private Dictionary<String, ControlState> children = new Dictionary<string, ControlState>();
-        private ControlState parent = null;
+        #endregion        
     }
 }
