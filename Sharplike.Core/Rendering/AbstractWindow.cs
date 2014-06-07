@@ -108,16 +108,15 @@ namespace Sharplike.Core.Rendering
 		/// </summary>
 		public void Invalidate()
 		{
-			InvalidateTiles();
+			Invalidate();
 		}
-
-
 
 		/// <summary>
 		/// Update the Window (paint any changes to screen).
 		/// </summary>
-        public virtual void Update()
+        public override void Update()
         {
+			base.Update();
             for (Int32 x = 0; x < this.Size.Width; x++)
             {
 				for (Int32 y = 0; y < this.Size.Height; y++)

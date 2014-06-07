@@ -350,7 +350,7 @@ namespace Sharplike.Editlike
 				window.AddRegion(this.Map);
 				this.Map.ViewFrom(this.Map.View, true);
 			}
-			window.InvalidateTiles();
+			window.Invalidate();
 		}
 
 		private void newToolStripMenuItem_Click(object sender, EventArgs e)

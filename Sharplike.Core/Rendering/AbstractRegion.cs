@@ -28,17 +28,18 @@ namespace Sharplike.Core.Rendering
             }
             set
 			{
-				InvalidateTiles();
+				Invalidate();
 				this.AutoSizeToContents = false;
                 this.ResizeRegion(value);
                 size = value;
                 if (this.Resize != null)
 					this.Resize();
-				InvalidateTiles();
+				Invalidate();
             }
         }
 
 		public bool AutoSizeToContents { get; set; }
+		private bool Dirty = true;
 
 		[NonSerialized]
         private Point location;
@@ -50,11 +51,11 @@ namespace Sharplike.Core.Rendering
             }
             set
 			{
-				InvalidateTiles();
+				Invalidate();
                 location = value;
                 if (this.Move != null)
 					this.Move();
-				InvalidateTiles();
+				Invalidate();
             }
         }
 
@@ -76,6 +77,7 @@ namespace Sharplike.Core.Rendering
             }
         }
 
+		private AbstractRegion _parent;
 		public AbstractRegion Parent
 		{
 			get;
@@ -173,7 +175,7 @@ namespace Sharplike.Core.Rendering
         /// <param name="newLocation">The new location of the region.</param>
         private void RelocateRegion(Point newLocation)
         {
-            InvalidateTiles();
+            Invalidate();
             this.location = newLocation;
             Parent.InvalidateTiles(new Rectangle(this.location, this.size));
         }
@@ -181,7 +183,7 @@ namespace Sharplike.Core.Rendering
         /// <summary>
         /// Invalidates all tiles within the region.
         /// </summary>
-        public void InvalidateTiles()
+        public void Invalidate()
         {
             InvalidateTiles(new Rectangle(new Point(0, 0), this.Size));
         }
@@ -206,6 +208,7 @@ namespace Sharplike.Core.Rendering
 						this.regionTiles[x, y].displaytile.MakeStackDirty();
 				}
 			}
+			this.Dirty = true;
         }
 
 		/// <summary>
@@ -243,8 +246,7 @@ namespace Sharplike.Core.Rendering
                 childRegion.Parent.RemoveRegion(childRegion);
 
             this.childRegions.Add(zOrder, childRegion);
-            if (this.ChildRegionAdded != null)
-                this.ChildRegionAdded(childRegion);
+			this.OnChildRegionAdded(childRegion);
 
             childRegion.Parent = this;
 
@@ -308,11 +310,10 @@ namespace Sharplike.Core.Rendering
                 {
                     if (this.childRegions[i] == r)
                     {
-                        r.InvalidateTiles();
+                        r.Invalidate();
                         this.childRegions.Remove(i);
                         r.Parent = null;
-                        if (this.ChildRegionRemoved != null)
-                            this.ChildRegionRemoved(r);
+						this.OnChildRegionRemoved(r);
                         return true;
                     }
                 }
@@ -378,6 +379,23 @@ namespace Sharplike.Core.Rendering
             }
         }
 
+		public virtual void Update()
+		{
+			foreach (AbstractRegion child in ChildRegions) {
+				child.Update();
+			}
+
+			if (this.Dirty) {
+				this.Dirty = false;
+				this.Render();
+			}
+		}
+
+		public virtual void Render()
+		{
+
+		}
+
 		/// <summary>
 		/// Gets or sets the region's anchor setting within its parent region.
 		/// </summary>
@@ -414,6 +432,22 @@ namespace Sharplike.Core.Rendering
         public event ChildNodeDelegate ChildRegionAdded;
         public event ChildNodeDelegate ChildRegionRemoved;
         public event ReparentDelegate Reparent;
+
+
+
+		protected virtual void OnChildRegionAdded(AbstractRegion childNode)
+		{
+			if (ChildRegionAdded != null) {
+				ChildRegionAdded(childNode);
+			}
+		}
+
+		protected virtual void OnChildRegionRemoved(AbstractRegion childNode)
+		{
+			if (ChildRegionRemoved != null) {
+				ChildRegionRemoved(childNode);
+			}
+		}
 
         public virtual void Dispose()
         {

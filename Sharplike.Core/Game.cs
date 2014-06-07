@@ -303,14 +303,21 @@ namespace Sharplike.Core
         /// </summary>
         public static void Process()
         {
-            if (GameProcessing != null)
-                GameProcessing(null, internedEventArg);
+			if (GameProcessing != null) {
+				GameProcessing(null, internedEventArg);
+			}
 
-            if (AudioSystem != null)
-                AudioSystem.Process();
+			if (AudioSystem != null) {
+				AudioSystem.Process();
+			}
 
-            if (RenderSystem != null)
-                RenderSystem.Process();
+			if (RenderSystem != null) {
+				RenderSystem.Process();
+			}
+
+			if (InputSystem != null) {
+				InputSystem.Process();
+			}
 
 			++Game.Time;
 			PumpMessages();

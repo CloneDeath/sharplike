@@ -62,7 +62,7 @@ namespace Sharplike.Editlike.MapTools
 
 			change = null;
 
-			region.InvalidateTiles();
+			region.Invalidate();
 
 			region.Dispose();
 			region = null;
@@ -90,7 +90,7 @@ namespace Sharplike.Editlike.MapTools
 				}
 
 				oldend = tile;
-				region.InvalidateTiles();
+				region.Invalidate();
 			}
 		}
 

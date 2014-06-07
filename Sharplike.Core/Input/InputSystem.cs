@@ -77,7 +77,7 @@ namespace Sharplike.Core.Input
 			}
         }
 
-		internal void Update()
+		internal void Process()
 		{
 			Input.Update();
 

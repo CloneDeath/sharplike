@@ -19,10 +19,14 @@ namespace Sharplike.UI.Controls
 			this.Text = text;
 		}
 
-        public void SetText(String text)
+        public override void Render()
         {
             this.Clear();
             int y = 0;
+			if (this.AutoSizeToContents) {
+				this.Size = new Size(0, 0);
+				this.AutoSizeToContents = true;
+			}
             foreach (String line in Wrap(text))
             {
 				if (y > this.Size.Height - 1) {
@@ -68,7 +72,7 @@ namespace Sharplike.UI.Controls
             set
             {
                 bg = value;
-                SetText(this.text);
+				this.Invalidate();
             }
         }
         private Color bg = Color.Black;
@@ -81,7 +85,8 @@ namespace Sharplike.UI.Controls
             }
             set 
             { 
-                fg = value; SetText(this.text); 
+                fg = value;
+				this.Invalidate();
             }
         }
         private Color fg = Color.White;
@@ -96,7 +101,7 @@ namespace Sharplike.UI.Controls
             set 
             {
                 text = value;
-                SetText(text);
+				this.Invalidate();
             }
         }
         private String text = "";

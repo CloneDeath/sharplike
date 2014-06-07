@@ -52,7 +52,7 @@ namespace Sharplike.Demos.Sharphack.State
 
 		protected override void GameLoopTick(Core.Runtime.AbstractGameLoop loop)
 		{
-			Window.InvalidateTiles();
+			Window.Invalidate();
 		}
 
 		protected override void CommandTriggered(CommandEventArgs e)
