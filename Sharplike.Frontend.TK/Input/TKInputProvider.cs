@@ -11,14 +11,14 @@ using Sharplike.Frontend.Rendering;
 
 namespace Sharplike.Frontend.Input
 {
-    public class TKInputProvider : AbstractInputProvider
-    {
+	public class TKInputProvider : AbstractInputProvider
+	{
 		TKWindow win;
 
-        public TKInputProvider()
-        {
-            TKRenderSystem rsys = (TKRenderSystem)Game.RenderSystem;
-            win = (TKWindow)rsys.Window;
+		public TKInputProvider()
+		{
+			TKRenderSystem rsys = (TKRenderSystem)Game.RenderSystem;
+			win = (TKWindow)rsys.Window;
 
 			win.Control.MouseMove += this.OnMouseMove;
 			win.Control.KeyDown += this.OnKeyPressed;
@@ -26,11 +26,11 @@ namespace Sharplike.Frontend.Input
 			win.Control.MouseDown += this.OnMousePressed;
 			win.Control.MouseUp += this.OnMouseReleased;
 			win.Control.MouseWheel += this.OnMouseWheel;
-        }
+		}
 
 		public override void Dispose()
 		{
 
 		}
-    }
+	}
 }

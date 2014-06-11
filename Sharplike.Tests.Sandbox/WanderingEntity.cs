@@ -10,24 +10,24 @@ using Sharplike.UI;
 namespace Sharplike.Tests.Sandbox
 {
 	[Serializable]
-    public class WanderingEntity : AbstractEntity
-    {
-        public override Core.Rendering.Glyph[] Glyphs
-        {
-            get
-            {
-                return new Glyph[] { new Glyph((int)GlyphDefault.At, Color.White) };
-            }
-        }
+	public class WanderingEntity : AbstractEntity
+	{
+		public override Core.Rendering.Glyph[] Glyphs
+		{
+			get
+			{
+				return new Glyph[] { new Glyph((int)GlyphDefault.At, Color.White) };
+			}
+		}
 
-        public void Wander()
-        {
-            Random r = new Random();
-            Vector3 newloc = Location + new Vector3(r.Next(-1, 2), r.Next(-1, 2), 0);
+		public void Wander()
+		{
+			Random r = new Random();
+			Vector3 newloc = Location + new Vector3(r.Next(-1, 2), r.Next(-1, 2), 0);
 
-            AbstractSquare sq = Map.GetSafeSquare(newloc);
-            if (sq != null && sq.IsPassable(Direction.Here))
-                Location = newloc;
-        }
-    }
+			AbstractSquare sq = Map.GetSafeSquare(newloc);
+			if (sq != null && sq.IsPassable(Direction.Here))
+				Location = newloc;
+		}
+	}
 }

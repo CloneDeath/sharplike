@@ -26,7 +26,7 @@ namespace Sharplike.Mapping
 		[NonSerialized]
 		public AbstractMap parentMap;
 
-        private List<AbstractEntity> ents = new List<AbstractEntity>();
+		private List<AbstractEntity> ents = new List<AbstractEntity>();
 
 		public Dictionary<Int64, List<PageCallbackInfo>> aiDispatchTable
 		{
@@ -46,7 +46,7 @@ namespace Sharplike.Mapping
 		{
 		}
 
-        public AbstractPage(Int32 width, Int32 height, Int32 depth) : this()
+		public AbstractPage(Int32 width, Int32 height, Int32 depth) : this()
 		{
 			this.size = new Vector3(width, height, depth);
 			map = new AbstractSquare[size.x, size.y, size.x];
@@ -73,13 +73,13 @@ namespace Sharplike.Mapping
 			}
 		}
 
-        public List<AbstractEntity> Entities
-        {
-            get
-            {
-                return ents;
-            }
-        }
+		public List<AbstractEntity> Entities
+		{
+			get
+			{
+				return ents;
+			}
+		}
 		
 		public abstract void Build();
 		
@@ -129,7 +129,7 @@ namespace Sharplike.Mapping
 		}
 
 		public void SetSquare(Int32 x, Int32 y, Int32 z, AbstractSquare sq) { this.map[x, y, z] = sq; }
-        public AbstractSquare GetSquare(Int32 x, Int32 y, Int32 z) { return this.map[x, y, z]; }
+		public AbstractSquare GetSquare(Int32 x, Int32 y, Int32 z) { return this.map[x, y, z]; }
 		
 		public AbstractSquare LocateNeighbor(Vector3 p, Direction d)
 		{
@@ -170,7 +170,7 @@ namespace Sharplike.Mapping
 			}
 			Vector3 neighborPosition = p + offset;
 			if (neighborPosition.x >= 0 && neighborPosition.x <= map.GetUpperBound(0) &&
-			    neighborPosition.y >= 0 && neighborPosition.y <= map.GetUpperBound(1) &&
+				neighborPosition.y >= 0 && neighborPosition.y <= map.GetUpperBound(1) &&
 				neighborPosition.z >= 0 && neighborPosition.z <= map.GetUpperBound(2)) 
 			{
 				return map[p.x, p.y, p.z];

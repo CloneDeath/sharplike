@@ -9,10 +9,10 @@ using Sharplike.Mapping;
 
 namespace Sharplike.Mapping.Entities
 {
-    [ChannelSubscriber("Entities")]
+	[ChannelSubscriber("Entities")]
 	[Serializable]
-    public class AbstractEntity : IGlyphProvider, IMessageReceiver, IDisposable, IPageCallbacker
-    {
+	public class AbstractEntity : IGlyphProvider, IMessageReceiver, IDisposable, IPageCallbacker
+	{
 		public AbstractEntity()
 		{
 			this.MessageHandler.SetHandler("Reposition", Message_Reposition);
@@ -22,10 +22,10 @@ namespace Sharplike.Mapping.Entities
 			this.BackgroundColor = Color.Black;
 		}
 
-        public void OnMessage(Message msg)
-        {
+		public void OnMessage(Message msg)
+		{
 			MessageHandler.HandleMessage(msg);
-        }
+		}
 
 		public void AssertArgumentTypes(Message msg)
 		{
@@ -63,51 +63,51 @@ namespace Sharplike.Mapping.Entities
 		/// <summary>
 		/// Gets the glyphs that will represent this entity.
 		/// </summary>
-        public virtual Glyph[] Glyphs
-        {
-            get { return new Glyph[0]; }
-        }
+		public virtual Glyph[] Glyphs
+		{
+			get { return new Glyph[0]; }
+		}
 
-        public virtual bool Dirty
-        {
-            get { return false; }
-        }
+		public virtual bool Dirty
+		{
+			get { return false; }
+		}
 
 		/// <summary>
 		/// Thread Safe. Gets or sets an entity's location on it's map.
 		/// This does NOT check that the entity's location will be on a valid square.
 		/// Use Move() for that.
 		/// </summary>
-        public Vector3 Location
-        {
-            get { return loc; }
-            set
-            {
+		public Vector3 Location
+		{
+			get { return loc; }
+			set
+			{
 				if (owner != null)
 					Game.SendMessage(owner, "RepositionEntity", this, loc, value);
 				loc = value;
-            }
-        }
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the map that the entity exists in.
 		/// </summary>
-        public AbstractMap Map
-        {
-            get { return owner; }
-            set
-            {
+		public AbstractMap Map
+		{
+			get { return owner; }
+			set
+			{
 				if (owner != null)
 				{
 					owner.RemoveEntity(this);
 				}
-                owner = value;
+				owner = value;
 				if (owner != null)
 				{
 					owner.AddEntity(this);
 				}
-            }
-        }
+			}
+		}
 
 		/// <summary>
 		/// Thread Safe. Makes an entity walk along the map world in a given direction.
@@ -180,9 +180,9 @@ namespace Sharplike.Mapping.Entities
 		}
 
 		[NonSerialized]
-        private AbstractMap owner;
+		private AbstractMap owner;
 
-        private Vector3 loc = new Vector3(0, 0, 0);
+		private Vector3 loc = new Vector3(0, 0, 0);
 
 		public readonly MessageHandler MessageHandler = new MessageHandler();
 	}

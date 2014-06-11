@@ -14,26 +14,26 @@ namespace Sharplike.Core.Audio
 		/// </summary>
 		/// <param name="audioFilename">The audio file to cue up.</param>
 		/// <returns>An engine-specific AudioCue subclass.</returns>
-        public AbstractAudioCue BuildAudioCue(String audioFilename)
-        {
-            using (FileStream s = new FileStream(audioFilename, FileMode.Open))
-            {
-                return BuildAudioCue(s);
-            }
-        }
+		public AbstractAudioCue BuildAudioCue(String audioFilename)
+		{
+			using (FileStream s = new FileStream(audioFilename, FileMode.Open))
+			{
+				return BuildAudioCue(s);
+			}
+		}
 
-        /// <summary>
-        /// Process audio events. This should be called frequently.
-        /// </summary>
-        public abstract void Process();
+		/// <summary>
+		/// Process audio events. This should be called frequently.
+		/// </summary>
+		public abstract void Process();
 
-        /// <summary>
-        /// Build an audio cue from an arbitrary stream.
-        /// </summary>
-        /// <param name="audioFilename">The audio file to cue up.</param>
-        /// <returns>An engine-specific AudioCue subclass.</returns>
-        public abstract AbstractAudioCue BuildAudioCue(Stream audioData);
+		/// <summary>
+		/// Build an audio cue from an arbitrary stream.
+		/// </summary>
+		/// <param name="audioFilename">The audio file to cue up.</param>
+		/// <returns>An engine-specific AudioCue subclass.</returns>
+		public abstract AbstractAudioCue BuildAudioCue(Stream audioData);
 
-        public abstract void Dispose();
-    }
+		public abstract void Dispose();
+	}
 }

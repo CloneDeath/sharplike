@@ -5,20 +5,18 @@ using Sharplike.Mapping;
 
 namespace Sharplike.Tests.Sandbox
 {
-
-
 	[Serializable]
-    public class FloorSquare : AbstractSquare
-    {
-        public override Color BackgroundColor { get { return Color.Black; } }
+	public class FloorSquare : AbstractSquare
+	{
+		public override Color BackgroundColor { get { return Color.Black; } }
 
-        private static Glyph[] glyphs = { new Glyph((int)'.', Color.Gray) };
-        public override Glyph[] Glyphs
-        {
-            get
-            {
-                return FloorSquare.glyphs;
-            }
-        }
-    }
+		private static Glyph[] glyphs = { new Glyph((int)'.', Color.Gray) };
+		public override Glyph[] Glyphs
+		{
+			get
+			{
+				return FloorSquare.glyphs;
+			}
+		}
+	}
 }

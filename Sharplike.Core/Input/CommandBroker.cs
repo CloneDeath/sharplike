@@ -6,14 +6,14 @@ using System.Drawing;
 
 namespace Sharplike.Core.Input
 {
-    public class CommandBroker : IDisposable
-    {
+	public class CommandBroker : IDisposable
+	{
 		internal CommandControls commands = new CommandControls();
 		Dictionary<String, Timer> keytimers = new Dictionary<String, Timer>();
 
 		AbstractInputProvider _provider;
-        internal AbstractInputProvider InputProvider
-        {
+		internal AbstractInputProvider InputProvider
+		{
 			get { return _provider; }
 			set
 			{
@@ -24,7 +24,7 @@ namespace Sharplike.Core.Input
 				_provider = value;
 				AddHooks(_provider);
 			}
-        }
+		}
 
 		public void Dispose()
 		{
@@ -195,5 +195,5 @@ namespace Sharplike.Core.Input
 		/// Invoked when a command begins (analogous to the WinForms KeyDown event).
 		/// </summary>
 		public event EventHandler<CommandEventArgs> CommandEnded;
-    }
+	}
 }

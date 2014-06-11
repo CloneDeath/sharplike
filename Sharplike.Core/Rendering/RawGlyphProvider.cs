@@ -16,19 +16,19 @@ namespace Sharplike.Core.Rendering
 			glyphs[0] = g;
 		}
 
-        public Color BackgroundColor
-        {
+		public Color BackgroundColor
+		{
 			get { return background; }
-        }
+		}
 
-        public Glyph[] Glyphs
-        {
+		public Glyph[] Glyphs
+		{
 			get { return glyphs; }
-        }
+		}
 
-        public bool Dirty
-        {
-            get { return false; }
-        }
-    }
+		public bool Dirty
+		{
+			get { return false; }
+		}
+	}
 }

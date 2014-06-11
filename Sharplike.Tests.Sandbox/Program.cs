@@ -76,10 +76,10 @@ namespace Sharplike.Tests.Sandbox
 			l.Location = new Point(0, 0);
 			l.Text = "Label on the map.";
 
-            Sharplike.UI.Controls.Window win = new UI.Controls.Window(map);
+			Sharplike.UI.Controls.Window win = new UI.Controls.Window(map);
 			win.Size = new Size(20, 10);
 			win.Location = new Point(5, 5);
-            win.Title = "Dialog Window";
+			win.Title = "Dialog Window";
 			win.BackgroundColor = Color.FromArgb(100, 0, 0, 200);
 
 			Game.OnGameInitialization += new EventHandler<EventArgs>(game_OnGameInitialization);

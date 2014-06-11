@@ -12,35 +12,35 @@ namespace Sharplike.Core.Rendering
 	/// </summary>
 	public class DisplayTile
 	{
-        private Boolean isRenderDirty = true;
-        private Boolean isStackDirty = true;
+		private Boolean isRenderDirty = true;
+		private Boolean isStackDirty = true;
 
-        private List<RegionTile> regionTiles = new List<RegionTile>();
+		private List<RegionTile> regionTiles = new List<RegionTile>();
 
-        private Point location;
+		private Point location;
 
-        GlyphPalette palette;
-        AbstractRegion rootregion;
-        
+		GlyphPalette palette;
+		AbstractRegion rootregion;
+		
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-        /// <param name="p">The GlyphPalette to use.</param>
+		/// <param name="p">The GlyphPalette to use.</param>
 		internal DisplayTile(GlyphPalette p, AbstractRegion root, Point loc)
 		{
-            palette = p;
-            rootregion = root;
-            location = loc;
+			palette = p;
+			rootregion = root;
+			location = loc;
 		}
 
-        public IList<RegionTile> RegionTiles
-        {
-            get
-            {
-                return regionTiles.AsReadOnly();
-            }
-        }
+		public IList<RegionTile> RegionTiles
+		{
+			get
+			{
+				return regionTiles.AsReadOnly();
+			}
+		}
 
 		/// <summary>
 		/// Used in some renderers to determine if repainting is necessary.
@@ -53,13 +53,13 @@ namespace Sharplike.Core.Rendering
 			}
 		}
 
-        public Boolean IsStackDirty
-        {
-            get
-            {
-                return this.isStackDirty;
-            }
-        }
+		public Boolean IsStackDirty
+		{
+			get
+			{
+				return this.isStackDirty;
+			}
+		}
 
 		/// <summary>
 		/// Signals to the tile that it shall be considered non-dirty until the tile
@@ -83,41 +83,41 @@ namespace Sharplike.Core.Rendering
 		public void MakeRenderDirty()
 		{
 			this.isRenderDirty = true;
-        }
+		}
 
-        /// <summary>
-        /// Signals to the tile that it's stack is now clean.
-        /// </summary>
-        public void MarkStackClean()
-        {
-            this.isStackDirty = false;
-        }
-        /// <summary>
-        /// Signals to the tile that it should rebuild it's RegionTile stack.
-        /// </summary>
-        /// <remarks>
-        /// Generally should only be used through Window.Invalidate().
-        /// </remarks>
-        public void MakeStackDirty()
-        {
-            this.isStackDirty = true;
-        }
+		/// <summary>
+		/// Signals to the tile that it's stack is now clean.
+		/// </summary>
+		public void MarkStackClean()
+		{
+			this.isStackDirty = false;
+		}
+		/// <summary>
+		/// Signals to the tile that it should rebuild it's RegionTile stack.
+		/// </summary>
+		/// <remarks>
+		/// Generally should only be used through Window.Invalidate().
+		/// </remarks>
+		public void MakeStackDirty()
+		{
+			this.isStackDirty = true;
+		}
 
-        /// <summary>
-        /// Rebuilds our cached list of regiontiles that affect this displaytile
-        /// </summary>
-        internal void RebuildRegionTiles()
-        {
-            foreach (RegionTile r in regionTiles)
-                r.displaytile = null;
+		/// <summary>
+		/// Rebuilds our cached list of regiontiles that affect this displaytile
+		/// </summary>
+		internal void RebuildRegionTiles()
+		{
+			foreach (RegionTile r in regionTiles)
+				r.displaytile = null;
 
-            regionTiles.Clear();
-            rootregion.PopulateRegionTiles(regionTiles, location);
+			regionTiles.Clear();
+			rootregion.PopulateRegionTiles(regionTiles, location);
 
-            foreach (RegionTile r in regionTiles)
-                r.displaytile = this;
+			foreach (RegionTile r in regionTiles)
+				r.displaytile = this;
 
-            MarkStackClean();
-        }
+			MarkStackClean();
+		}
 	}
 }

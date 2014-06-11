@@ -6,15 +6,15 @@ using Sharplike.Core.Rendering;
 
 namespace Sharplike.UI.Controls
 {
-    public class Window : Border
-    {
-        public Window(AbstractRegion parent) : base(parent)
-        {
-            titletext = new Label(this);
+	public class Window : Border
+	{
+		public Window(AbstractRegion parent) : base(parent)
+		{
+			titletext = new Label(this);
 			titletext.Size = new Size(this.Size.Width - 3, 1);
 			titletext.Location = new Point(2, 0);
-            Title = "Unnamed Window";
-        }
+			Title = "Unnamed Window";
+		}
 
 		public override Size Size
 		{
@@ -31,14 +31,14 @@ namespace Sharplike.UI.Controls
 			}
 		}
 
-        public String Title
-        {
-            get { return titletext.Text; }
-            set { 
+		public String Title
+		{
+			get { return titletext.Text; }
+			set { 
 				titletext.Text = value;
 				titletext.Size = new Size(this.Size.Width - 3, 1);
 			}
-        }
+		}
 
 		public Color TitleColor
 		{
@@ -46,12 +46,12 @@ namespace Sharplike.UI.Controls
 			set { titletext.Color = value; }
 		}
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            titletext.Dispose();
-        }
+		public override void Dispose()
+		{
+			base.Dispose();
+			titletext.Dispose();
+		}
 
-        private Label titletext;
-    }
+		private Label titletext;
+	}
 }

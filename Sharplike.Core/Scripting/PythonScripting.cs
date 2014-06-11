@@ -7,17 +7,17 @@ using Microsoft.Scripting.Hosting;
 
 namespace Sharplike.Core.Scripting
 {
-    public class PythonScripting : IScriptingEngine
-    {
-        public ScriptEngine Engine
-        {
-            get
-            {
-                if (engine == null)
-                    engine = Python.CreateEngine();
-                return engine;
-            }
-        }
-        private ScriptEngine engine;
-    }
+	public class PythonScripting : IScriptingEngine
+	{
+		public ScriptEngine Engine
+		{
+			get
+			{
+				if (engine == null)
+					engine = Python.CreateEngine();
+				return engine;
+			}
+		}
+		private ScriptEngine engine;
+	}
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sharplike.Core.Messaging
 {
-    public interface IMessageRouter
-    {
-    }
+	public interface IMessageRouter
+	{
+	}
 }

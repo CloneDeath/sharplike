@@ -135,14 +135,14 @@ namespace Sharplike.Frontend.Rendering
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            List<IGlyphProvider> gproviders = new List<IGlyphProvider>();
-            foreach (RegionTile t in tile.RegionTiles)
-            {
-                foreach (IGlyphProvider p in t.GlyphProviders)
-                    gproviders.Add(p);
-            }
+			List<IGlyphProvider> gproviders = new List<IGlyphProvider>();
+			foreach (RegionTile t in tile.RegionTiles)
+			{
+				foreach (IGlyphProvider p in t.GlyphProviders)
+					gproviders.Add(p);
+			}
 
-            foreach (IGlyphProvider glyphpro in gproviders)
+			foreach (IGlyphProvider glyphpro in gproviders)
 			{
 				GL.Begin(BeginMode.Quads);
 				GL.Color4(glyphpro.BackgroundColor);
@@ -186,8 +186,8 @@ namespace Sharplike.Frontend.Rendering
 
 		public override void Update()
 		{
-            base.Update();
+			base.Update();
 			Control.Refresh();
 		}
-    }
+	}
 }

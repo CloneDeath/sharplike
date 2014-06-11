@@ -11,21 +11,21 @@ namespace Sharplike.Core.Input
 	/// A tree representing a list of valid commands.
 	/// Commands are inherited from parent CommandControls.
 	/// </summary>
-    public class CommandControls
-    {
+	public class CommandControls
+	{
 		private CommandControls parent = null;
 		private Dictionary<Keys, String> keycommands = new Dictionary<Keys, string>();
 		private Dictionary<String, CommandControls> children = new Dictionary<string, CommandControls>();
 
-        internal CommandControls(CommandControls parent = null)
-        {
-            this.parent = parent;
-        }
+		internal CommandControls(CommandControls parent = null)
+		{
+			this.parent = parent;
+		}
 
-        public CommandData GetCommand(Keys keypress, String state)
-        {
-            if (String.IsNullOrEmpty(state))
-            {
+		public CommandData GetCommand(Keys keypress, String state)
+		{
+			if (String.IsNullOrEmpty(state))
+			{
 				if (keycommands.ContainsKey(keypress))
 				{
 					CommandData cmd = new CommandData(keycommands[keypress]);
@@ -35,11 +35,11 @@ namespace Sharplike.Core.Input
 				{
 					return null;
 				}
-            }
+			}
 
-            int dotindex = state.IndexOf('.');
-            String childname = null;
-            String childns = null;
+			int dotindex = state.IndexOf('.');
+			String childname = null;
+			String childns = null;
 
 			if (dotindex == -1) {
 				childname = state;
@@ -48,13 +48,13 @@ namespace Sharplike.Core.Input
 				childns = state.Substring(dotindex + 1);
 			}
 
-            CommandData childresult = null;
+			CommandData childresult = null;
 			if (children.ContainsKey(childname)) {
 				childresult = children[childname].GetCommand(keypress, childns);
 			}
 
-            if (childresult == null)
-            {
+			if (childresult == null)
+			{
 				if (keycommands.ContainsKey(keypress))
 				{
 					CommandData cmd = new CommandData(keycommands[keypress]);
@@ -64,87 +64,87 @@ namespace Sharplike.Core.Input
 				{
 					return null;
 				}
-            }
-            return childresult;
-        }
+			}
+			return childresult;
+		}
 
-        public void SetCommand(Keys keycode, String command, String statename)
-        {
-            CommandControls cs = GetChild(statename, true);
-            if (cs == null)
-                keycommands[keycode] = command;
-            cs.keycommands[keycode] = command;
-        }
+		public void SetCommand(Keys keycode, String command, String statename)
+		{
+			CommandControls cs = GetChild(statename, true);
+			if (cs == null)
+				keycommands[keycode] = command;
+			cs.keycommands[keycode] = command;
+		}
 
-        private String GetCommand(Keys keypress)
-        {
-            if (!keycommands.ContainsKey(keypress))
-            {
-                if (parent != null)
-                    return parent.GetCommand(keypress);
-                return null;
-            }
-            return keycommands[keypress];
-        }
+		private String GetCommand(Keys keypress)
+		{
+			if (!keycommands.ContainsKey(keypress))
+			{
+				if (parent != null)
+					return parent.GetCommand(keypress);
+				return null;
+			}
+			return keycommands[keypress];
+		}
 
-        internal CommandControls GetChild(String location, bool create)
-        {
-            if (location == null)
-                return this;
+		internal CommandControls GetChild(String location, bool create)
+		{
+			if (location == null)
+				return this;
 
-            int dotindex = location.IndexOf('.');
-            String childname = null;
-            String childns = null;
-            if (dotindex == -1)
-                childname = location;
-            else
-            {
-                childname = location.Substring(0, dotindex);
-                childns = location.Substring(dotindex + 1);
-            }
+			int dotindex = location.IndexOf('.');
+			String childname = null;
+			String childns = null;
+			if (dotindex == -1)
+				childname = location;
+			else
+			{
+				childname = location.Substring(0, dotindex);
+				childns = location.Substring(dotindex + 1);
+			}
 
-            if (!children.ContainsKey(childname) && create)
-            {
-                CommandControls cs = new CommandControls(this);
-                children[childname] = cs;
-            }
+			if (!children.ContainsKey(childname) && create)
+			{
+				CommandControls cs = new CommandControls(this);
+				children[childname] = cs;
+			}
 
-            if (children.ContainsKey(childname))
-                return children[childname].GetChild(childns, create);
-            else
-                return null;
-        }
+			if (children.ContainsKey(childname))
+				return children[childname].GetChild(childns, create);
+			else
+				return null;
+		}
 
-        #region Save/Load
-        public void WriteIni(IniWriter w)
-        {
-            WriteIni(w, null);
-        }
-        private void WriteIni(IniWriter w, String ownns)
-        {
-            foreach (KeyValuePair<Keys, String> kvp in keycommands)
-            {
-                w.WriteKey(kvp.Key.ToString(), kvp.Value);
-            }
+		#region Save/Load
+		public void WriteIni(IniWriter w)
+		{
+			WriteIni(w, null);
+		}
+		private void WriteIni(IniWriter w, String ownns)
+		{
+			foreach (KeyValuePair<Keys, String> kvp in keycommands)
+			{
+				w.WriteKey(kvp.Key.ToString(), kvp.Value);
+			}
 
-            w.WriteEmpty();
+			w.WriteEmpty();
 
-            foreach (KeyValuePair<String, CommandControls> kvp in children)
-            {
-                String childns = kvp.Key;
-                if (ownns != null)
-                    childns = String.Format("{0}.{1}", ownns, kvp.Key);
+			foreach (KeyValuePair<String, CommandControls> kvp in children)
+			{
+				String childns = kvp.Key;
+				if (ownns != null)
+					childns = String.Format("{0}.{1}", ownns, kvp.Key);
 
-                w.WriteSection(String.Format("KeyBindings {0}", childns));
-                kvp.Value.WriteIni(w, childns);
-            }
-        }
+				w.WriteSection(String.Format("KeyBindings {0}", childns));
+				kvp.Value.WriteIni(w, childns);
+			}
+		}
 
-        public void ReadIni(IniReader r)
-        {
-            while (r.MoveToNextKey())
-                keycommands.Add((Keys)Enum.Parse(typeof(Keys), r.Name), r.Value);
-        }
-        #endregion        
-    }
+		public void ReadIni(IniReader r)
+		{
+			while (r.MoveToNextKey())
+				keycommands.Add((Keys)Enum.Parse(typeof(Keys), r.Name), r.Value);
+		}
+		#endregion		
+	}
 }

@@ -22,54 +22,54 @@ namespace Sharplike.Tests.TKTest
 		static void Main()
 		{
 
-            Game.Initialize();
+			Game.Initialize();
 
-            AbstractWindow gwin;
-            Assembly ea = Assembly.GetExecutingAssembly();
+			AbstractWindow gwin;
+			Assembly ea = Assembly.GetExecutingAssembly();
 
 
-            using (Stream imgstream = ea.GetManifestResourceStream("Sharplike.Tests.TKTest.curses_640x300.png"))
-            {
-                GlyphPalette pal = new GlyphPalette(imgstream, 16, 16);
+			using (Stream imgstream = ea.GetManifestResourceStream("Sharplike.Tests.TKTest.curses_640x300.png"))
+			{
+				GlyphPalette pal = new GlyphPalette(imgstream, 16, 16);
 
-                Int32 width = 80 * pal.GlyphDimensions.Width;
-                Int32 height = 25 * pal.GlyphDimensions.Height;
+				Int32 width = 80 * pal.GlyphDimensions.Width;
+				Int32 height = 25 * pal.GlyphDimensions.Height;
 
-                try
-                {
-                    //game.SetAudioSystem("OpenTK");
-                    Game.SetRenderSystem("OpenTK");
-                    gwin = Game.RenderSystem.CreateWindow(new Size(width, height), pal);
-                    Game.SetInputSystem("OpenTK");
-                }
-                catch (System.NullReferenceException e)
-                {
-                    Console.WriteLine("Error when loading plugin: " + e.Message + "\n" + e.Source);
-                    return;
-                }
+				try
+				{
+					//game.SetAudioSystem("OpenTK");
+					Game.SetRenderSystem("OpenTK");
+					gwin = Game.RenderSystem.CreateWindow(new Size(width, height), pal);
+					Game.SetInputSystem("OpenTK");
+				}
+				catch (System.NullReferenceException e)
+				{
+					Console.WriteLine("Error when loading plugin: " + e.Message + "\n" + e.Source);
+					return;
+				}
 
-            }
+			}
 			
-            //Game.Scripting.Run(Game.PathTo("Test.py"));
-            //game.Scripting.Run(game.PathTo("Test.rb"));
+			//Game.Scripting.Run(Game.PathTo("Test.py"));
+			//game.Scripting.Run(game.PathTo("Test.rb"));
 
-            Game.InputSystem.LoadConfiguration(Game.PathTo("commands.ini"));
-            Game.InputSystem.SaveConfiguration(Game.PathTo("commands.out.ini"));
+			Game.InputSystem.LoadConfiguration(Game.PathTo("commands.ini"));
+			Game.InputSystem.SaveConfiguration(Game.PathTo("commands.out.ini"));
 
-            
+			
 			gwin.Clear();
 
-            //ac.Play();
-            Game.GameProcessing += new EventHandler<EventArgs>(game_GameProcessing);
-            StepwiseGameLoop loop = new StepwiseGameLoop(RunGame);
-            Game.Run(loop);
+			//ac.Play();
+			Game.GameProcessing += new EventHandler<EventArgs>(game_GameProcessing);
+			StepwiseGameLoop loop = new StepwiseGameLoop(RunGame);
+			Game.Run(loop);
 
-            Game.Terminate();
-        }
+			Game.Terminate();
+		}
 
-        static void game_GameProcessing(object sender, EventArgs e)
-        {
-            AbstractWindow gwin = Game.RenderSystem.Window;
+		static void game_GameProcessing(object sender, EventArgs e)
+		{
+			AbstractWindow gwin = Game.RenderSystem.Window;
 			gwin.Clear();
 			for (Int32 i = 0; i < 256; i++)
 			{
@@ -82,18 +82,18 @@ namespace Sharplike.Tests.TKTest
 
 				//gwin[x, y].AddGlyph(i, Color.White, Color.FromArgb(r, g, b));
 			}
-        }
+		}
 
-        static Boolean RunGame(StepwiseGameLoop loop)
-        {
-            CommandData cmd = null;
-            do
-            {
-                cmd = loop.WaitForInput();
-                Console.WriteLine(cmd.Command);
-            } while (cmd.Command != "quit");
+		static Boolean RunGame(StepwiseGameLoop loop)
+		{
+			CommandData cmd = null;
+			do
+			{
+				cmd = loop.WaitForInput();
+				Console.WriteLine(cmd.Command);
+			} while (cmd.Command != "quit");
 
 			return false;
-        }
+		}
 	}
 }

@@ -10,8 +10,8 @@ using Nini.Ini;
 
 namespace Sharplike.Core.Input
 {
-    public sealed class InputSystem
-    {
+	public sealed class InputSystem
+	{
 		internal Dictionary<String, String> winEvents = new Dictionary<string, string>();
 		public CommandBroker Command { get; private set; }
 		public InputManager Input { get; private set; }
@@ -32,17 +32,17 @@ namespace Sharplike.Core.Input
 		}
 
 		
-        internal InputSystem() {
+		internal InputSystem() {
 			Command = new CommandBroker();
 			Input = new InputManager();
 		}
 
-        /// <summary>
-        /// Loads control bindings from a specified path.
-        /// </summary>
-        /// <param name="filename">The path to load from. Note: This does NOT automatically use Game.PathTo()</param>
-        public void LoadConfiguration(String filename)
-        {
+		/// <summary>
+		/// Loads control bindings from a specified path.
+		/// </summary>
+		/// <param name="filename">The path to load from. Note: This does NOT automatically use Game.PathTo()</param>
+		public void LoadConfiguration(String filename)
+		{
 			using (FileStream fs = new FileStream(filename, FileMode.Open)) {
 				using (IniReader r = new IniReader(fs)) {
 					while (true) {
@@ -75,7 +75,7 @@ namespace Sharplike.Core.Input
 					}
 				}
 			}
-        }
+		}
 
 		internal void Process()
 		{
@@ -84,20 +84,20 @@ namespace Sharplike.Core.Input
 			Provider.Poll();
 		}
 
-        /// <summary>
-        /// Saves the current control bindings to a path on the filesystem.
-        /// </summary>
-        /// <param name="filename">The location of the file to write to. NOTE: This does NOT automatically use Game.PathTo()</param>
-        public void SaveConfiguration(String filename)
-        {
-            using (FileStream fs = new FileStream(filename, FileMode.Create)){
+		/// <summary>
+		/// Saves the current control bindings to a path on the filesystem.
+		/// </summary>
+		/// <param name="filename">The location of the file to write to. NOTE: This does NOT automatically use Game.PathTo()</param>
+		public void SaveConfiguration(String filename)
+		{
+			using (FileStream fs = new FileStream(filename, FileMode.Create)){
 				using (IniWriter w = new IniWriter(fs))
 				{
 					w.WriteSection("KeyBindings");
 					Command.commands.WriteIni(w);
 				}
 			}
-        }
+		}
 
 		/// <summary>
 		/// Triggers a window event.
@@ -119,5 +119,5 @@ namespace Sharplike.Core.Input
 		{
 			return winEvents.ContainsKey(eventname);
 		}
-    }
+	}
 }

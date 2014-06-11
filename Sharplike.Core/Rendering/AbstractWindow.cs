@@ -56,7 +56,7 @@ namespace Sharplike.Core.Rendering
 		public AbstractWindow(Size displayDimensions, GlyphPalette palette) : base(null)
 		{
 			this.Size = new Size(displayDimensions.Width / palette.GlyphDimensions.Width, 
-			    displayDimensions.Height / palette.GlyphDimensions.Height);
+				displayDimensions.Height / palette.GlyphDimensions.Height);
 			
 			this.GlyphPalette = palette;
 			this.WindowSize = displayDimensions;
@@ -114,18 +114,18 @@ namespace Sharplike.Core.Rendering
 		/// <summary>
 		/// Update the Window (paint any changes to screen).
 		/// </summary>
-        public override void Update()
-        {
+		public override void Update()
+		{
 			base.Update();
-            for (Int32 x = 0; x < this.Size.Width; x++)
-            {
+			for (Int32 x = 0; x < this.Size.Width; x++)
+			{
 				for (Int32 y = 0; y < this.Size.Height; y++)
-                {
-                    if (tiles[x, y].IsStackDirty)
-                        tiles[x, y].RebuildRegionTiles();
-                }
-            }
-        }
+				{
+					if (tiles[x, y].IsStackDirty)
+						tiles[x, y].RebuildRegionTiles();
+				}
+			}
+		}
 		
 		/// <summary>
 		/// Invoked when the user changes the title (is called by the WindowTitle setter).

@@ -10,7 +10,7 @@ namespace Sharplike.Tests.Sandbox
 
 		public YellowWallPage (Vector3 pageSize) : base(pageSize)
 		{
-            Build();
+			Build();
 		}
 		
 		public override void Build()
@@ -41,13 +41,13 @@ namespace Sharplike.Tests.Sandbox
 				}
 			}
 
-            for (int x = 1; x < this.size.x - 1; ++x)
-            {
-                for (int y = 1; y < this.size.y - 1; ++y)
-                {
-                    map[x, y, 0] = new FloorSquare();
-                }
-            }
+			for (int x = 1; x < this.size.x - 1; ++x)
+			{
+				for (int y = 1; y < this.size.y - 1; ++y)
+				{
+					map[x, y, 0] = new FloorSquare();
+				}
+			}
 		}
 
 		

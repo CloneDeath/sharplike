@@ -17,27 +17,27 @@ namespace Sharplike.Core.Input
 		/// <summary>
 		/// The point on screen where the mouse command occurred.
 		/// </summary>
-        public Point ScreenCoordinates
-        {
-            get
-            {
-                return Game.InputSystem.Input.MousePosition;
-            }
-        }
+		public Point ScreenCoordinates
+		{
+			get
+			{
+				return Game.InputSystem.Input.MousePosition;
+			}
+		}
 
 		/// <summary>
 		/// The screen tile on which the mouse command occurred.
 		/// </summary>
-        public Point TileCoordinates
-        {
-            get
-            {
-                Point sc = ScreenCoordinates;
-                int x = sc.X / Game.RenderSystem.Window.GlyphPalette.GlyphDimensions.Width;
+		public Point TileCoordinates
+		{
+			get
+			{
+				Point sc = ScreenCoordinates;
+				int x = sc.X / Game.RenderSystem.Window.GlyphPalette.GlyphDimensions.Width;
 				int y = sc.Y / Game.RenderSystem.Window.GlyphPalette.GlyphDimensions.Width;
-                return new Point(x,y);
-            }
-        }
+				return new Point(x,y);
+			}
+		}
 
 		public CommandData(String command)
 		{
@@ -48,9 +48,9 @@ namespace Sharplike.Core.Input
 		{
 			String str = "CommandData: { " + this.Command;
 			//{
-			//    str += " (mouse) ";
-			//    str += "TileXY: " + this.TileCoordinates.ToString() + " ";
-			//    str += "ScreenXY: " + this.ScreenCoordinates.ToString();
+			//	str += " (mouse) ";
+			//	str += "TileXY: " + this.TileCoordinates.ToString() + " ";
+			//	str += "ScreenXY: " + this.ScreenCoordinates.ToString();
 			//}
 			str += " }";
 			return str;

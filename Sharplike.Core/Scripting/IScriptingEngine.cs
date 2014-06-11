@@ -6,11 +6,11 @@ using Microsoft.Scripting.Hosting;
 
 namespace Sharplike.Core.Scripting
 {
-    public interface IScriptingEngine
-    {
-        ScriptEngine Engine
-        {
-            get;
-        }
-    }
+	public interface IScriptingEngine
+	{
+		ScriptEngine Engine
+		{
+			get;
+		}
+	}
 }

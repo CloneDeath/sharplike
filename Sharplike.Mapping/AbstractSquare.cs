@@ -23,10 +23,10 @@ namespace Sharplike.Mapping
 			}
 		}
 
-        public virtual bool Dirty
-        {
+		public virtual bool Dirty
+		{
 			get { return false; }
-        }
+		}
 
 		public virtual AbstractMap Map
 		{
@@ -39,5 +39,5 @@ namespace Sharplike.Mapping
 			get { return Vector3.Zero; }
 			set { }
 		}
-    }
+	}
 }

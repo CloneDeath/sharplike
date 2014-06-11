@@ -64,13 +64,13 @@ namespace Sharplike.Noise
 								
 								try {
 									Double vx = interp.Interpolate(odata[ptx*o, pty*o, ptz*o, ptw*o], 
-									                               odata[(ptx+1)*o, pty*o, ptz*o, ptw*o], fx);
+																   odata[(ptx+1)*o, pty*o, ptz*o, ptw*o], fx);
 									Double vy = interp.Interpolate(odata[ptx*o, pty*o, ptz*o, ptw*o], 
-									                               odata[ptx*o, (pty+1)*o, ptz*o, ptw*o], fy);
+																   odata[ptx*o, (pty+1)*o, ptz*o, ptw*o], fy);
 									Double vz = interp.Interpolate(odata[ptx*o, pty*o, ptz*o, ptw*o], 
-									                               odata[ptx*o, pty*o, (ptz+1)*o, ptw*o], fz);
+																   odata[ptx*o, pty*o, (ptz+1)*o, ptw*o], fz);
 									Double vw = interp.Interpolate(odata[ptx*o, pty*o, ptz*o, ptw*o], 
-									                               odata[ptx*o, pty*o, ptz*o, (ptw+1)*o], fw);
+																   odata[ptx*o, pty*o, ptz*o, (ptw+1)*o], fw);
 							
 									Double finalval = (vx + vy + vz + vw) / 4; // Not the proper way, but, it's late
 								

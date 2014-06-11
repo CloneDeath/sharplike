@@ -7,19 +7,19 @@ using Sharplike.Core.Input;
 
 namespace Sharplike.Core.Runtime
 {
-    public class StepwiseGameLoop : AbstractGameLoop
-    {
+	public class StepwiseGameLoop : AbstractGameLoop
+	{
 		/// <summary>
-        /// Creates a new step-based game loop, which processes game logic
-        /// only in response to a keypress.
-        /// </summary>
-        /// <param name="callback">The game entry point.</param>
-        public StepwiseGameLoop(Execute callback)
-        {
-            usercode = callback;
-            Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
+		/// Creates a new step-based game loop, which processes game logic
+		/// only in response to a keypress.
+		/// </summary>
+		/// <param name="callback">The game entry point.</param>
+		public StepwiseGameLoop(Execute callback)
+		{
+			usercode = callback;
+			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
 			Game.Time = 0;
-        }
+		}
 
 		/// <summary>
 		/// Creates a new step-based game loop, which processes game logic
@@ -44,8 +44,8 @@ namespace Sharplike.Core.Runtime
 			usercode = stateMachine.GameLoopTick;
 		}
 
-        public override void Begin()
-        {
+		public override void Begin()
+		{
 			Boolean foo = true;
 			while (foo == true && Game.Terminated == false)
 			{
@@ -53,7 +53,7 @@ namespace Sharplike.Core.Runtime
 				Game.Process();
 				Application.DoEvents();
 			}
-        }
+		}
 
 		private CommandData DoWait()
 		{
@@ -63,50 +63,50 @@ namespace Sharplike.Core.Runtime
 			}
 			return lastcommands.Dequeue();
 		}
-        
-        /// <summary>
-        /// Wait for a user to trigger one of the specified commands.
-        /// This call will not return until the user triggers one of the expected commands.
-        /// </summary>
-        /// <param name="expected">The specific commands to expect.</param>
-        /// <returns>The command data object.</returns>
-        public CommandData WaitForInput(String[] expected)
-        {
-            List<String> exp = new List<string>(expected);
-            CommandData cmd = null;
-            do
-            {
-                cmd = DoWait();
-            } while (!exp.Contains(cmd.Command));
+		
+		/// <summary>
+		/// Wait for a user to trigger one of the specified commands.
+		/// This call will not return until the user triggers one of the expected commands.
+		/// </summary>
+		/// <param name="expected">The specific commands to expect.</param>
+		/// <returns>The command data object.</returns>
+		public CommandData WaitForInput(String[] expected)
+		{
+			List<String> exp = new List<string>(expected);
+			CommandData cmd = null;
+			do
+			{
+				cmd = DoWait();
+			} while (!exp.Contains(cmd.Command));
 
 			Game.Step();
 
-            return cmd;
-        }
+			return cmd;
+		}
 
-        /// <summary>
-        /// Wait for the user to press a key.
-        /// </summary>
-        /// <returns>The command raised by the user. See Sharpwise.Core.Input.InputSystem for details on input commands.</returns>
-        public CommandData WaitForInput()
-        {
+		/// <summary>
+		/// Wait for the user to press a key.
+		/// </summary>
+		/// <returns>The command raised by the user. See Sharpwise.Core.Input.InputSystem for details on input commands.</returns>
+		public CommandData WaitForInput()
+		{
 			CommandData ret = DoWait();
 			Game.Step();
 			return ret;
-        }
+		}
 
-        void InputSystem_CommandTriggered(object sender, CommandEventArgs e)
-        {
-            lastcommands.Enqueue(e.CommandData);
-        }
+		void InputSystem_CommandTriggered(object sender, CommandEventArgs e)
+		{
+			lastcommands.Enqueue(e.CommandData);
+		}
 
-        /// <summary>
-        /// Defines the entry point of an application.
-        /// </summary>
-        /// <param name="loop">The StepwiseGameLoop that is in charge of this game.</param>
-        public delegate Boolean Execute(StepwiseGameLoop loop);
+		/// <summary>
+		/// Defines the entry point of an application.
+		/// </summary>
+		/// <param name="loop">The StepwiseGameLoop that is in charge of this game.</param>
+		public delegate Boolean Execute(StepwiseGameLoop loop);
 
-        private Execute usercode;
+		private Execute usercode;
 		Queue<CommandData> lastcommands = new Queue<CommandData>();
-    }
+	}
 }

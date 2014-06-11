@@ -17,64 +17,64 @@ using Sharplike.Core.Scheduling;
 
 namespace Sharplike.Core
 {
-    /// <summary>
-    /// Game is the core entry point of the Sharplike engine.
-    /// </summary>
-    /// <example>
-    /// Game.Initialize();
-    /// 
-    /// Game.SetRenderSystem("OpenTK");
-    /// Game.CreateRenderWindow(...);
-    /// 
-    /// Game.SetInputSystem("OpenTK");
-    /// Game.SetAudioSystem("OpenTK");
-    /// 
-    /// g.Run(new StepwiseGameLoop(new StepwiseGameLoop.Execute(MyGame)));
-    /// 
-    /// g.Terminate();
-    /// </example>
-    public static class Game
-    {
+	/// <summary>
+	/// Game is the core entry point of the Sharplike engine.
+	/// </summary>
+	/// <example>
+	/// Game.Initialize();
+	/// 
+	/// Game.SetRenderSystem("OpenTK");
+	/// Game.CreateRenderWindow(...);
+	/// 
+	/// Game.SetInputSystem("OpenTK");
+	/// Game.SetAudioSystem("OpenTK");
+	/// 
+	/// g.Run(new StepwiseGameLoop(new StepwiseGameLoop.Execute(MyGame)));
+	/// 
+	/// g.Terminate();
+	/// </example>
+	public static class Game
+	{
 		private static readonly EventArgs internedEventArg = new EventArgs();
-        private static GameMessenger messenger = new GameMessenger();
+		private static GameMessenger messenger = new GameMessenger();
 
 		private static PostOffice post = new PostOffice();
 		private static Dictionary<String, List<IMessageReceiver>> subscriptions = new Dictionary<string, List<IMessageReceiver>>();
 
 		/// <summary>
-        /// Creates a new game.
-        /// </summary>
-        /// <param name="basedir">The base application directory.</param>
-        public static void Initialize(String basedir)
-        {
-            SubscribeToChannels(messenger);
+		/// Creates a new game.
+		/// </summary>
+		/// <param name="basedir">The base application directory.</param>
+		public static void Initialize(String basedir)
+		{
+			SubscribeToChannels(messenger);
 
-            BaseDirectory = Path.GetFullPath(basedir);
-            if (!Directory.Exists(BaseDirectory))
-                throw new DirectoryNotFoundException("Specified base directory does not exist.");
+			BaseDirectory = Path.GetFullPath(basedir);
+			if (!Directory.Exists(BaseDirectory))
+				throw new DirectoryNotFoundException("Specified base directory does not exist.");
 
-            if (AddinManager.IsInitialized)
-                return;
+			if (AddinManager.IsInitialized)
+				return;
 
-            AddinManager.Initialize(PathTo("addins"));
+			AddinManager.Initialize(PathTo("addins"));
 #if DEBUG
-            AddinManager.Registry.Rebuild(new ConsoleProgressStatus(true));
+			AddinManager.Registry.Rebuild(new ConsoleProgressStatus(true));
 #else
-            AddinManager.Registry.Update();
+			AddinManager.Registry.Update();
 #endif
 
-            Game.InputSystem = new InputSystem();
+			Game.InputSystem = new InputSystem();
 
 			Game.Time = 0;
-        }
+		}
 
-        /// <summary>
-        /// Creates a new game. The base directory will be the location of the .exe file that was run.
-        /// </summary>
-        public static void Initialize()
-        {
-            Initialize(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-        }
+		/// <summary>
+		/// Creates a new game. The base directory will be the location of the .exe file that was run.
+		/// </summary>
+		public static void Initialize()
+		{
+			Initialize(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+		}
 
 		#region Messaging
 		/// <summary>
@@ -83,8 +83,8 @@ namespace Sharplike.Core
 		/// <param name="channel">The channel to send to</param>
 		/// <param name="messagename">The name of the message to send</param>
 		/// <param name="args">The arguments for the message</param>
-        public static void SendMessage(String channel, String messagename, params Object[] args)
-        {
+		public static void SendMessage(String channel, String messagename, params Object[] args)
+		{
 			List<IMessageReceiver> subscribers;
 			lock (subscriptions)
 			{
@@ -96,7 +96,7 @@ namespace Sharplike.Core
 					}
 				}
 			}
-        }
+		}
 
 		/// <summary>
 		/// Thread safe. Broadcasts a message to a channel.
@@ -114,12 +114,12 @@ namespace Sharplike.Core
 		/// <param name="target">The target to send the message to.</param>
 		/// <param name="messagename">The name of the message to send</param>
 		/// <param name="args">The arguments for the message</param>
-        public static void SendMessage(IMessageReceiver target, String messagename, params Object[] args)
-        {
+		public static void SendMessage(IMessageReceiver target, String messagename, params Object[] args)
+		{
 			Message m = new Message(messagename, null, args);
 			target.AssertArgumentTypes(m);
 			post.EnqueueMessage(target, m);
-        }
+		}
 
 		/// <summary>
 		/// Thread safe. Send a message to a particular target.
@@ -138,8 +138,8 @@ namespace Sharplike.Core
 		/// <see cref="Sharplike.Core.Game.Unsubscribe"/>
 		/// <param name="chan">The channel to subscribe to.</param>
 		/// <param name="subscriber">The object that will receive messages.</param>
-        public static void SubscribeToChannel(String chan, IMessageReceiver subscriber)
-        {
+		public static void SubscribeToChannel(String chan, IMessageReceiver subscriber)
+		{
 			List<IMessageReceiver> channel;
 			lock (subscriptions)
 			{
@@ -151,7 +151,7 @@ namespace Sharplike.Core
 
 				channel.Add(subscriber);
 			}
-        }
+		}
 
 		/// <summary>
 		/// Thread safe. Automatically subscribe to all channels specified in class attributes.
@@ -160,14 +160,14 @@ namespace Sharplike.Core
 		/// <see cref="Sharplike.Core.Game.Unsubscribe"/>
 		/// <seealso cref="Sharplike.Core.Messaging.ChannelSubscriberAttribute"/>
 		/// <param name="subscriber">The object to create subscriptions for.</param>
-        public static void SubscribeToChannels(IMessageReceiver subscriber)
-        {
+		public static void SubscribeToChannels(IMessageReceiver subscriber)
+		{
 			foreach (ChannelSubscriberAttribute attr in
 				Attribute.GetCustomAttributes(subscriber.GetType()))
 			{
 				SubscribeToChannel(attr.Channel, subscriber);
 			}
-        }
+		}
 
 		/// <summary>
 		/// Thread safe. Unsubscribes an object from the whole post system. This object will no longer receive messages.
@@ -216,66 +216,66 @@ namespace Sharplike.Core
 		#endregion
 
 		/// <summary>
-        /// Sets the input system to use. WARNING: Many input systems (such as OpenTK) reference the rendering system
-        /// for a window handle. Consult the documentation of your input system for details, but in general
-        /// be sure to initialize your rendering system first.
-        /// </summary>
-        /// <param name="sys">The name of the input system to use.</param>
-        public static void SetInputSystem(String sys)
-        {
-            if (Game.InputSystem.Provider != null)
-                throw new InvalidOperationException("Game.SetInputSystem() may only be called once.");
-            TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Input/{0}", sys));
+		/// Sets the input system to use. WARNING: Many input systems (such as OpenTK) reference the rendering system
+		/// for a window handle. Consult the documentation of your input system for details, but in general
+		/// be sure to initialize your rendering system first.
+		/// </summary>
+		/// <param name="sys">The name of the input system to use.</param>
+		public static void SetInputSystem(String sys)
+		{
+			if (Game.InputSystem.Provider != null)
+				throw new InvalidOperationException("Game.SetInputSystem() may only be called once.");
+			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Input/{0}", sys));
 			if (node == null)
 				throw new ArgumentException("Specified input system could not be found.", "sys");
-            InputSystem.Provider = (AbstractInputProvider)node.CreateInstance();
-        }
+			InputSystem.Provider = (AbstractInputProvider)node.CreateInstance();
+		}
 
-        /// <summary>
-        /// Sets the rendering engine to use.
-        /// </summary>
-        /// <param name="sys">The name of the rendering engine. Default is "OpenTK".</param>
-        public static void SetRenderSystem(String sys)
-        {
-            if (Game.RenderSystem != null)
-                throw new InvalidOperationException("Game.SetRenderSystem() may only be called once.");
+		/// <summary>
+		/// Sets the rendering engine to use.
+		/// </summary>
+		/// <param name="sys">The name of the rendering engine. Default is "OpenTK".</param>
+		public static void SetRenderSystem(String sys)
+		{
+			if (Game.RenderSystem != null)
+				throw new InvalidOperationException("Game.SetRenderSystem() may only be called once.");
 			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Rendering/{0}", sys));
 			if (node == null)
 				throw new ArgumentException("Specified render system could not be found.", "sys");
-            RenderSystem = (AbstractRenderSystem)node.CreateInstance();
-        }
+			RenderSystem = (AbstractRenderSystem)node.CreateInstance();
+		}
 
-        /// <summary>
-        /// Sets the audio engine to use.
-        /// </summary>
-        /// <param name="sys">The name of the audio engine. Default is "OpenTK".</param>
-        public static void SetAudioSystem(String sys)
-        {
-            if (Game.AudioSystem != null)
-                throw new InvalidOperationException("Game.SetAudioSystem() may only be called once.");
-            ExtensionNodeList en = AddinManager.GetExtensionNodes("/Sharplike/Audio");
+		/// <summary>
+		/// Sets the audio engine to use.
+		/// </summary>
+		/// <param name="sys">The name of the audio engine. Default is "OpenTK".</param>
+		public static void SetAudioSystem(String sys)
+		{
+			if (Game.AudioSystem != null)
+				throw new InvalidOperationException("Game.SetAudioSystem() may only be called once.");
+			ExtensionNodeList en = AddinManager.GetExtensionNodes("/Sharplike/Audio");
 			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Audio/{0}", sys));
 			if (node == null)
 				throw new ArgumentException("Specified audio system could not be found.", "sys");
-            AudioSystem = (AbstractAudioEngine)node.CreateInstance();
-        }
+			AudioSystem = (AbstractAudioEngine)node.CreateInstance();
+		}
 
-        /// <summary>
-        /// Starts the game's processing. Make sure that the game has been initialized through a call to
-        /// Initialize() first. Game call will not return until the user has quit the game.
-        /// </summary>
-        /// <param name="loop">The AbstractGameLoop that's responsible for delegating to game logic.</param>
-        public static void Run(AbstractGameLoop loop)
-        {
+		/// <summary>
+		/// Starts the game's processing. Make sure that the game has been initialized through a call to
+		/// Initialize() first. Game call will not return until the user has quit the game.
+		/// </summary>
+		/// <param name="loop">The AbstractGameLoop that's responsible for delegating to game logic.</param>
+		public static void Run(AbstractGameLoop loop)
+		{
 			if (Scheduler == null)
 				Scheduler = new SingleThreadedScheduler();
 
 			if (Game.OnGameInitialization != null)
-                Game.OnGameInitialization(null, internedEventArg);
-            loop.Begin();
+				Game.OnGameInitialization(null, internedEventArg);
+			loop.Begin();
 			if (Game.OnGameTermination != null)
-                Game.OnGameTermination(null, internedEventArg);
-        }
+				Game.OnGameTermination(null, internedEventArg);
+		}
 
 		/// <summary>
 		/// Starts the game's processing and immediately returns. For expert users only!
@@ -298,11 +298,11 @@ namespace Sharplike.Core
 				Game.OnGameTermination(null, internedEventArg);
 		}
 
-        /// <summary>
-        /// Processes the game's core subsystems. Game function should not be called except by expert users.
-        /// </summary>
-        public static void Process()
-        {
+		/// <summary>
+		/// Processes the game's core subsystems. Game function should not be called except by expert users.
+		/// </summary>
+		public static void Process()
+		{
 			if (GameProcessing != null) {
 				GameProcessing(null, internedEventArg);
 			}
@@ -321,7 +321,7 @@ namespace Sharplike.Core
 
 			++Game.Time;
 			PumpMessages();
-        }
+		}
 
 		/// <summary>
 		/// Pumps game messages. For expert users only!
@@ -342,33 +342,33 @@ namespace Sharplike.Core
 			//List<IScheduledTask> alltasks;
 			//lock (tasks)
 			//{
-			//    alltasks = new List<IScheduledTask>(tasks);
+			//	alltasks = new List<IScheduledTask>(tasks);
 			//}
 			//Scheduler.Process(alltasks.AsReadOnly());
 			Scheduler.Process();
 		}
 
-        /// <summary>
-        /// The system in charge of graphical output.
-        /// </summary>
+		/// <summary>
+		/// The system in charge of graphical output.
+		/// </summary>
 		public static AbstractRenderSystem RenderSystem
 		{
 			get;
 			private set;
 		}
 
-        /// <summary>
-        /// The system in charge of audio playback.
-        /// </summary>
+		/// <summary>
+		/// The system in charge of audio playback.
+		/// </summary>
 		public static AbstractAudioEngine AudioSystem
 		{
 			get;
 			private set;
 		}
 
-        /// <summary>
-        /// The system in charge of user input.
-        /// </summary>
+		/// <summary>
+		/// The system in charge of user input.
+		/// </summary>
 		public static InputSystem InputSystem
 		{
 			get;
@@ -381,10 +381,10 @@ namespace Sharplike.Core
 			set;
 		}
 
-        /// <summary>
-        /// The system in charge of dynamic scripting.
-        /// </summary>
-        public static ScriptingSystem Scripting
+		/// <summary>
+		/// The system in charge of dynamic scripting.
+		/// </summary>
+		public static ScriptingSystem Scripting
 		{
 			get;
 			private set;
@@ -397,17 +397,17 @@ namespace Sharplike.Core
 		/// </summary>
 		/// <param name="location">The path to generate off of the game's BaseDirectory.</param>
 		/// <returns>The full system path to the specified location.</returns>
-        public static String PathTo(String location)
-        {
+		public static String PathTo(String location)
+		{
 			return Game.PathTo(location.Split('/'));
-        }
+		}
 		/// <summary>
 		/// Builds a full system path to the specified location from an IEnumerable of
 		/// path components.
 		/// </summary>
 		/// <param name="location">An enumerable collection of path components.</param>
 		/// <returns>The full system path to the specified location.</returns>
-        public static String PathTo(IEnumerable<String> location)
+		public static String PathTo(IEnumerable<String> location)
 		{
 			String foo = Game.BaseDirectory;
 			foreach (String s in location)
@@ -415,14 +415,14 @@ namespace Sharplike.Core
 			return foo;
 		}
 
-        /// <summary>
-        /// The base application directory of the current game.
-        /// </summary>
-        public static String BaseDirectory
-        {
-            get;
-            private set;
-        }
+		/// <summary>
+		/// The base application directory of the current game.
+		/// </summary>
+		public static String BaseDirectory
+		{
+			get;
+			private set;
+		}
 
 		public static Int64 Time
 		{
@@ -452,12 +452,12 @@ namespace Sharplike.Core
 		/// Call Game when your application's done. Disposes of Game and fires any
 		/// OnGameTermination events.
 		/// </summary>
-        public static void Terminate()
+		public static void Terminate()
 		{
 			if (Game.Terminated) return;
 
-            if (AudioSystem != null)
-                AudioSystem.Dispose();
+			if (AudioSystem != null)
+				AudioSystem.Dispose();
 			
 			if (InputSystem.Provider != null)
 				InputSystem.Provider.Dispose();
@@ -471,44 +471,44 @@ namespace Sharplike.Core
 			Unsubscribe(messenger);
 		}
 
-        public static Boolean Terminated
+		public static Boolean Terminated
 		{
 			get;
 			private set;
 		}
 
-        public delegate void GameProcessingEventHandler(object sender, EventArgs e);
+		public delegate void GameProcessingEventHandler(object sender, EventArgs e);
 
-        /// <summary>
-        /// GameProcessing is called just before a frame is rendered to the screen.
-        /// It may be used for graphical map effects, but should not contain game logic.
-        /// </summary>
-        public static event EventHandler<EventArgs> GameProcessing;
+		/// <summary>
+		/// GameProcessing is called just before a frame is rendered to the screen.
+		/// It may be used for graphical map effects, but should not contain game logic.
+		/// </summary>
+		public static event EventHandler<EventArgs> GameProcessing;
 
 		/// <summary>
 		/// OnGameInitialization is an event that will fire after the game loop
 		/// is initialized, but before it is run for the first time.
 		/// </summary>
-        public static event EventHandler<EventArgs> OnGameInitialization;
+		public static event EventHandler<EventArgs> OnGameInitialization;
 
 		/// <summary>
 		/// Called after the game loop finally terminates.
 		/// </summary>
-        public static event EventHandler<EventArgs> OnGameTermination;
-    }
+		public static event EventHandler<EventArgs> OnGameTermination;
+	}
 
-    [ChannelSubscriber("Game")]
-    public class GameMessenger : IMessageReceiver
-    {
-        internal GameMessenger()
-        {
+	[ChannelSubscriber("Game")]
+	public class GameMessenger : IMessageReceiver
+	{
+		internal GameMessenger()
+		{
 			mhandler.SetHandler("Terminate", Message_Terminate);
-        }
+		}
 
-        public void OnMessage(Message msg)
-        {
-            mhandler.HandleMessage(msg);
-        }
+		public void OnMessage(Message msg)
+		{
+			mhandler.HandleMessage(msg);
+		}
 
 		void Message_Terminate(Message msg)
 		{

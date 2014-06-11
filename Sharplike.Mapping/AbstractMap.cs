@@ -160,7 +160,7 @@ namespace Sharplike.Mapping
 			Game.Scheduler.AddTask(newPage);
 
 			Pages.Add(pageLocation, newPage);
-            newPage.Build();
+			newPage.Build();
 		}
 
 		public AbstractPage GetPage(Vector3 addr)
@@ -268,12 +268,12 @@ namespace Sharplike.Mapping
 		/// </summary>
 		/// <param name="ent">The entity to view from.</param>
 		public void ViewFrom(AbstractEntity ent)
-        {
-            int x = ent.Location.x - (Size.Width / 2);
-            int y = ent.Location.y - (Size.Height / 2);
-            int z = ent.Location.z;
-            ViewFrom(new Vector3(x, y, z));
-        }
+		{
+			int x = ent.Location.x - (Size.Width / 2);
+			int y = ent.Location.y - (Size.Height / 2);
+			int z = ent.Location.z;
+			ViewFrom(new Vector3(x, y, z));
+		}
 
 		/// <summary>
 		/// Sets the viewport to a specific location on the map.
@@ -291,7 +291,7 @@ namespace Sharplike.Mapping
 		{
 			if (nView.Equals(view) == false || forceRender == true)
 			{
-                this.Clear();
+				this.Clear();
 				
 				for (int x = 0; x < this.Size.Width; x++)
 				{
@@ -299,26 +299,26 @@ namespace Sharplike.Mapping
 					for (int y = 0; y < this.Size.Height; y++)
 					{
 						int gy = y + nView.y;
-                        this.RegionTiles[x, y].Reset();
+						this.RegionTiles[x, y].Reset();
 						
 						AbstractSquare sq = this.GetSafeSquare(new Vector3(gx, gy, nView.z));
 						if (sq != null)
 						{
-                            this.RegionTiles[x, y].AddGlyphProvider(sq);
+							this.RegionTiles[x, y].AddGlyphProvider(sq);
 						}
 						else
 						{
-                            //Draw a nice red error tile if we're looking out of bounds in debug mode,
-                            //but just black if we're in release mode.
+							//Draw a nice red error tile if we're looking out of bounds in debug mode,
+							//but just black if we're in release mode.
 #if DEBUG
 							int n = 249; // circle
 							if (gx % 2 == 0 && gy % 2 == 0) n = 197; // +
 							if (gx % 2 != 0 && gy % 2 == 0) n = 196; // -
 							if (gx % 2 == 0 && gy % 2 != 0) n = 179; // |
 
-                            this.RegionTiles[x, y].AddGlyphProvider(new ErrorSquare(n));
+							this.RegionTiles[x, y].AddGlyphProvider(new ErrorSquare(n));
 #else
-                            this.RegionTiles[x, y].AddGlyphProvider(new EmptySquare());
+							this.RegionTiles[x, y].AddGlyphProvider(new EmptySquare());
 #endif
 						}
 
@@ -327,9 +327,9 @@ namespace Sharplike.Mapping
 
 				view = nView;
 
-                Vector3 addr;
-                Vector3 newoff;
-                Vector3.Divide(nView, this.pageSize, out addr, out newoff);
+				Vector3 addr;
+				Vector3 newoff;
+				Vector3.Divide(nView, this.pageSize, out addr, out newoff);
 
 				foreach (AbstractPage p in GetPagesInRange(nView, new Vector3(this.Size.Width, this.Size.Height, 1)))
 				{

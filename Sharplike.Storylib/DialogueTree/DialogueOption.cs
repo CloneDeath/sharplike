@@ -8,26 +8,26 @@ using System.Xml.Schema;
 namespace Sharplike.Storylib.DialogueTree
 {
 	[Serializable]
-    public class DialogueOption
-    {
-        public String Summary
-        {
-            get;
-            set;
-        }
+	public class DialogueOption
+	{
+		public String Summary
+		{
+			get;
+			set;
+		}
 
-        public StoryPhase Target
-        {
-            get;
-            set;
-        }
+		public StoryPhase Target
+		{
+			get;
+			set;
+		}
 
-        internal void OnOptionChosen()
-        {
-            if (OptionChosen != null)
-                OptionChosen(this, new EventArgs());
-        }
+		internal void OnOptionChosen()
+		{
+			if (OptionChosen != null)
+				OptionChosen(this, new EventArgs());
+		}
 
-        public event EventHandler<EventArgs> OptionChosen;
-    }
+		public event EventHandler<EventArgs> OptionChosen;
+	}
 }

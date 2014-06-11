@@ -32,24 +32,24 @@ namespace Sharplike.Core.Rendering
 		/// </summary>
 		public readonly Size GlyphDimensions;
 
-        /// <summary>
-        /// Stream Constructor.
-        /// </summary>
-        /// <param name="filename">Filename of the glyph bitmap.</param>
-        /// <param name="numRows">Number of rows in the glyph bitmap.</param>
-        /// <param name="numCols">Number of columns in the glyph bitmap.</param>
-        public GlyphPalette(Stream filedata, Int32 numRows, Int32 numCols)
-        {
-            this.SourceBitmap = new Bitmap(filedata);
-            this.RowCount = numRows;
-            this.ColumnCount = numCols;
-            this.GlyphCount = numRows * numCols;
+		/// <summary>
+		/// Stream Constructor.
+		/// </summary>
+		/// <param name="filename">Filename of the glyph bitmap.</param>
+		/// <param name="numRows">Number of rows in the glyph bitmap.</param>
+		/// <param name="numCols">Number of columns in the glyph bitmap.</param>
+		public GlyphPalette(Stream filedata, Int32 numRows, Int32 numCols)
+		{
+			this.SourceBitmap = new Bitmap(filedata);
+			this.RowCount = numRows;
+			this.ColumnCount = numCols;
+			this.GlyphCount = numRows * numCols;
 
-            this.GlyphDimensions = new Size(this.SourceBitmap.Width / numCols,
-                                            this.SourceBitmap.Height / numRows);
+			this.GlyphDimensions = new Size(this.SourceBitmap.Width / numCols,
+											this.SourceBitmap.Height / numRows);
 
-            Glyph.GlyphCount = this.GlyphCount;
-        }
+			Glyph.GlyphCount = this.GlyphCount;
+		}
 
 		/// <summary>
 		/// Constructor.

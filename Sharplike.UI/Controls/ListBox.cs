@@ -71,9 +71,11 @@ namespace Sharplike.UI.Controls
 				y_offset += item.Size.Height;
 
 				if (SelectedItem == item) {
-					item.Background = Color.Blue;
+					item.Background = Color.Yellow;
+					item.Color = Color.Black;
 				} else {
 					item.Background = Color.Black;
+					item.Color = Color.White;
 				}
 			}
 		}
