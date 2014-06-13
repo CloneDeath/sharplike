@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using Sharplike.Core.Audio;
 using OpenTK;
+using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 
 namespace Sharplike.Audio.TK
@@ -23,12 +24,13 @@ namespace Sharplike.Audio.TK
 			AL.Source(source, ALSourcef.Gain, (float)this.Volume);
 			ac.CheckErrors();
 
-			using (AudioReader ar = new AudioReader(data))
-			{
-				SoundData d = ar.ReadToEnd();
-				AL.BufferData(source, d);
-				ac.CheckErrors();
-			}
+#warning OpenTK Audio is not implemented.
+			//using (AudioReader ar = new AudioReader(data))
+			//{
+			//    SoundData d = ar.ReadToEnd();
+			//    AL.BufferData(source, d);
+			//    ac.CheckErrors();
+			//}
 
 			AL.Source(source, ALSourcei.Buffer, buffer);
 			ac.CheckErrors();

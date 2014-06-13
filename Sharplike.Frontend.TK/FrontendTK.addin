@@ -2,7 +2,7 @@
 <Addin id="Sharplike.Frontend.TK" author="Large Russian Games" version="1.0">
 	<Runtime>
 		<Import assembly="OpenTK.dll" />
-		<Import assembly="OpenTK.Compatibility.dll" />
+		<Import assembly="OpenTK.GLControl.dll" />
 		<Import assembly="Sharplike.Frontend.TK.dll" />
 	</Runtime>
 

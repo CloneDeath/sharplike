@@ -152,7 +152,7 @@ namespace Sharplike.Frontend.Rendering
 
 			foreach (IGlyphProvider glyphpro in gproviders)
 			{
-				GL.Begin(BeginMode.Quads);
+				GL.Begin(PrimitiveType.Quads);
 				GL.Color4(glyphpro.BackgroundColor);
 				GL.Vertex2(x, y);
 				GL.Vertex2(x + w, y);
@@ -173,7 +173,7 @@ namespace Sharplike.Frontend.Rendering
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, paletteId);
 	
-					GL.Begin(BeginMode.Quads);
+					GL.Begin(PrimitiveType.Quads);
 					GL.Color4(glyph.Color);
 					GL.TexCoord2(u, v); GL.Vertex2(x, y);
 					GL.TexCoord2(du + u, v); GL.Vertex2(x + w, y);
