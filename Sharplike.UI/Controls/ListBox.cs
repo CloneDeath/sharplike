@@ -83,6 +83,7 @@ namespace Sharplike.UI.Controls
 				if (SelectedIndex == -1) {
 					SelectedIndex = 0;
 				}
+				childNode.Location = new Point(1, Items.Count);
 			}
 		}
 
