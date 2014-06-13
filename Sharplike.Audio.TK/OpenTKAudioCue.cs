@@ -4,8 +4,7 @@ using System.Text;
 using System.IO;
 using Sharplike.Core.Audio;
 using OpenTK;
-using OpenTK.Audio;
-//using OpenTK.Audio.OpenAL;
+using OpenTK.Audio.OpenAL;
 
 namespace Sharplike.Audio.TK
 {

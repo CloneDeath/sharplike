@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Mono.Addins;
-using Mono.Addins.CecilReflector;
 using System.IO;
 using System.Reflection;
 using Sharplike;
