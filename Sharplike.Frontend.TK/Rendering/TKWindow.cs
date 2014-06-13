@@ -117,15 +117,23 @@ namespace Sharplike.Frontend.Rendering
 				{
 					DisplayTile tile = this.tiles[x, y];
 
-					DrawTile(tile, x, y);
-					tile.MarkRenderClean();
-					
+					if (tile.IsRenderDirty || tile.RenderData == null) {
+						UpdateDisplayList(tile, x, y);
+						tile.MarkRenderClean();
+					} else {
+						GL.CallList((int)tile.RenderData);
+					}
 				}
 			}
 		}
 
-		private void DrawTile(DisplayTile tile, int x, int y)
+		private void UpdateDisplayList(DisplayTile tile, int x, int y)
 		{
+			if (tile.RenderData == null) {
+				tile.RenderData = GL.GenLists(1);
+			}
+
+			GL.NewList((int)tile.RenderData, ListMode.CompileAndExecute);
 
 			Int32 w = this.GlyphPalette.GlyphDimensions.Width;
 			Int32 h = this.GlyphPalette.GlyphDimensions.Height;
@@ -177,6 +185,7 @@ namespace Sharplike.Frontend.Rendering
 			}
 			GL.Disable(EnableCap.Blend);
 
+			GL.EndList();
 		}
 
 		protected override void WindowTitleChange()

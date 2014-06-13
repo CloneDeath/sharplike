@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using Sharplike.Core.Input;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Sharplike.Core.Runtime
 {
@@ -14,10 +16,9 @@ namespace Sharplike.Core.Runtime
 		/// only in response to a keypress.
 		/// </summary>
 		/// <param name="callback">The game entry point.</param>
-		public StepwiseGameLoop(Execute callback)
+		public StepwiseGameLoop(Action<StepwiseGameLoop> callback)
 		{
-			usercode = callback;
-			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
+			GameTick = callback;
 			Game.Time = 0;
 		}
 
@@ -27,10 +28,9 @@ namespace Sharplike.Core.Runtime
 		/// </summary>
 		/// <param name="callback">The game entry point.</param>
 		/// <param name="startTime">The parameter to start the system at.</param>
-		public StepwiseGameLoop(Execute callback, Int64 startTime)
+		public StepwiseGameLoop(Action<StepwiseGameLoop> callback, Int64 startTime)
 		{
-			usercode = callback;
-			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
+			GameTick = callback;
 			Game.Time = startTime;
 		}
 
@@ -41,72 +41,27 @@ namespace Sharplike.Core.Runtime
 		/// <param name="stateMachine">The StateMachine used for this game's control flow.</param>
 		public StepwiseGameLoop(Sharplike.Core.ControlFlow.StateMachine stateMachine)
 		{
-			usercode = stateMachine.GameLoopTick;
+			GameTick = stateMachine.GameLoopTick;
 		}
 
 		public override void Begin()
 		{
-			Boolean foo = true;
-			while (foo == true && Game.Terminated == false)
+			while (Game.Terminated == false)
 			{
-				foo = usercode(this);
-				Game.Process();
-				Application.DoEvents();
+				GameTick(this);
+				
+				do {
+					Game.Process();
+					Application.DoEvents();
+				} while (Game.InputSystem.Input.GetAllPressed().Count == 0);
 			}
-		}
-
-		private CommandData DoWait()
-		{
-			while (lastcommands.Count == 0) {
-				Game.Process();
-				Application.DoEvents();
-			}
-			return lastcommands.Dequeue();
-		}
-		
-		/// <summary>
-		/// Wait for a user to trigger one of the specified commands.
-		/// This call will not return until the user triggers one of the expected commands.
-		/// </summary>
-		/// <param name="expected">The specific commands to expect.</param>
-		/// <returns>The command data object.</returns>
-		public CommandData WaitForInput(String[] expected)
-		{
-			List<String> exp = new List<string>(expected);
-			CommandData cmd = null;
-			do
-			{
-				cmd = DoWait();
-			} while (!exp.Contains(cmd.Command));
-
-			Game.Step();
-
-			return cmd;
-		}
-
-		/// <summary>
-		/// Wait for the user to press a key.
-		/// </summary>
-		/// <returns>The command raised by the user. See Sharpwise.Core.Input.InputSystem for details on input commands.</returns>
-		public CommandData WaitForInput()
-		{
-			CommandData ret = DoWait();
-			Game.Step();
-			return ret;
-		}
-
-		void InputSystem_CommandTriggered(object sender, CommandEventArgs e)
-		{
-			lastcommands.Enqueue(e.CommandData);
 		}
 
 		/// <summary>
 		/// Defines the entry point of an application.
 		/// </summary>
 		/// <param name="loop">The StepwiseGameLoop that is in charge of this game.</param>
-		public delegate Boolean Execute(StepwiseGameLoop loop);
-
-		private Execute usercode;
+		private Action<StepwiseGameLoop> GameTick;
 		Queue<CommandData> lastcommands = new Queue<CommandData>();
 	}
 }

@@ -9,28 +9,17 @@ namespace Sharplike.Frontend.Rendering
 {
 	public class TKRenderSystem : AbstractRenderSystem
 	{
-		public override AbstractWindow CreateWindow(Size displayDimensions, GlyphPalette palette, Object context)
-		{
-			if (win == null)
-				win = new TKWindow(displayDimensions, palette, context as Control);
-			return win;
-		}
-
+		private TKWindow _window = null;
 		public override AbstractWindow Window
 		{
-			get { return win; }
-		}
-		private TKWindow win = null;
-
-		public override void Dispose()
-		{
-			if (win != null)
-				win.Dispose();
+			get { return _window; }
 		}
 
-		public override void Process()
+		public override AbstractWindow CreateWindow(Size displayDimensions, GlyphPalette palette, Object context)
 		{
-			win.Update();
+			if (_window == null)
+				_window = new TKWindow(displayDimensions, palette, context as Control);
+			return _window;
 		}
 	}
 }

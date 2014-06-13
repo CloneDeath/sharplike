@@ -9,9 +9,9 @@ namespace Sharplike.Core.Input
 {
 	public class InputManager
 	{
-		struct KeyboardState
+		class KeyboardState
 		{
-			List<Keys> PressedKeys;
+			public List<Keys> PressedKeys = new List<Keys>();
 			
 			public void Pressed(Keys key)
 			{
@@ -33,9 +33,9 @@ namespace Sharplike.Core.Input
 			}
 		}
 
-		struct MouseState
+		class MouseState
 		{
-			List<MouseButtons> PressedKeys;
+			public List<MouseButtons> PressedKeys = new List<MouseButtons>();
 			public int Wheel;
 			public Point Position;
 
@@ -57,6 +57,15 @@ namespace Sharplike.Core.Input
 			{
 				return PressedKeys.Contains(key);
 			}
+		}
+
+		public InputManager()
+		{
+			CurrentKeyboardState.PressedKeys = new List<Keys>();
+			PreviousKeyboardState.PressedKeys = new List<Keys>();
+
+			CurrentMouseState.PressedKeys = new List<MouseButtons>();
+			PreviousMouseState.PressedKeys = new List<MouseButtons>();
 		}
 
 		KeyboardState PreviousKeyboardState = new KeyboardState();
@@ -82,9 +91,8 @@ namespace Sharplike.Core.Input
 
 		internal void Update()
 		{
-			// Structs, so copies are made.
-			PreviousKeyboardState = CurrentKeyboardState;
-			PreviousMouseState = CurrentMouseState;
+			PreviousKeyboardState.PressedKeys = new List<Keys>(CurrentKeyboardState.PressedKeys);
+			PreviousMouseState.PressedKeys = new List<MouseButtons>(CurrentMouseState.PressedKeys);
 		}
 
 		private void AddHooks(AbstractInputProvider _provider)
@@ -109,12 +117,12 @@ namespace Sharplike.Core.Input
 
 		private void _provider_OnKeyPressed(object sender, KeyEventArgs args)
 		{
-			CurrentKeyboardState.Pressed(args.KeyCode);
+			CurrentKeyboardState.Pressed(args.KeyData);
 		}
 
 		private void _provider_OnKeyReleased(object sender, KeyEventArgs args)
 		{
-			CurrentKeyboardState.Released(args.KeyCode);
+			CurrentKeyboardState.Released(args.KeyData);
 		}
 
 		private void _provider_OnMousePressed(object sender, MouseEventArgs args)
@@ -190,6 +198,17 @@ namespace Sharplike.Core.Input
 
 		public Point PreviousMosePosition {
 			get { return PreviousMouseState.Position; }
+		}
+
+		internal IList<Keys> GetAllPressed()
+		{
+			List<Keys> ret = new List<Keys>();
+			foreach (Keys key in CurrentKeyboardState.PressedKeys) {
+				if (this.IsPressed(key)) {
+					ret.Add(key);
+				}
+			}
+			return ret;
 		}
 	}
 }

@@ -29,8 +29,8 @@ namespace Sharplike.Tests.UI
 			ols.AddItem("Quit");
 
 			ols.SelectedItem = def;
-			
-			
+
+			ols.Focus();
 		}
 	}
 }

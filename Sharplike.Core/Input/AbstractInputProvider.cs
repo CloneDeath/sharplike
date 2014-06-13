@@ -19,13 +19,58 @@ namespace Sharplike.Core.Input
 		/// </summary>
 		public virtual void Poll() { }
 
-		public KeyEventHandler OnKeyPressed;
-		public KeyEventHandler OnKeyReleased;
-		public MouseEventHandler OnMouseMove;
-		public MouseEventHandler OnMousePressed;
-		public MouseEventHandler OnMouseReleased;
-		public MouseEventHandler OnMouseWheel;
+		public event EventHandler<KeyEventArgs> OnKeyPressed;
+		public event EventHandler<KeyEventArgs> OnKeyReleased;
+		public event EventHandler<MouseEventArgs> OnMouseMove;
+		public event EventHandler<MouseEventArgs> OnMousePressed;
+		public event EventHandler<MouseEventArgs> OnMouseReleased;
+		public event EventHandler<MouseEventArgs> OnMouseWheel;
 
-		public abstract void Dispose();
+		protected void KeyPressed(KeyEventArgs args)
+		{
+			if (OnKeyPressed != null) {
+				OnKeyPressed(this, args);
+			}
+		}
+
+		protected void KeyReleased(KeyEventArgs args)
+		{
+			if (OnKeyReleased != null) {
+				OnKeyReleased(this, args);
+			}
+		}
+
+		protected void MouseMove(MouseEventArgs args)
+		{
+			if (OnMouseMove != null){
+				OnMouseMove(this, args);
+			}
+		}
+
+		protected void MouseWheel(MouseEventArgs args)
+		{
+			if (OnMouseWheel != null) {
+				OnMouseWheel(this, args);
+			}
+		}
+
+		protected void MouseReleased(MouseEventArgs args)
+		{
+			if (OnMouseReleased != null) {
+				OnMouseReleased(this, args);
+			}
+		}
+
+		protected void MousePressed(MouseEventArgs args)
+		{
+			if (OnMousePressed != null) {
+				OnMousePressed(this, args);
+			}
+		}
+
+		public virtual void Dispose()
+		{
+
+		}
 	}
 }

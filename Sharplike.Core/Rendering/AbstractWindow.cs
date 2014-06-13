@@ -103,13 +103,6 @@ namespace Sharplike.Core.Rendering
 				this.WindowTitleChange();
 			}
 		}
-		/// <summary>
-		/// Force a repaint of all tiles.
-		/// </summary>
-		public void Invalidate()
-		{
-			Invalidate();
-		}
 
 		/// <summary>
 		/// Update the Window (paint any changes to screen).
@@ -117,12 +110,9 @@ namespace Sharplike.Core.Rendering
 		public override void Update()
 		{
 			base.Update();
-			for (Int32 x = 0; x < this.Size.Width; x++)
-			{
-				for (Int32 y = 0; y < this.Size.Height; y++)
-				{
-					if (tiles[x, y].IsStackDirty)
-						tiles[x, y].RebuildRegionTiles();
+			foreach (DisplayTile tile in tiles) {
+				if (tile.IsStackDirty) {
+					tile.RebuildRegionTiles();
 				}
 			}
 		}

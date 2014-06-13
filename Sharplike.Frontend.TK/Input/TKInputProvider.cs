@@ -20,17 +20,44 @@ namespace Sharplike.Frontend.Input
 			TKRenderSystem rsys = (TKRenderSystem)Game.RenderSystem;
 			win = (TKWindow)rsys.Window;
 
-			win.Control.MouseMove += this.OnMouseMove;
-			win.Control.KeyDown += this.OnKeyPressed;
-			win.Control.KeyUp += this.OnKeyReleased;
-			win.Control.MouseDown += this.OnMousePressed;
-			win.Control.MouseUp += this.OnMouseReleased;
-			win.Control.MouseWheel += this.OnMouseWheel;
+			
+
+			win.Control.KeyDown += new KeyEventHandler(Control_KeyDown);
+			win.Control.KeyUp += new KeyEventHandler(Control_KeyUp);
+			win.Control.MouseDown += new MouseEventHandler(Control_MouseDown);
+			win.Control.MouseUp += new MouseEventHandler(Control_MouseUp);
+			win.Control.MouseWheel += new MouseEventHandler(Control_MouseWheel);
+			win.Control.MouseMove += new MouseEventHandler(Control_MouseMove);
 		}
 
-		public override void Dispose()
+		void Control_KeyDown(object sender, KeyEventArgs e)
 		{
+			this.KeyPressed(e);
+		}
 
+		void Control_KeyUp(object sender, KeyEventArgs e)
+		{
+			this.KeyReleased(e);
+		}
+
+		void Control_MouseDown(object sender, MouseEventArgs e)
+		{
+			this.MousePressed(e);
+		}
+
+		void Control_MouseUp(object sender, MouseEventArgs e)
+		{
+			this.MouseReleased(e);
+		}
+
+		void Control_MouseWheel(object sender, MouseEventArgs e)
+		{
+			this.MouseWheel(e);
+		}
+
+		void Control_MouseMove(object sender, MouseEventArgs e)
+		{
+			this.MouseMove(e);
 		}
 	}
 }
