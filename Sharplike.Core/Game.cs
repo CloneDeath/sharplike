@@ -12,6 +12,7 @@ using Sharplike.Core.Scripting;
 using Sharplike.Core.Runtime;
 using Sharplike.Core.Messaging;
 using Sharplike.Core.Scheduling;
+using System.Threading.Tasks;
 
 
 namespace Sharplike.Core

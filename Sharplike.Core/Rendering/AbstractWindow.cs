@@ -110,6 +110,7 @@ namespace Sharplike.Core.Rendering
 		public override void Update()
 		{
 			base.Update();
+
 			foreach (DisplayTile tile in tiles) {
 				if (tile.IsStackDirty) {
 					tile.RebuildRegionTiles();

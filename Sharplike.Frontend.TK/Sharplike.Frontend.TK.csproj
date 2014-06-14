@@ -84,6 +84,10 @@
       <Name>Sharplike.Core</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Sharplike.UI\Sharplike.UI.csproj">
+      <Project>{A1594427-AD60-4A97-8606-E784D9287043}</Project>
+      <Name>Sharplike.UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FrontendTK.addin">

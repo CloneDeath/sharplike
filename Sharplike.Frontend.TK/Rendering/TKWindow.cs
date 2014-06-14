@@ -20,7 +20,6 @@ namespace Sharplike.Frontend.Rendering
 	/// </remarks>
 	public class TKWindow : AbstractWindow
 	{
-
 		private TKForm form;
 		private int paletteId;
 
@@ -74,6 +73,11 @@ namespace Sharplike.Frontend.Rendering
 			GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
 			GL.Disable(EnableCap.DepthTest);
 			GL.Disable(EnableCap.CullFace);
+			GL.Enable(EnableCap.Texture2D);
+
+			GL.BindTexture(TextureTarget.Texture2D, paletteId);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 		}
 
 		void TKWindow_Resize()
@@ -87,7 +91,7 @@ namespace Sharplike.Frontend.Rendering
 		void Control_Paint(object sender, PaintEventArgs e)
 		{
 			Control.MakeCurrent();
-			Render();
+			DrawWindow();
 			Control.SwapBuffers();
 		}
 
@@ -105,90 +109,71 @@ namespace Sharplike.Frontend.Rendering
 			Game.InputSystem.WindowCommand("OnClosing");
 		}
 
-		private void Render()
+		private void DrawWindow()
 		{
 			GL.MatrixMode(MatrixMode.Modelview);
 
 			GL.LoadIdentity();
 
-			Int32 w = this.GlyphPalette.GlyphDimensions.Width;
-			Int32 h = this.GlyphPalette.GlyphDimensions.Height;
+			int w = this.GlyphPalette.GlyphDimensions.Width;
+			int h = this.GlyphPalette.GlyphDimensions.Height;
 
-			for (Int32 x = 0; x < this.Size.Width; x++)
+			List<KeyValuePair<Point, IGlyphProvider>> gproviders = new List<KeyValuePair<Point, IGlyphProvider>>();
+
+			for (int x = 0; x < this.Size.Width; x++)
 			{
-				for (Int32 y = 0; y < this.Size.Height; y++)
+				for (int y = 0; y < this.Size.Height; y++)
 				{
 					DisplayTile tile = this.tiles[x, y];
-
-					if (tile.IsRenderDirty || tile.RenderData == null) {
-						UpdateDisplayList(tile, x, y);
-						tile.MarkRenderClean();
-					} else {
-						GL.CallList((int)tile.RenderData);
+					foreach (RegionTile t in tile.RegionTiles) {
+						foreach (IGlyphProvider p in t.GlyphProviders) {
+							gproviders.Add(new KeyValuePair<Point,IGlyphProvider>(new Point(x, y), p));
+						}
 					}
 				}
 			}
-		}
 
-		private void UpdateDisplayList(DisplayTile tile, int x, int y)
-		{
-			if (tile.RenderData == null) {
-				tile.RenderData = GL.GenLists(1);
-			}
+			/* Draw Glyphs */
+			GL.Begin(PrimitiveType.Quads);
+			foreach (KeyValuePair<Point, IGlyphProvider> kvp in gproviders){
+				IGlyphProvider glyphpro = kvp.Value;
+				Point loc = kvp.Key;
 
-			GL.NewList((int)tile.RenderData, ListMode.CompileAndExecute);
-
-			Int32 w = this.GlyphPalette.GlyphDimensions.Width;
-			Int32 h = this.GlyphPalette.GlyphDimensions.Height;
-			x *= w;
-			y *= h;
-
-			GL.Enable(EnableCap.Blend);
-			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-			List<IGlyphProvider> gproviders = new List<IGlyphProvider>();
-			foreach (RegionTile t in tile.RegionTiles)
-			{
-				foreach (IGlyphProvider p in t.GlyphProviders)
-					gproviders.Add(p);
-			}
-
-			foreach (IGlyphProvider glyphpro in gproviders)
-			{
-				GL.Begin(PrimitiveType.Quads);
-				GL.Color4(glyphpro.BackgroundColor);
-				GL.Vertex2(x, y);
-				GL.Vertex2(x + w, y);
-				GL.Vertex2(x + w, h + y);
-				GL.Vertex2(x, h + y);
-				GL.End();
-				
-				foreach (Glyph glyph in glyphpro.Glyphs)
+				int screen_x = loc.X *w;
+				int screen_y = loc.Y *h;
 				{
-					int uvrow = glyph.Index / GlyphPalette.ColumnCount;
-					int uvcol = glyph.Index % GlyphPalette.ColumnCount;
-	
+					int uvrow = (int)Sharplike.UI.GlyphDefault.Block / GlyphPalette.ColumnCount;
+					int uvcol = (int)Sharplike.UI.GlyphDefault.Block % GlyphPalette.ColumnCount;
+
 					double u = (double)uvcol / (double)GlyphPalette.ColumnCount;
 					double v = (double)uvrow / (double)GlyphPalette.RowCount;
 					double du = 1.0 / (double)GlyphPalette.ColumnCount;
 					double dv = 1.0 / (double)GlyphPalette.RowCount;
-					
-					GL.Enable(EnableCap.Texture2D);
-					GL.BindTexture(TextureTarget.Texture2D, paletteId);
-	
-					GL.Begin(PrimitiveType.Quads);
+
+					GL.Color4(glyphpro.BackgroundColor);
+					GL.TexCoord2(u, v); GL.Vertex2(screen_x, screen_y);
+					GL.TexCoord2(du + u, v); GL.Vertex2(screen_x + w, screen_y);
+					GL.TexCoord2(du + u, dv + v); GL.Vertex2(screen_x + w, h + screen_y);
+					GL.TexCoord2(u, dv + v); GL.Vertex2(screen_x, h + screen_y);
+				}
+
+				foreach (Glyph glyph in glyphpro.Glyphs) {
+					int uvrow = glyph.Index / GlyphPalette.ColumnCount;
+					int uvcol = glyph.Index % GlyphPalette.ColumnCount;
+
+					double u = (double)uvcol / (double)GlyphPalette.ColumnCount;
+					double v = (double)uvrow / (double)GlyphPalette.RowCount;
+					double du = 1.0 / (double)GlyphPalette.ColumnCount;
+					double dv = 1.0 / (double)GlyphPalette.RowCount;
+
 					GL.Color4(glyph.Color);
-					GL.TexCoord2(u, v); GL.Vertex2(x, y);
-					GL.TexCoord2(du + u, v); GL.Vertex2(x + w, y);
-					GL.TexCoord2(du + u, dv + v); GL.Vertex2(x + w, h + y);
-					GL.TexCoord2(u, dv + v); GL.Vertex2(x, h + y);
-					GL.End();
-					GL.Disable(EnableCap.Texture2D);
+					GL.TexCoord2(u, v); GL.Vertex2(screen_x, screen_y);
+					GL.TexCoord2(du + u, v); GL.Vertex2(screen_x + w, screen_y);
+					GL.TexCoord2(du + u, dv + v); GL.Vertex2(screen_x + w, h + screen_y);
+					GL.TexCoord2(u, dv + v); GL.Vertex2(screen_x, h + screen_y);
 				}
 			}
-			GL.Disable(EnableCap.Blend);
-
-			GL.EndList();
+			GL.End();
 		}
 
 		/// <summary>
@@ -205,7 +190,7 @@ namespace Sharplike.Frontend.Rendering
 		public override void Update()
 		{
 			base.Update();
-			Control.Refresh();
+			Control.Invalidate();
 		}
 
 		internal void FocusWindow()
@@ -213,6 +198,12 @@ namespace Sharplike.Frontend.Rendering
 			Control.Focus();
 			form.WindowState = FormWindowState.Normal;
 			form.Activate();
+		}
+
+		public override void Dispose()
+		{
+			Control.Dispose();
+			base.Dispose();
 		}
 	}
 }
