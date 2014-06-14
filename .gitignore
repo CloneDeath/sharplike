@@ -4,3 +4,5 @@ StyleCop.Cache
 Thumbs.db
 *.suo
 /Addins
+/Sharplike.Core.0.5.1.0.nupkg
+/Sharplike.Plugins.OpenTK.0.5.1.0.nupkg
