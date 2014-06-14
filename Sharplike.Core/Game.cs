@@ -272,11 +272,7 @@ namespace Sharplike.Core
 
 			if (Game.OnGameInitialization != null)
 				Game.OnGameInitialization(null, internedEventArg);
-			Task gameloop = Task.Factory.StartNew(loop.Begin);
-			while (!gameloop.IsCompleted) {
-				System.Windows.Forms.Application.DoEvents();
-			}
-			gameloop.Wait();
+			loop.Begin();
 			if (Game.OnGameTermination != null)
 				Game.OnGameTermination(null, internedEventArg);
 		}

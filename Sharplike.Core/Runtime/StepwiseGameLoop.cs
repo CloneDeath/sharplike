@@ -51,6 +51,7 @@ namespace Sharplike.Core.Runtime
 				
 				do {
 					Game.Process();
+					Application.DoEvents();
 				} while (Game.InputSystem.Input.GetAllPressed().Count == 0 && Game.Terminated == false);
 			}
 		}
