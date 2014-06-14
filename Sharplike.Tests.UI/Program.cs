@@ -52,6 +52,7 @@ namespace Sharplike.Tests.UI
 			Game.InputSystem.LoadConfiguration(Game.PathTo("commands.ini"));
 
 			gameWindow.Clear();
+			gameWindow.WindowTitle = "UI Test";
 
 			// Creates the core game state machine, and gives it the MainMenuState as a start state.
 			// When we invoke the state machine, that will be the first state that pops up. The state

@@ -17,8 +17,10 @@ namespace Sharplike.Frontend.Rendering
 
 		public override AbstractWindow CreateWindow(Size displayDimensions, GlyphPalette palette, Object context)
 		{
-			if (_window == null)
+			if (_window == null) {
 				_window = new TKWindow(displayDimensions, palette, context as Control);
+				_window.FocusWindow();
+			}
 			return _window;
 		}
 	}
