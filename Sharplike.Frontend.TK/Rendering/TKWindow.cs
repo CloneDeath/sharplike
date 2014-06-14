@@ -24,6 +24,9 @@ namespace Sharplike.Frontend.Rendering
 		private TKForm form;
 		private int paletteId;
 
+		/// <summary>
+		/// The inner GLControl responsible for rendering.
+		/// </summary>
 		public readonly TKGLControl Control = new TKGLControl();
 
 		public TKWindow(Size displayDimensions, GlyphPalette palette, Control context)
@@ -188,11 +191,17 @@ namespace Sharplike.Frontend.Rendering
 			GL.EndList();
 		}
 
+		/// <summary>
+		/// Changes the form text to the WindowTitle property.
+		/// </summary>
 		protected override void WindowTitleChange()
 		{
 			form.Text = this.WindowTitle;
 		}
 
+		/// <summary>
+		/// Updates the GLControl, and any subregions.
+		/// </summary>
 		public override void Update()
 		{
 			base.Update();
