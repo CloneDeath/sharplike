@@ -190,13 +190,20 @@ namespace Sharplike.Frontend.Rendering
 
 		protected override void WindowTitleChange()
 		{
-			
+			form.Text = this.WindowTitle;
 		}
 
 		public override void Update()
 		{
 			base.Update();
 			Control.Refresh();
+		}
+
+		internal void FocusWindow()
+		{
+			Control.Focus();
+			form.WindowState = FormWindowState.Normal;
+			form.Activate();
 		}
 	}
 }
