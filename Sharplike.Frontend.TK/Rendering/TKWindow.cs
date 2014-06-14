@@ -87,7 +87,9 @@ namespace Sharplike.Frontend.Rendering
 		void Control_Paint(object sender, PaintEventArgs e)
 		{
 			Control.MakeCurrent();
-			Render();
+			lock (this) {
+				Render();
+			}
 			Control.SwapBuffers();
 		}
 
@@ -204,8 +206,10 @@ namespace Sharplike.Frontend.Rendering
 		/// </summary>
 		public override void Update()
 		{
-			base.Update();
-			Control.Refresh();
+			lock (this) {
+				base.Update();
+			}
+			Control.Invalidate();
 		}
 
 		internal void FocusWindow()
@@ -213,6 +217,14 @@ namespace Sharplike.Frontend.Rendering
 			Control.Focus();
 			form.WindowState = FormWindowState.Normal;
 			form.Activate();
+		}
+
+		public override void Dispose()
+		{
+			lock (this) {
+				Control.Dispose();
+				base.Dispose();
+			}
 		}
 	}
 }

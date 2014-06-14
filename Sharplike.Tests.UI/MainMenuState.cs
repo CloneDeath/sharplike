@@ -15,6 +15,7 @@ namespace Sharplike.Tests.UI
 		{
 			AbstractWindow pwin = Game.RenderSystem.Window;
 			pwin.RemoveAllRegions();
+			pwin.Clear();
 
 			Window mainwin = new Window(pwin);
 			mainwin.Size = pwin.Size;

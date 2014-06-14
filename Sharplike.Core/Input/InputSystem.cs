@@ -84,7 +84,6 @@ namespace Sharplike.Core.Input
 		internal void Process()
 		{
 			Input.Update();
-
 			InputProvider.Poll();
 		}
 

@@ -19,11 +19,7 @@ namespace Sharplike.Core.Runtime
 		/// only in response to a keypress.
 		/// </summary>
 		/// <param name="callback">The game entry point.</param>
-		public StepwiseGameLoop(Action<StepwiseGameLoop> callback)
-		{
-			GameTick = callback;
-			Game.Time = 0;
-		}
+		public StepwiseGameLoop(Action<StepwiseGameLoop> callback) : this(callback, 0) { }
 
 		/// <summary>
 		/// Creates a new step-based game loop, which processes game logic
@@ -55,8 +51,7 @@ namespace Sharplike.Core.Runtime
 				
 				do {
 					Game.Process();
-					Application.DoEvents();
-				} while (Game.InputSystem.Input.GetAllPressed().Count == 0);
+				} while (Game.InputSystem.Input.GetAllPressed().Count == 0 && Game.Terminated == false);
 			}
 		}
 
@@ -65,6 +60,5 @@ namespace Sharplike.Core.Runtime
 		/// </summary>
 		/// <param name="loop">The StepwiseGameLoop that is in charge of this game.</param>
 		private Action<StepwiseGameLoop> GameTick;
-		Queue<CommandData> lastcommands = new Queue<CommandData>();
 	}
 }

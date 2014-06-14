@@ -12,6 +12,7 @@ using Sharplike.Core.Scripting;
 using Sharplike.Core.Runtime;
 using Sharplike.Core.Messaging;
 using Sharplike.Core.Scheduling;
+using System.Threading.Tasks;
 
 
 namespace Sharplike.Core
@@ -271,7 +272,11 @@ namespace Sharplike.Core
 
 			if (Game.OnGameInitialization != null)
 				Game.OnGameInitialization(null, internedEventArg);
-			loop.Begin();
+			Task gameloop = Task.Factory.StartNew(loop.Begin);
+			while (!gameloop.IsCompleted) {
+				System.Windows.Forms.Application.DoEvents();
+			}
+			gameloop.Wait();
 			if (Game.OnGameTermination != null)
 				Game.OnGameTermination(null, internedEventArg);
 		}
