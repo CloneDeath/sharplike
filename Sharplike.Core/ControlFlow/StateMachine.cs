@@ -6,6 +6,9 @@ using Sharplike.Core.Input;
 
 namespace Sharplike.Core.ControlFlow
 {
+	/// <summary>
+	/// State machine with a collection of state stacks.
+	/// </summary>
 	public sealed class StateMachine
 	{
 		private String currentStack;
@@ -187,6 +190,10 @@ namespace Sharplike.Core.ControlFlow
 			this.stackDictionary[currentStack].Peek().GameProcessing();
 		}
 
+		/// <summary>
+		/// Calls the GameLoopTick on the currently active state.
+		/// </summary>
+		/// <param name="loop"></param>
 		public void GameLoopTick(Sharplike.Core.Runtime.AbstractGameLoop loop)
 		{
 			this.stackDictionary[currentStack].Peek().GameLoopTick(loop);

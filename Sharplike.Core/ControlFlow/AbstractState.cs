@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Sharplike.Core.ControlFlow
 {
+	/// <summary>
+	/// Represents a state in the state machine.
+	/// </summary>
 	public abstract class AbstractState
 	{
 		/// <summary>
