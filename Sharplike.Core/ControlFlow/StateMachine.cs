@@ -27,6 +27,7 @@ namespace Sharplike.Core.ControlFlow
 			Game.InputSystem.Command.CommandStarted += new EventHandler<CommandEventArgs>(InputSystem_CommandStarted);
 			Game.InputSystem.Command.CommandEnded += new EventHandler<CommandEventArgs>(InputSystem_CommandEnded);
 			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
+			Game.InputSystem.InputProvider.OnKeyPressed += new EventHandler<KeyEventArgs>(InputProvider_OnKeyPressed);
 		}
 		
 		/// <summary>
@@ -205,6 +206,11 @@ namespace Sharplike.Core.ControlFlow
 		void InputSystem_CommandEnded(object sender, CommandEventArgs e)
 		{
 			this.stackDictionary[currentStack].Peek().CommandEnded(e);
+		}
+
+		void InputProvider_OnKeyPressed(object sender, KeyEventArgs e)
+		{
+			this.stackDictionary[currentStack].Peek().KeyPressed(e);
 		}
 	}
 }

@@ -31,6 +31,17 @@ namespace Sharplike.Tests.UI
 			ols.SelectedItem = def;
 
 			ols.Focus();
+
+			Game.InputSystem.Command.CommandSet = "MainMenu";
+		}
+
+		protected override void CommandTriggered(Core.Input.CommandEventArgs e)
+		{
+			switch (e.CommandData.Command) {
+				case "quit":
+					Game.Terminate();
+					break;
+			}
 		}
 	}
 }
