@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Sharplike.Core</id>
+    <version>0.5.0</version>
+    <authors>Sharplike Team</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Sharplike: The Open Roguelike Library</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>C# .net Roguelike Engine</tags>
+    <dependencies>
+	  <dependency id="IronPython" version="2.7.4" />
+	  <dependency id="IronRuby" version="1.1.3" />
+	  <dependency id="Mono.Addins" version="1.1" />
+	  <dependency id="Mono.Addins.Setup" version="1.1" />
+	  <dependency id="Trove.Nini" version="1.1.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+	<!-- Core -->
+	<file src="Sharplike.Core\bin\Release\Sharplike.Core.dll" target="lib\net40\" />
+	<file src="Sharplike.Core\bin\Release\Sharplike.Core.XML" target="lib\net40\" />
+	<file src="Sharplike.Core\bin\Release\Sharplike.addins" target="lib\net40\" />
+	
+	<!-- Extensions -->
+	<file src="Sharplike.Mapping\bin\Release\Sharplike.Mapping.dll" target="lib\net40\" />
+	<file src="Sharplike.Mapping\bin\Release\Sharplike.Mapping.XML" target="lib\net40\" />
+	<file src="Sharplike.UI\bin\Release\Sharplike.UI.dll" target="lib\net40\" />
+	<file src="Sharplike.UI\bin\Release\Sharplike.UI.XML" target="lib\net40\" />
+  </files>
+</package>
