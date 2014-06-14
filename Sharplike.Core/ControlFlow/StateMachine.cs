@@ -186,14 +186,9 @@ namespace Sharplike.Core.ControlFlow
 			this.stackDictionary[currentStack].Peek().GameProcessing();
 		}
 
-		public Boolean GameLoopTick(Sharplike.Core.Runtime.AbstractGameLoop loop)
+		public void GameLoopTick(Sharplike.Core.Runtime.AbstractGameLoop loop)
 		{
-			while (Game.Terminated == false)
-			{
-				this.stackDictionary[currentStack].Peek().GameLoopTick(loop);
-				return true;
-			}
-			return false;
+			this.stackDictionary[currentStack].Peek().GameLoopTick(loop);
 		}
 
 

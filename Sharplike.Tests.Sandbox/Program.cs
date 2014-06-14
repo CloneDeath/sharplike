@@ -82,12 +82,63 @@ namespace Sharplike.Tests.Sandbox
 			win.Title = "Dialog Window";
 			win.BackgroundColor = Color.FromArgb(100, 0, 0, 200);
 
+			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(Command_CommandTriggered);
 			Game.OnGameInitialization += new EventHandler<EventArgs>(game_OnGameInitialization);
 			Game.GameProcessing += new EventHandler<EventArgs>(game_GameProcessing);
 			StepwiseGameLoop loop = new StepwiseGameLoop(RunGame);
 			Game.Run(loop);
 
 			Game.Terminate();
+		}
+
+		static void Command_CommandTriggered(object sender, CommandEventArgs e)
+		{
+			map.BroadcastMessage(cameraVector, new Vector3(5, 5, 1), "Ping");
+
+			cache.ActiveLevel = cameraVector.z;
+			cache.AssessCache();
+
+			switch (e.CommandData.Command) {
+				case "move_left":
+					cameraVector = new Vector3(cameraVector.x - 1,
+										cameraVector.y, cameraVector.z);
+					cameraMoved = true;
+					break;
+				case "move_right":
+					cameraVector = new Vector3(cameraVector.x + 1,
+										cameraVector.y, cameraVector.z);
+					cameraMoved = true;
+					break;
+				case "move_up":
+					cameraVector = new Vector3(cameraVector.x,
+										cameraVector.y - 1, cameraVector.z);
+					cameraMoved = true;
+					break;
+				case "move_down":
+					cameraVector = new Vector3(cameraVector.x,
+										cameraVector.y + 1, cameraVector.z);
+					cameraMoved = true;
+					break;
+				case "move_in":
+					cameraVector = new Vector3(cameraVector.x,
+										cameraVector.y, cameraVector.z + 1);
+					cameraMoved = true;
+					break;
+				case "move_out":
+					cameraVector = new Vector3(cameraVector.x,
+										cameraVector.y, cameraVector.z - 1);
+					cameraMoved = true;
+					break;
+				case "spacebar":
+					if (ent != null) {
+						ent.Dispose();
+						ent = null;
+					}
+					break;
+				case "quit":
+					Game.Terminate();
+					break;
+			}
 		}
 
 		static void game_OnGameInitialization(object sender, EventArgs e)
@@ -106,62 +157,8 @@ namespace Sharplike.Tests.Sandbox
 
 		static WanderingEntity ent;
 
-		static Boolean RunGame(StepwiseGameLoop loop)
+		static void RunGame(StepwiseGameLoop loop)
 		{
-			CommandData cmd = null;
-			do
-			{
-				map.BroadcastMessage(cameraVector, new Vector3(5, 5, 1), "Ping");
-
-				cache.ActiveLevel = cameraVector.z;
-				cache.AssessCache();
-
-				cmd = loop.WaitForInput();
-				Console.WriteLine(cmd.ToString());
-				//if (ent != null)
-				//	ent.Wander();
-				switch (cmd.Command)
-				{
-					case "move_left":
-						cameraVector = new Vector3(cameraVector.x - 1,
-											cameraVector.y, cameraVector.z);
-						cameraMoved = true;
-						break;
-					case "move_right":
-						cameraVector = new Vector3(cameraVector.x + 1,
-											cameraVector.y, cameraVector.z);
-						cameraMoved = true;
-						break;
-					case "move_up":
-						cameraVector = new Vector3(cameraVector.x,
-											cameraVector.y - 1, cameraVector.z);
-						cameraMoved = true;
-						break;
-					case "move_down":
-						cameraVector = new Vector3(cameraVector.x,
-											cameraVector.y + 1, cameraVector.z);
-						cameraMoved = true;
-						break;
-					case "move_in":
-						cameraVector = new Vector3(cameraVector.x,
-											cameraVector.y, cameraVector.z + 1);
-						cameraMoved = true;
-						break;
-					case "move_out":
-						cameraVector = new Vector3(cameraVector.x,
-											cameraVector.y, cameraVector.z - 1);
-						cameraMoved = true;
-						break;
-					case "spacebar":
-						if (ent != null) {
-							ent.Dispose();
-							ent = null;
-						}
-						break;
-				}
-			} while (cmd.Command != "quit");
-
-			return false;
 		}
 	}
 }

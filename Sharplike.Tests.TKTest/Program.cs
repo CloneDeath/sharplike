@@ -61,10 +61,20 @@ namespace Sharplike.Tests.TKTest
 
 			//ac.Play();
 			Game.GameProcessing += new EventHandler<EventArgs>(game_GameProcessing);
+			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(Command_CommandTriggered);
 			StepwiseGameLoop loop = new StepwiseGameLoop(RunGame);
 			Game.Run(loop);
 
 			Game.Terminate();
+		}
+
+		static void Command_CommandTriggered(object sender, CommandEventArgs e)
+		{
+			Console.WriteLine(e.CommandData.Command);
+
+			if (e.CommandData.Command == "quit") {
+				Game.Terminate();
+			}
 		}
 
 		static void game_GameProcessing(object sender, EventArgs e)
@@ -84,16 +94,9 @@ namespace Sharplike.Tests.TKTest
 			}
 		}
 
-		static Boolean RunGame(StepwiseGameLoop loop)
+		static void RunGame(StepwiseGameLoop loop)
 		{
-			CommandData cmd = null;
-			do
-			{
-				cmd = loop.WaitForInput();
-				Console.WriteLine(cmd.Command);
-			} while (cmd.Command != "quit");
-
-			return false;
+			
 		}
 	}
 }

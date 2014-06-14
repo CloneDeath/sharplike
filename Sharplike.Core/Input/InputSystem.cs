@@ -17,7 +17,7 @@ namespace Sharplike.Core.Input
 		public InputManager Input { get; private set; }
 
 		private AbstractInputProvider _provider;
-		public AbstractInputProvider Provider
+		public AbstractInputProvider InputProvider
 		{
 			get
 			{
@@ -81,7 +81,7 @@ namespace Sharplike.Core.Input
 		{
 			Input.Update();
 
-			Provider.Poll();
+			InputProvider.Poll();
 		}
 
 		/// <summary>

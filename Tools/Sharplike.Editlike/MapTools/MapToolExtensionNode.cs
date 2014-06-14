@@ -10,13 +10,13 @@ namespace Sharplike.Editlike.MapTools
 	public class MapToolExtensionNode : TypeExtensionNode
 	{
 		[NodeAttribute]
-		string icon;
+		string icon = "";
 
 		[NodeAttribute]
-		string tooltip;
+		string tooltip = "";
 
 		[NodeAttribute]
-		string tag;
+		string tag = "";
 
 		public String Tooltip
 		{

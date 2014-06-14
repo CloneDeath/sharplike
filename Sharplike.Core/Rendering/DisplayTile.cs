@@ -21,7 +21,13 @@ namespace Sharplike.Core.Rendering
 
 		GlyphPalette palette;
 		AbstractRegion rootregion;
-		
+
+		/// <summary>
+		/// Reserved data for the renderer.
+		/// This is only allowed to be changed by the renderer, and the renderer
+		/// can use it however they want (Display list, tile metadata, etc).
+		/// </summary>
+		public object RenderData { get; set; }
 
 		/// <summary>
 		/// Constructor.

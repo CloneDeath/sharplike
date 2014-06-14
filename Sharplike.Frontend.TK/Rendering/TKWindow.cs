@@ -117,15 +117,23 @@ namespace Sharplike.Frontend.Rendering
 				{
 					DisplayTile tile = this.tiles[x, y];
 
-					DrawTile(tile, x, y);
-					tile.MarkRenderClean();
-					
+					if (tile.IsRenderDirty || tile.RenderData == null) {
+						UpdateDisplayList(tile, x, y);
+						tile.MarkRenderClean();
+					} else {
+						GL.CallList((int)tile.RenderData);
+					}
 				}
 			}
 		}
 
-		private void DrawTile(DisplayTile tile, int x, int y)
+		private void UpdateDisplayList(DisplayTile tile, int x, int y)
 		{
+			if (tile.RenderData == null) {
+				tile.RenderData = GL.GenLists(1);
+			}
+
+			GL.NewList((int)tile.RenderData, ListMode.CompileAndExecute);
 
 			Int32 w = this.GlyphPalette.GlyphDimensions.Width;
 			Int32 h = this.GlyphPalette.GlyphDimensions.Height;
@@ -144,7 +152,7 @@ namespace Sharplike.Frontend.Rendering
 
 			foreach (IGlyphProvider glyphpro in gproviders)
 			{
-				GL.Begin(BeginMode.Quads);
+				GL.Begin(PrimitiveType.Quads);
 				GL.Color4(glyphpro.BackgroundColor);
 				GL.Vertex2(x, y);
 				GL.Vertex2(x + w, y);
@@ -165,7 +173,7 @@ namespace Sharplike.Frontend.Rendering
 					GL.Enable(EnableCap.Texture2D);
 					GL.BindTexture(TextureTarget.Texture2D, paletteId);
 	
-					GL.Begin(BeginMode.Quads);
+					GL.Begin(PrimitiveType.Quads);
 					GL.Color4(glyph.Color);
 					GL.TexCoord2(u, v); GL.Vertex2(x, y);
 					GL.TexCoord2(du + u, v); GL.Vertex2(x + w, y);
@@ -177,6 +185,7 @@ namespace Sharplike.Frontend.Rendering
 			}
 			GL.Disable(EnableCap.Blend);
 
+			GL.EndList();
 		}
 
 		protected override void WindowTitleChange()

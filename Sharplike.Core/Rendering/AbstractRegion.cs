@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using Sharplike.Core.Messaging;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace Sharplike.Core.Rendering
 {
@@ -12,6 +13,8 @@ namespace Sharplike.Core.Rendering
 	[Serializable]
 	public abstract class AbstractRegion : IComparable<AbstractRegion>, IDeserializationCallback, IDisposable
 	{
+		internal static AbstractRegion FocusControl = null;
+
 		[NonSerialized]
 		private RegionTile[,] regionTiles = new RegionTile[0, 0];
 		public RegionTile[,] RegionTiles
@@ -386,8 +389,8 @@ namespace Sharplike.Core.Rendering
 			}
 
 			if (this.Dirty) {
-				this.Dirty = false;
 				this.Render();
+				this.Dirty = false;
 			}
 		}
 
@@ -470,6 +473,21 @@ namespace Sharplike.Core.Rendering
 					regionTiles[x, y] = new RegionTile();
 				}
 			}
+		}
+
+		public void Focus()
+		{
+			FocusControl = this;
+		}
+
+		public bool HasFocus()
+		{
+			return FocusControl == this;
+		}
+
+		public virtual void OnKeyPress(Keys KeyCode)
+		{
+			
 		}
 	}
 

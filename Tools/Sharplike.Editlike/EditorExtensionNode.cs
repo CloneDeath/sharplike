@@ -11,14 +11,14 @@ namespace Sharplike.Editlike
 	/// </summary>
 	public class EditorExtensionNode : TypeExtensionNode
 	{
-		[NodeAttribute]
-		string editor;
+		//[NodeAttribute]
+		//string editor = "";
 
 		[NodeAttribute]
-		int gid;
+		int gid = -1;
 
 		[NodeAttribute]
-		string tooltip;
+		string tooltip = "";
 
 		/// <summary>
 		/// The tooltip for this particular editor extension.

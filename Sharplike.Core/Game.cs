@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Mono.Addins;
-using Mono.Addins.CecilReflector;
 using System.IO;
 using System.Reflection;
 using Sharplike;
@@ -223,12 +222,12 @@ namespace Sharplike.Core
 		/// <param name="sys">The name of the input system to use.</param>
 		public static void SetInputSystem(String sys)
 		{
-			if (Game.InputSystem.Provider != null)
+			if (Game.InputSystem.InputProvider != null)
 				throw new InvalidOperationException("Game.SetInputSystem() may only be called once.");
 			TypeExtensionNode node = (TypeExtensionNode)AddinManager.GetExtensionNode(String.Format("/Sharplike/Input/{0}", sys));
 			if (node == null)
 				throw new ArgumentException("Specified input system could not be found.", "sys");
-			InputSystem.Provider = (AbstractInputProvider)node.CreateInstance();
+			InputSystem.InputProvider = (AbstractInputProvider)node.CreateInstance();
 		}
 
 		/// <summary>
@@ -459,8 +458,8 @@ namespace Sharplike.Core
 			if (AudioSystem != null)
 				AudioSystem.Dispose();
 			
-			if (InputSystem.Provider != null)
-				InputSystem.Provider.Dispose();
+			if (InputSystem.InputProvider != null)
+				InputSystem.InputProvider.Dispose();
 
 			if (RenderSystem != null)
 				RenderSystem.Dispose();

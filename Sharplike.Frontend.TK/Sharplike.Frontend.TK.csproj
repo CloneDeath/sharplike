@@ -37,6 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\Addins\Sharplike.Frontend.TK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,19 +46,16 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\Addins\Sharplike.Frontend.TK.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\OpenTK\OpenTK.dll</HintPath>
+      <HintPath>..\packages\OpenTK.1.1.1589.5941\lib\NET40\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.Compatibility, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\OpenTK\OpenTK.Compatibility.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Externals\OpenTK\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\packages\OpenTK.GLControl.1.1.1589.5941\lib\NET40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,6 +89,9 @@
     <EmbeddedResource Include="Rendering\TKForm.resx">
       <DependentUpon>TKForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
