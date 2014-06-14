@@ -10,6 +10,7 @@ namespace Sharplike.UI
 	/// </summary>
 	public enum GlyphDefault
 	{
+#pragma warning disable 1591
 		// Row 0
 		Blank = 0,
 		EmptySmiley = 1,
@@ -315,5 +316,6 @@ namespace Sharplike.UI
 		Exponent2 = 253,
 		Square = 254,
 		Blank3 = 255
+#pragma warning restore 1591
 	}
 }

@@ -19,13 +19,40 @@ namespace Sharplike.Core.Input
 		/// </summary>
 		public virtual void Poll() { }
 
+		/// <summary>
+		/// Triggered whenever a keyboard key is pressed.
+		/// </summary>
 		public event EventHandler<KeyEventArgs> OnKeyPressed;
+
+		/// <summary>
+		/// Triggered whenever a keyboard key is released.
+		/// </summary>
 		public event EventHandler<KeyEventArgs> OnKeyReleased;
+
+		/// <summary>
+		/// Triggered whenever the mouse moves.
+		/// </summary>
 		public event EventHandler<MouseEventArgs> OnMouseMove;
+
+		/// <summary>
+		/// Triggered whenever a mouse button is pressed.
+		/// </summary>
 		public event EventHandler<MouseEventArgs> OnMousePressed;
+
+		/// <summary>
+		/// Triggered whenever a mouse button is released.
+		/// </summary>
 		public event EventHandler<MouseEventArgs> OnMouseReleased;
+
+		/// <summary>
+		/// Triggered whenever the mouse wheel is scrolled.
+		/// </summary>
 		public event EventHandler<MouseEventArgs> OnMouseWheel;
 
+		/// <summary>
+		/// Triggers the OnKeyPressed event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void KeyPressed(KeyEventArgs args)
 		{
 			if (OnKeyPressed != null) {
@@ -33,6 +60,10 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Triggers the OnKeyReleased event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void KeyReleased(KeyEventArgs args)
 		{
 			if (OnKeyReleased != null) {
@@ -40,6 +71,10 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Triggers the OnMouseMove event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void MouseMove(MouseEventArgs args)
 		{
 			if (OnMouseMove != null){
@@ -47,6 +82,10 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Triggers the OnMouseWheel event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void MouseWheel(MouseEventArgs args)
 		{
 			if (OnMouseWheel != null) {
@@ -54,6 +93,10 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Triggers the OnMouseReleased event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void MouseReleased(MouseEventArgs args)
 		{
 			if (OnMouseReleased != null) {
@@ -61,6 +104,10 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Triggers the OnMousePressed event.
+		/// </summary>
+		/// <param name="args">Event data to use</param>
 		protected void MousePressed(MouseEventArgs args)
 		{
 			if (OnMousePressed != null) {
@@ -68,6 +115,9 @@ namespace Sharplike.Core.Input
 			}
 		}
 
+		/// <summary>
+		/// Disposes all unmanaged input resources.
+		/// </summary>
 		public virtual void Dispose()
 		{
 

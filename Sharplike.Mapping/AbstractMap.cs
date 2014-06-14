@@ -177,6 +177,11 @@ namespace Sharplike.Mapping
 			return GetSquare(npos);
 		}
 
+		/// <summary>
+		/// Returns the square at the specified location.
+		/// </summary>
+		/// <param name="location">The location of the square.</param>
+		/// <returns>The square at the specified location.</returns>
 		public AbstractSquare GetSquare(Vector3 location)
 		{
 			Vector3 addr;
@@ -186,6 +191,11 @@ namespace Sharplike.Mapping
 			return Pages[addr].GetSquare(newoff.x, newoff.y, newoff.z);
 		}
 
+		/// <summary>
+		/// Sets a location in the map to the specified square.
+		/// </summary>
+		/// <param name="location">Location on the map to edit.</param>
+		/// <param name="square">Square to use</param>
 		public void SetSquare(Vector3 location, AbstractSquare square)
 		{
 			Vector3 addr;

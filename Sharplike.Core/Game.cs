@@ -476,8 +476,6 @@ namespace Sharplike.Core
 			private set;
 		}
 
-		public delegate void GameProcessingEventHandler(object sender, EventArgs e);
-
 		/// <summary>
 		/// GameProcessing is called just before a frame is rendered to the screen.
 		/// It may be used for graphical map effects, but should not contain game logic.

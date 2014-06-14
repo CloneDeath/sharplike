@@ -10,6 +10,10 @@ using Nini.Ini;
 
 namespace Sharplike.Core.Input
 {
+	/// <summary>
+	/// Responsible for handling and organizing the data associated with user input.
+	/// Keeps track of input state and triggered commands.
+	/// </summary>
 	public sealed class InputSystem
 	{
 		internal Dictionary<String, String> winEvents = new Dictionary<string, string>();

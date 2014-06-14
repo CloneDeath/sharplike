@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace Sharplike.Core.Rendering
 {
+	/// <summary>
+	/// Abstract graphical rendering system. This is in charge of drawing the game data.
+	/// </summary>
 	public abstract class AbstractRenderSystem : IDisposable
 	{
 		/// <summary>

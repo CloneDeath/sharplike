@@ -9,8 +9,11 @@ using System.Windows.Forms;
 
 namespace Sharplike.Core.Rendering
 {
-	[ChannelSubscriber("Regions")]
+	/// <summary>
+	/// A region of glyps, with child regions.
+	/// </summary>
 	[Serializable]
+	[ChannelSubscriber("Regions")]
 	public abstract class AbstractRegion : IComparable<AbstractRegion>, IDeserializationCallback, IDisposable
 	{
 		internal static AbstractRegion FocusControl = null;

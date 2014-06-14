@@ -9,6 +9,9 @@ using System.Diagnostics;
 
 namespace Sharplike.Core.Runtime
 {
+	/// <summary>
+	/// A step-based game loop, processes a game loop every time a key is pressed.
+	/// </summary>
 	public class StepwiseGameLoop : AbstractGameLoop
 	{
 		/// <summary>

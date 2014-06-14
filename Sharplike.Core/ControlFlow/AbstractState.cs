@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace Sharplike.Core.ControlFlow
 {
+	/// <summary>
+	/// Represents a state in the state machine.
+	/// </summary>
 	public abstract class AbstractState
 	{
 		/// <summary>
@@ -168,6 +171,6 @@ namespace Sharplike.Core.ControlFlow
 		/// Triggers once when a key is pressed.
 		/// </summary>
 		/// <param name="Key">String representation of the key that is pressed.</param>
-		protected internal virtual void KeyPressed(Keys Key) { }
+		protected internal virtual void KeyPressed(KeyEventArgs Key) { }
 	}
 }

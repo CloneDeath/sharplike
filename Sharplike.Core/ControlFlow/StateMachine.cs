@@ -6,6 +6,9 @@ using Sharplike.Core.Input;
 
 namespace Sharplike.Core.ControlFlow
 {
+	/// <summary>
+	/// State machine with a collection of state stacks.
+	/// </summary>
 	public sealed class StateMachine
 	{
 		private String currentStack;
@@ -27,6 +30,7 @@ namespace Sharplike.Core.ControlFlow
 			Game.InputSystem.Command.CommandStarted += new EventHandler<CommandEventArgs>(InputSystem_CommandStarted);
 			Game.InputSystem.Command.CommandEnded += new EventHandler<CommandEventArgs>(InputSystem_CommandEnded);
 			Game.InputSystem.Command.CommandTriggered += new EventHandler<CommandEventArgs>(InputSystem_CommandTriggered);
+			Game.InputSystem.InputProvider.OnKeyPressed += new EventHandler<KeyEventArgs>(InputProvider_OnKeyPressed);
 		}
 		
 		/// <summary>
@@ -186,6 +190,10 @@ namespace Sharplike.Core.ControlFlow
 			this.stackDictionary[currentStack].Peek().GameProcessing();
 		}
 
+		/// <summary>
+		/// Calls the GameLoopTick on the currently active state.
+		/// </summary>
+		/// <param name="loop"></param>
 		public void GameLoopTick(Sharplike.Core.Runtime.AbstractGameLoop loop)
 		{
 			this.stackDictionary[currentStack].Peek().GameLoopTick(loop);
@@ -205,6 +213,11 @@ namespace Sharplike.Core.ControlFlow
 		void InputSystem_CommandEnded(object sender, CommandEventArgs e)
 		{
 			this.stackDictionary[currentStack].Peek().CommandEnded(e);
+		}
+
+		void InputProvider_OnKeyPressed(object sender, KeyEventArgs e)
+		{
+			this.stackDictionary[currentStack].Peek().KeyPressed(e);
 		}
 	}
 }
