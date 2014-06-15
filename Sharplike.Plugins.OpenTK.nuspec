@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Sharplike.Plugins.OpenTK</id>
-    <version>0.5.2.0</version>
+    <version>0.5.3.0</version>
     <authors>Sharplike Team</authors>
     <owners></owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,7 +13,7 @@
     <dependencies>
       <dependency id="OpenTK" version="1.1.1589.5941" />
       <dependency id="OpenTK.GLControl" version="1.1.1589.5941" />
-	  <dependency id="Sharplike.Core" version="0.5.2.0" />
+	  <dependency id="Sharplike.Core" version="0.5.3.0" />
     </dependencies>
   </metadata>
   <files>
