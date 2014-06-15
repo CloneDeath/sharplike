@@ -9,7 +9,6 @@ namespace Sharplike.Core.Input
 	public class CommandBroker : IDisposable
 	{
 		internal CommandControls commands = new CommandControls();
-		Dictionary<String, Timer> keytimers = new Dictionary<String, Timer>();
 
 		AbstractInputProvider _provider;
 		internal AbstractInputProvider InputProvider
@@ -145,22 +144,11 @@ namespace Sharplike.Core.Input
 		{
 			if (command == null)
 				return;
-			if (!keytimers.ContainsKey(command.Command)) {
-				if (this.CommandStarted != null)
-					CommandStarted(this, new CommandEventArgs(command));
 
-				TriggerCommand(command);
-				Timer t = new Timer();
-				t.Interval = 250;
-				t.Start();
-				t.Tick += delegate(object sender, EventArgs e) {
-					TriggerCommand(command);
-					t.Interval = 100;
-					t.Stop();
-					t.Start();
-				};
-				keytimers.Add(command.Command, t);
-			}
+			if (this.CommandStarted != null)
+				CommandStarted(this, new CommandEventArgs(command));
+
+			TriggerCommand(command);
 		}
 
 		/// <summary>
@@ -173,11 +161,6 @@ namespace Sharplike.Core.Input
 				return;
 			if (this.CommandEnded != null)
 				CommandEnded(this, new CommandEventArgs(command));
-
-			if (keytimers.ContainsKey(command.Command)) {
-				keytimers[command.Command].Dispose();
-				keytimers.Remove(command.Command);
-			}
 		}
 
 		/// <summary>
