@@ -629,7 +629,7 @@ namespace Sharplike.Mapping
 
 						this.RegionTiles[screen_x, screen_y].AddGlyphProvider(new ErrorSquare(n));
 #else
-						this.RegionTiles[x, y].AddGlyphProvider(new EmptySquare());
+						this.RegionTiles[screen_x, screen_y].AddGlyphProvider(new EmptySquare());
 #endif
 					}
 
