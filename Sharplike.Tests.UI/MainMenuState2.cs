@@ -9,7 +9,7 @@ using Sharplike.Core.Rendering;
 
 namespace Sharplike.Tests.UI
 {
-	class MainMenuState : AbstractState
+	class MainMenuState2 : AbstractState
 	{
 		protected override void StateStarted()
 		{
@@ -19,41 +19,18 @@ namespace Sharplike.Tests.UI
 
 			Window mainwin = new Window(pwin);
 			mainwin.Size = pwin.Size;
-			mainwin.Title = "Sharplike.Tests.UI";
+			mainwin.Title = "(Press Escape)";
 			mainwin.Style = BorderStyle.Double;
 
-			ListBox ols = new ListBox(mainwin);
-			ols.Location = new System.Drawing.Point(1, 1);
-			ols.Size = new System.Drawing.Size(11, 5);
-			ListBoxItem def = ols.AddItem("New Game");
-			ols.AddItem("Load Game");
-			ols.AddItem("Quit");
-
-			ols.SelectedItem = def;
-
-			ols.Focus();
 
 			Game.InputSystem.Command.CommandSet = "MainMenu";
-		}
-
-		protected override void StateResumed(AbstractState previousState)
-		{
-			this.StateStarted();
-		}
-
-		protected override void StatePaused()
-		{
-			AbstractRegion.ClearFocus();
 		}
 
 		protected override void CommandTriggered(Core.Input.CommandEventArgs e)
 		{
 			switch (e.CommandData.Command) {
 				case "quit":
-					Game.Terminate();
-					break;
-				case "enter":
-					StateMachine.PushState(new MainMenuState2());
+					StateMachine.PopState();
 					break;
 			}
 		}
