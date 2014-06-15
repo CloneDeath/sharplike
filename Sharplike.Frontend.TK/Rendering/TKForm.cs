@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Sharplike.Frontend.Rendering
 {
-	public partial class TKForm : Form
+	partial class TKForm : Form
 	{
 		public TKForm()
 		{

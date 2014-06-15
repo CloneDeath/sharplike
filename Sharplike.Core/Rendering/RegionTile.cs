@@ -52,9 +52,12 @@ namespace Sharplike.Core.Rendering
 		/// <param name="g">The pre-created glyph to add.</param>
 		public void AddGlyphProvider(IGlyphProvider g)
 		{
-			this.glyphList.Add(g);
-			if (displaytile != null)
+			if (!this.glyphList.Contains(g)) {
+				this.glyphList.Add(g);
+			}
+			if (displaytile != null) {
 				displaytile.MakeRenderDirty();
+			}
 		}
 
 		/// <summary>
@@ -63,9 +66,12 @@ namespace Sharplike.Core.Rendering
 		/// <param name="g">The glyph provider to remove</param>
 		public void RemoveGlyphProvider(IGlyphProvider g)
 		{
-			this.glyphList.Remove(g);
-			if (displaytile != null)
+			if (this.glyphList.Contains(g)) {
+				this.glyphList.Remove(g);
+			}
+			if (displaytile != null) {
 				displaytile.MakeRenderDirty();
+			}
 		}
 
 		/// <summary>

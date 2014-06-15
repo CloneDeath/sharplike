@@ -63,6 +63,7 @@ namespace Sharplike.Core
 			AddinManager.Registry.Update();
 #endif
 
+			Game.Scheduler = new SimpleThreadPoolScheduler();
 			Game.InputSystem = new InputSystem();
 
 			Game.Time = 0;

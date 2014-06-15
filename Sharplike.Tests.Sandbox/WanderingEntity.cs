@@ -12,6 +12,8 @@ namespace Sharplike.Tests.Sandbox
 	[Serializable]
 	public class WanderingEntity : AbstractEntity
 	{
+		public WanderingEntity(AbstractMap parent) : base(parent) { }
+
 		public override Core.Rendering.Glyph[] Glyphs
 		{
 			get

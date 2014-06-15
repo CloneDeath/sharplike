@@ -15,37 +15,37 @@ namespace Sharplike.Tests.Sandbox
 		
 		public override void Build()
 		{
-			for (int x = 0; x < this.size.x; x++) {
-				if (x == this.size.x / 2)
+			for (int x = 0; x < this.Size.X; x++) {
+				if (x == this.Size.X / 2)
 				{
-					map[x, 0, 0] = new FloorSquare();
-					map[x, this.size.y - 1, 0] = new FloorSquare();
+					this[x, 0, 0] = new FloorSquare();
+					this[x, this.Size.Y - 1, 0] = new FloorSquare();
 				}
 				else
 				{
-					map[x, 0, 0] = new NormalWallSquare();
-					map[x, this.size.y - 1, 0] = new NormalWallSquare();
-				}
-			}
-			
-			for (int y = 1; y < this.size.y - 1; y++) {
-				if (y == this.size.y / 2)
-				{
-					map[0, y, 0] = new FloorSquare();
-					map[this.size.x - 1, y, 0] = new FloorSquare();
-				}
-				else
-				{
-					map[0, y, 0] = new NormalWallSquare();
-					map[this.size.x - 1, y, 0] = new NormalWallSquare();
+					this[x, 0, 0] = new NormalWallSquare();
+					this[x, this.Size.Y - 1, 0] = new NormalWallSquare();
 				}
 			}
 
-			for (int x = 1; x < this.size.x - 1; ++x)
-			{
-				for (int y = 1; y < this.size.y - 1; ++y)
+			for (int y = 1; y < this.Size.Y - 1; y++) {
+				if (y == this.Size.Y / 2)
 				{
-					map[x, y, 0] = new FloorSquare();
+					this[0, y, 0] = new FloorSquare();
+					this[this.Size.X - 1, y, 0] = new FloorSquare();
+				}
+				else
+				{
+					this[0, y, 0] = new NormalWallSquare();
+					this[this.Size.X - 1, y, 0] = new NormalWallSquare();
+				}
+			}
+
+			for (int x = 1; x < this.Size.X - 1; ++x)
+			{
+				for (int y = 1; y < this.Size.Y - 1; ++y)
+				{
+					this[x, y, 0] = new FloorSquare();
 				}
 			}
 		}

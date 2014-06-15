@@ -45,7 +45,7 @@ namespace Sharplike.Core.Rendering
 		}
 
 		public bool AutoSizeToContents { get; set; }
-		private bool Dirty = true;
+		protected bool Dirty = true;
 
 		[NonSerialized]
 		private Point location;
@@ -397,7 +397,11 @@ namespace Sharplike.Core.Rendering
 			}
 		}
 
-		public virtual void Render()
+		/// <summary>
+		/// This is called whenever the region has been marked as "Dirty".
+		/// The entire region should be refreshed/redrawn in this function.
+		/// </summary>
+		protected virtual void Render()
 		{
 
 		}
@@ -478,29 +482,71 @@ namespace Sharplike.Core.Rendering
 			}
 		}
 
+		/// <summary>
+		/// Focuses this control for keyboard input.
+		/// </summary>
 		public void Focus()
 		{
 			FocusControl = this;
 		}
 
+		/// <summary>
+		/// Returns true if this control has keyboard focus.
+		/// </summary>
+		/// <returns>True if this control is receiving keyboard input - false otherwise.</returns>
 		public bool HasFocus()
 		{
 			return FocusControl == this;
 		}
 
+		/// <summary>
+		/// Clears all controls from receiving keyboard input.
+		/// </summary>
+		public static void ClearFocus()
+		{
+			FocusControl = null;
+		}
+
+		/// <summary>
+		/// Called whenever a keyboard key is pressed, and the current control has focus.
+		/// </summary>
+		/// <param name="KeyCode">The key that has been pressed.</param>
 		public virtual void OnKeyPress(Keys KeyCode)
 		{
 			
 		}
 	}
 
+	/// <summary>
+	/// Anchor flags to control what child regions do when their parent resizes.
+	/// Multiple options can be selected simultaniously.
+	/// </summary>
 	[Flags]
 	public enum Anchor
 	{
-		None = 0x0,
-		Top = 0x1,
-		Bottom = 0x2,
-		Left = 0x4,
-		Right = 0x8
+		/// <summary>
+		/// Let the child float - his screen space will remain unchanges.
+		/// </summary>
+		None =		0x0,
+
+		/// <summary>
+		/// Anchors to the top of the parent.
+		/// </summary>
+		Top =		0x01 << 0,
+
+		/// <summary>
+		/// Anchors to the bottom of the parent.
+		/// </summary>
+		Bottom =	0x01 << 1,
+
+		/// <summary>
+		/// Anchors to the left of the parent.
+		/// </summary>
+		Left =		0x01 << 2,
+
+		/// <summary>
+		/// Anchors to the right of the parent.
+		/// </summary>
+		Right =		0x01 << 3
 	}
 }

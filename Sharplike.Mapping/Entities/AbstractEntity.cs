@@ -13,13 +13,15 @@ namespace Sharplike.Mapping.Entities
 	[Serializable]
 	public class AbstractEntity : IGlyphProvider, IMessageReceiver, IDisposable, IPageCallbacker
 	{
-		public AbstractEntity()
+		public AbstractEntity(AbstractMap map)
 		{
 			this.MessageHandler.SetHandler("Reposition", Message_Reposition);
 			this.MessageHandler.SetHandler("Ping", Message_Ping);
 			this.MessageHandler.SetHandler("Move", Message_Move);
 
 			this.BackgroundColor = Color.Black;
+			
+			this.Map = map;
 		}
 
 		public void OnMessage(Message msg)
@@ -120,44 +122,7 @@ namespace Sharplike.Mapping.Entities
 		/// </returns>
 		public virtual bool Move(Direction dir)
 		{
-			Vector3 w;
-			switch (dir)
-			{
-				case Direction.North:
-					w = new Vector3(0, -1, 0);
-					break;
-				case Direction.South:
-					w = new Vector3(0, 1, 0);
-					break;
-				case Direction.East:
-					w = new Vector3(1, 0, 0);
-					break;
-				case Direction.West:
-					w = new Vector3(-1, 0, 0);
-					break;
-				case Direction.Northwest:
-					w = new Vector3(-1, -1, 0);
-					break;
-				case Direction.Southwest:
-					w = new Vector3(1, -1, 0);
-					break;
-				case Direction.Northeast:
-					w = new Vector3(-1, 1, 0);
-					break;
-				case Direction.Southeast:
-					w = new Vector3(1, 1, 0);
-					break;
-				case Direction.Up:
-					w = new Vector3(0, 0, -1);
-					break;
-				case Direction.Down:
-					w = new Vector3(0, 0, 1);
-					break;
-				default:
-					throw new ArgumentException("Direction was invalid.", "dir");
-			}
-
-			Vector3 newloc = this.Location + w;
+			Vector3 newloc = this.Location + DirectionUtils.DirectionVector(dir);
 
 			lock (Map)
 			{

@@ -6,6 +6,9 @@ using System.IO;
 
 namespace Sharplike.Core.Rendering
 {
+	/// <summary>
+	/// Contains all the data relevant to a glyph sheet.
+	/// </summary>
 	public class GlyphPalette
 	{
 		/// <summary>

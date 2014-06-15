@@ -9,10 +9,10 @@ namespace Sharplike.Mapping
 	[Serializable]
 	public class MapStack : AbstractMap
 	{
-		public MapStack(Size regionsize, Int32 width, Int32 height, string name, AbstractRegion parent) 
-			: base(new Vector3(width, height, 1), name, parent)
+		public MapStack(Size WindowSize, Int32 RegionWidth, Int32 RegionHeight, string name, AbstractRegion parent) 
+			: base(name, new Vector3(RegionWidth, RegionHeight, 1), parent)
 		{
-			this.Size = regionsize;
+			this.Size = WindowSize;
 		}	
 	}
 }

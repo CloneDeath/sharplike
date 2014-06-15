@@ -59,7 +59,7 @@ namespace Sharplike.Core.Input
 			}
 		}
 
-		public InputManager()
+		internal InputManager()
 		{
 			CurrentKeyboardState.PressedKeys = new List<Keys>();
 			PreviousKeyboardState.PressedKeys = new List<Keys>();
@@ -146,61 +146,116 @@ namespace Sharplike.Core.Input
 		}
 
 		/* Keyboard */
+
+		/// <summary>
+		/// Returns true if they keyboard key is currently down.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns>True if the key is currently being pressed down.</returns>
 		public bool IsDown(Keys key)
 		{
 			return CurrentKeyboardState.IsDown(key);
 		}
 
+		/// <summary>
+		/// Returns true if they keyboard key is currently up.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns>True if the key is currently being not being pressed down.</returns>
 		public bool IsUp(Keys key)
 		{
 			return !CurrentKeyboardState.IsDown(key);
 		}
 
+
+		/// <summary>
+		/// Returns true if they keyboard key has been pressed down since the last game step.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns>True if the key is currently being pressed down, and was previously not.</returns>
 		public bool IsPressed(Keys key)
 		{
 			return !PreviousKeyboardState.IsDown(key) && CurrentKeyboardState.IsDown(key);
 		}
 
+		/// <summary>
+		/// Returns true if they keyboard key has been released since the last game step.
+		/// </summary>
+		/// <param name="key">The key to check.</param>
+		/// <returns>True if the key is currently released, and was previously not.</returns>
 		public bool IsReleased(Keys key)
 		{
 			return PreviousKeyboardState.IsDown(key) && !CurrentKeyboardState.IsDown(key);
 		}
 
 		/* Mouse */
+		/// <summary>
+		/// Returns true if the specified mouse button is currently pressed down.
+		/// </summary>
+		/// <param name="key">The mouse button to check.</param>
+		/// <returns>True if the mouse button is currently down.</returns>
 		public bool IsDown(MouseButtons key)
 		{
 			return CurrentMouseState.IsDown(key);
 		}
 
+		/// <summary>
+		/// Returns true if the specified mouse button is currently not pressed down.
+		/// </summary>
+		/// <param name="key">The mouse button to check.</param>
+		/// <returns>True if the mouse button is currently up.</returns>
 		public bool IsUp(MouseButtons key)
 		{
 			return !CurrentMouseState.IsDown(key);
 		}
 
+		/// <summary>
+		/// Returns true if the specified mouse button has been pressed since the last update.
+		/// </summary>
+		/// <param name="key">The mouse button to check.</param>
+		/// <returns>True if the mouse button was recently pressed.</returns>
 		public bool IsPressed(MouseButtons key)
 		{
 			return !PreviousMouseState.IsDown(key) && CurrentMouseState.IsDown(key);
 		}
 
+		/// <summary>
+		/// Returns true if the specified mouse button has been released since the last update.
+		/// </summary>
+		/// <param name="key">The mouse button to check.</param>
+		/// <returns>True if the mouse button was recently released.</returns>
 		public bool IsReleased(MouseButtons key)
 		{
 			return PreviousMouseState.IsDown(key) && !CurrentMouseState.IsDown(key);
 		}
 
+		/// <summary>
+		/// The number of clicks the mouse wheel has moved since the last update.
+		/// </summary>
 		public int MouseWheel
 		{
 			get { return CurrentMouseState.Wheel - PreviousMouseState.Wheel; }
 		}
 
+		/// <summary>
+		/// The current mouse position. (Note: I have no idea what this is relative to, or in what scale)
+		/// </summary>
 		public Point MousePosition {
 			get { return CurrentMouseState.Position; }
 		}
 
+		/// <summary>
+		/// The previous mouse position. (Note: I have no idea what this is relative to, or in what scale)
+		/// </summary>
 		public Point PreviousMosePosition {
 			get { return PreviousMouseState.Position; }
 		}
 
-		internal IList<Keys> GetAllPressed()
+		/// <summary>
+		/// Returns a list of all keys that have been pressed since the last update.
+		/// </summary>
+		/// <returns>A list of keys that have been pressed.</returns>
+		public IList<Keys> GetAllPressed()
 		{
 			List<Keys> ret = new List<Keys>();
 			foreach (Keys key in CurrentKeyboardState.PressedKeys) {

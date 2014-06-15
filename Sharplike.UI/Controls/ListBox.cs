@@ -62,6 +62,8 @@ namespace Sharplike.UI.Controls
 				} else {
 					this._selectedIndex = value;
 				}
+
+				this.Invalidate();
 			}
 		}
 
@@ -97,9 +99,8 @@ namespace Sharplike.UI.Controls
 			}
 		}
 
-		public override void Render()
+		protected override void Render()
 		{
-			int y_offset = 1;
 			foreach (ListBoxItem item in Items) {
 				if (SelectedItem == item) {
 					item.Background = Color.Yellow;

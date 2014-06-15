@@ -28,8 +28,8 @@ namespace Sharplike.Editlike.MapTools
 
 		public void End(Point tile)
 		{
-			Vector3 start = new Vector3(tile.X + form.Map.View.x,
-				tile.Y + form.Map.View.y, form.Map.View.z);
+			Vector3 start = new Vector3(tile.X + form.Map.View.X,
+				tile.Y + form.Map.View.Y, form.Map.View.Z);
 			EditorExtensionNode node = form.SelectedSquareType();
 			AbstractSquare sq = form.Map.GetSafeSquare(start);
 			if (sq != null && node != null && !sq.GetType().Equals(node.Type))

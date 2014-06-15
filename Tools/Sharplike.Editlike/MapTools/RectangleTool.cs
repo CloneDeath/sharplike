@@ -40,8 +40,8 @@ namespace Sharplike.Editlike.MapTools
 							y == border.Location.Y || y == border.Location.Y + border.Size.Height - 1))
 						{
 							AbstractSquare sq = (AbstractSquare)node.CreateInstance();
-							Vector3 loc = new Vector3(x + form.Map.View.x,
-								y + form.Map.View.y, form.Map.View.z);
+							Vector3 loc = new Vector3(x + form.Map.View.X,
+								y + form.Map.View.Y, form.Map.View.Z);
 
 							change.AddOperation(form.Map.GetSafeSquare(loc), sq, loc);
 							form.Map.SetSquare(loc, sq);

@@ -12,23 +12,44 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Sharplike.Mapping
 {
-	[ChannelSubscriber("Maps")]
+	/// <summary>
+	/// Represents a single continuous location in space.
+	/// A map is made up of pages - 3D chunks of the world.
+	/// </summary>
 	[Serializable]
+	[ChannelSubscriber("Maps")]
 	public abstract class AbstractMap : AbstractRegion, IMessageReceiver
 	{
-		Vector3 pageSize;
+		/// <summary>
+		/// Name of the map.
+		/// </summary>
+		public string Name { get; private set; }
+
+		/// <summary>
+		/// Thread safe. Gets the size of pages that the map uses.
+		/// </summary>
+		public Vector3 PageSize
+		{
+			get;
+			private set;
+		}
+
 		public readonly Dictionary<Vector3, AbstractPage> Pages;
 		Vector3 view;
-		public readonly string Name;
 
-		private IScheduler scheduler;
-
-		public AbstractMap(Vector3 pageSize, string Name, AbstractRegion parent) : base(parent)
+		/// <summary>
+		/// The location of the camera in world-space. This will be the top-left location in the screen space.
+		/// </summary>
+		public Vector3 View
 		{
-			this.pageSize = pageSize;
-			this.Name = Name;
+			get { return view; }
+			set { ViewFrom(value); }
+		}
 
-			Game.Scheduler = new SimpleThreadPoolScheduler();
+		public AbstractMap(string Name, Vector3 PageSize, AbstractRegion parent) : base(parent)
+		{
+			this.PageSize = PageSize;
+			this.Name = Name;
 
 			Pages = new Dictionary<Vector3, AbstractPage>();
 
@@ -76,9 +97,9 @@ namespace Sharplike.Mapping
 		/// Get operations are thread safe. Set operations are not.
 		/// Gets or sets the square to be used at a particular map coordinate.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="z"></param>
+		/// <param name="x">X coordinate to retrieve a square from.</param>
+		/// <param name="y">Y coordinate to retrieve a square from.</param>
+		/// <param name="z">Z coordinate to retrieve a square from.</param>
 		/// <returns>The square at the specified coordinate.</returns>
 		public virtual AbstractSquare this[Int32 x, Int32 y, Int32 z]
 		{
@@ -88,30 +109,26 @@ namespace Sharplike.Mapping
 			}
 			protected set
 			{
-
 				SetSquare(new Vector3(x, y, z), value);
 			}
 		}
 
 		/// <summary>
-		/// Thread safe. Gets the size of pages that the map uses.
-		/// </summary>
-		public Vector3 PageSize
-		{
-			get
-			{
-				return pageSize;
-			}
-		}
-
-		/// <summary>
-		/// Thread safe. Gets the current position and size of the viewport.
+		/// Thread safe. Gets/Sets the current position and size of the viewport.
+		/// The location of the viewport is in world space, the size of the viewport is tied to both
+		/// the world space and screen space.
+		/// To change the location on the screen, use the <see cref="Location"/> property.
 		/// </summary>
 		public Rectangle Viewport
 		{
 			get
 			{
-				return new Rectangle(new Point(view.x, view.y), this.Size);
+				return new Rectangle(new Point(view.X, view.Y), this.Size);
+			}
+			set
+			{
+				this.ViewFrom(new Vector3(value.X, value.Y, view.Z));
+				this.Size = value.Size;
 			}
 		}
 
@@ -128,33 +145,38 @@ namespace Sharplike.Mapping
 			}
 		}
 		
+		/// <summary>
+		/// Adds the passed in page to this map, at the specified map slot.
+		/// </summary>
+		/// <param name="newPage">The page to add to this map.</param>
+		/// <param name="pageLocation">The map slot to place this page.</param>
 		public void AddPage(AbstractPage newPage, Vector3 pageLocation)
 		{
-			if (newPage.Size.Equals(this.pageSize) == false)
+			if (newPage.Size.Equals(this.PageSize) == false)
 				throw new ArgumentException("All pages must be the size specified to the Map object.");
 
 			if (Pages.ContainsKey(pageLocation)) throw new ArgumentException("Page already exists at " + pageLocation.ToString() + ".");
-			/*
-			Vector3 n = new Vector3(here.x, here.y - 1, here.z);
-			Vector3 s = new Vector3(here.x, here.y + 1, here.z);
-			Vector3 e = new Vector3(here.x + 1, here.y, here.z);
-			Vector3 w = new Vector3(here.x - 1, here.y, here.z);
-			Vector3 u = new Vector3(here.x, here.y, here.z - 1);
-			Vector3 d = new Vector3(here.x, here.y, here.z + 1);
-			bool valid = pages.Count == 0 ||
-				(false &&
-				(pages.ContainsKey(n) ||
-				 pages.ContainsKey(s) ||
-				 pages.ContainsKey(e) ||
-				 pages.ContainsKey(w) ||
-				 pages.ContainsKey(u) ||
-				 pages.ContainsKey(d)));
-			if (!valid)
-			{
-				throw new ArgumentException("Provided coordinates for new page are not contiguous with existing pages.");
-			}
-			 */
-			newPage.parentMap = this;
+
+			// Let's allow them to make disjointed space -- maybe they have infinite terrain, as well as teleportation
+			//bool Found = false;
+			//for (int dx = -1; dx <= 1; dx++) {
+			//    for (int dy = -1; dy <= 1; dy++) {
+			//        for (int dz = -1; dz <= 1; dz++){
+			//            if (Pages.ContainsKey(pageLocation + new Vector3(dx, dy, dz))) {
+			//                Found = true;
+			//                break;
+			//            }
+			//        }
+			//        if (Found) break;
+			//    }
+			//    if (Found) break;
+			//}
+			//if (!Found)
+			//{
+			//    throw new ArgumentException("Provided coordinates for new page are not contiguous with existing pages.");
+			//}
+
+			newPage.ParentMap = this;
 			newPage.address = pageLocation;
 
 			Game.Scheduler.AddTask(newPage);
@@ -171,9 +193,9 @@ namespace Sharplike.Mapping
 
 		public AbstractSquare GetSquare(AbstractPage p, Vector3 offset)
 		{
-			Vector3 npos = new Vector3(p.address.x * pageSize.x + offset.x,
-										   p.address.y * pageSize.y + offset.y,
-										   p.address.z * pageSize.z + offset.z);
+			Vector3 npos = new Vector3(p.address.X * PageSize.X + offset.X,
+										   p.address.Y * PageSize.Y + offset.Y,
+										   p.address.Z * PageSize.Z + offset.Z);
 			return GetSquare(npos);
 		}
 
@@ -186,9 +208,9 @@ namespace Sharplike.Mapping
 		{
 			Vector3 addr;
 			Vector3 newoff;
-			Vector3.Divide(location, this.pageSize, out addr, out newoff);
+			Vector3.Divide(location, this.PageSize, out addr, out newoff);
 			if (!Pages.ContainsKey(addr)) throw new ArgumentException("Specified square not in map.");
-			return Pages[addr].GetSquare(newoff.x, newoff.y, newoff.z);
+			return Pages[addr].GetSquare(newoff.X, newoff.Y, newoff.Z);
 		}
 
 		/// <summary>
@@ -200,19 +222,20 @@ namespace Sharplike.Mapping
 		{
 			Vector3 addr;
 			Vector3 newoff;
-			Vector3.Divide(location, this.pageSize, out addr, out newoff);
+			Vector3.Divide(location, this.PageSize, out addr, out newoff);
 			if (!Pages.ContainsKey(addr))
 			{
-				AddPage(new BasicPage(pageSize), addr);
+				AddPage(new BasicPage(PageSize), addr);
 			}
 
-			Pages[addr].SetSquare(newoff.x, newoff.y, newoff.z, square);
+			Pages[addr].SetSquare(newoff.X, newoff.Y, newoff.Z, square);
 
-			if (location.z == view.z)
+			if (location.Z == view.Z)
 			{
-				if (Viewport.Contains(new Point(location.x, location.y)))
+				if (Viewport.Contains(new Point(location.X, location.Y)))
 				{
-					InvalidateTiles(new Rectangle(location.x - view.x, location.y - view.y, 1, 1));
+					InvalidateTiles(new Rectangle(location.X - view.X, location.Y - view.Y, 1, 1));
+					this.Dirty = false;
 				}
 			}
 
@@ -235,12 +258,12 @@ namespace Sharplike.Mapping
 
 			lock (this)
 			{
-				Vector3.Divide(location, this.pageSize, out addr, out newoff);
+				Vector3.Divide(location, this.PageSize, out addr, out newoff);
 
 				AbstractPage p;
 				if (!Pages.TryGetValue(addr, out p))
 					return null;
-				return p.GetSquare(newoff.x, newoff.y, newoff.z);
+				return p.GetSquare(newoff.X, newoff.Y, newoff.Z);
 			}
 		}
 
@@ -252,11 +275,11 @@ namespace Sharplike.Mapping
 				foreach (AbstractPage page in this.GetPagesInRange(this.View, 
 					new Vector3(this.Viewport.Width, this.Viewport.Height, 1)))
 				{
-					for (int y = 0; y < pageSize.y; ++y)
+					for (int y = 0; y < PageSize.Y; ++y)
 					{
-						for (int x = 0; x < pageSize.x; ++x)
+						for (int x = 0; x < PageSize.X; ++x)
 						{
-							Vector3 location = new Vector3(x, y, this.View.z);
+							Vector3 location = new Vector3(x, y, this.View.Z);
 							if (page[location].Equals(square))
 								return location;
 						}
@@ -266,12 +289,6 @@ namespace Sharplike.Mapping
 			return Vector3.Zero;
 		}
 
-		public Vector3 View
-		{
-			get { return view; }
-			set { ViewFrom(value); }
-		}
-
 		/// <summary>
 		/// Sets the viewport to look at a specific entity on the map.
 		/// This will center the entity on the screen.
@@ -279,9 +296,9 @@ namespace Sharplike.Mapping
 		/// <param name="ent">The entity to view from.</param>
 		public void ViewFrom(AbstractEntity ent)
 		{
-			int x = ent.Location.x - (Size.Width / 2);
-			int y = ent.Location.y - (Size.Height / 2);
-			int z = ent.Location.z;
+			int x = ent.Location.X - (Size.Width / 2);
+			int y = ent.Location.Y - (Size.Height / 2);
+			int z = ent.Location.Z;
 			ViewFrom(new Vector3(x, y, z));
 		}
 
@@ -294,65 +311,15 @@ namespace Sharplike.Mapping
 		/// <summary>
 		/// Sets the viewport to a specific location on the map.
 		/// </summary>
-		/// <param name="nView">The coordinates of the top-left most square to view from.</param>
+		/// <param name="newView">The coordinates of the top-left most square to view from.</param>
 		/// <param name="forceRender">Whether or not to force a redraw of the viewport.
 		/// This only has an effect when the viewport doesn't change.</param>
-		public void ViewFrom(Vector3 nView, Boolean forceRender)
+		public void ViewFrom(Vector3 newView, Boolean forceRender)
 		{
-			if (nView.Equals(view) == false || forceRender == true)
+			if (newView.Equals(view) == false || forceRender == true)
 			{
-				this.Clear();
-				
-				for (int x = 0; x < this.Size.Width; x++)
-				{
-					int gx = x + nView.x;
-					for (int y = 0; y < this.Size.Height; y++)
-					{
-						int gy = y + nView.y;
-						this.RegionTiles[x, y].Reset();
-						
-						AbstractSquare sq = this.GetSafeSquare(new Vector3(gx, gy, nView.z));
-						if (sq != null)
-						{
-							this.RegionTiles[x, y].AddGlyphProvider(sq);
-						}
-						else
-						{
-							//Draw a nice red error tile if we're looking out of bounds in debug mode,
-							//but just black if we're in release mode.
-#if DEBUG
-							int n = 249; // circle
-							if (gx % 2 == 0 && gy % 2 == 0) n = 197; // +
-							if (gx % 2 != 0 && gy % 2 == 0) n = 196; // -
-							if (gx % 2 == 0 && gy % 2 != 0) n = 179; // |
-
-							this.RegionTiles[x, y].AddGlyphProvider(new ErrorSquare(n));
-#else
-							this.RegionTiles[x, y].AddGlyphProvider(new EmptySquare());
-#endif
-						}
-
-					}
-				}
-
-				view = nView;
-
-				Vector3 addr;
-				Vector3 newoff;
-				Vector3.Divide(nView, this.pageSize, out addr, out newoff);
-
-				foreach (AbstractPage p in GetPagesInRange(nView, new Vector3(this.Size.Width, this.Size.Height, 1)))
-				{
-					foreach (AbstractEntity ent in p.Entities)
-					{
-						if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.z == view.z)
-						{
-							this.RegionTiles[ent.Location.x - view.x,
-								ent.Location.y - view.y].AddGlyphProvider(ent);
-						}
-					}
-				}
-				
+				view = newView;
+				this.Invalidate();				
 			}
 		}
 
@@ -360,15 +327,15 @@ namespace Sharplike.Mapping
 		{
 			Vector3 addr;
 			Vector3 newoff;
-			Vector3.Divide(start, this.pageSize, out addr, out newoff);
+			Vector3.Divide(start, this.PageSize, out addr, out newoff);
 
 			List<AbstractPage> ret = new List<AbstractPage>();
 
-			for (int x = addr.x; x <= addr.x + Math.Ceiling((double)extents.x / pageSize.x); ++x)
+			for (int x = addr.X; x <= addr.X + Math.Ceiling((double)extents.X / PageSize.X); ++x)
 			{
-				for (int y = addr.y; y <= addr.y + Math.Ceiling((double)extents.y / pageSize.y); ++y)
+				for (int y = addr.Y; y <= addr.Y + Math.Ceiling((double)extents.Y / PageSize.Y); ++y)
 				{
-					for (int z = addr.z; z <= addr.z + Math.Ceiling((double)extents.z / pageSize.z); ++z)
+					for (int z = addr.Z; z <= addr.Z + Math.Ceiling((double)extents.Z / PageSize.Z); ++z)
 					{
 						AbstractPage p;
 						if (Pages.TryGetValue(new Vector3(x, y, z), out p))
@@ -383,11 +350,11 @@ namespace Sharplike.Mapping
 		bool IsPageVisible(AbstractPage p)
 		{
 			Vector3 worldloc = new Vector3(
-				p.address.x * pageSize.x,
-				p.address.y * pageSize.y,
-				p.address.z * pageSize.z);
-			Rectangle pagerect = new Rectangle(new Point(worldloc.x, worldloc.y), new Size(p.Size.x, p.Size.y));
-			return pagerect.IntersectsWith(this.Viewport) && view.z >= worldloc.z && view.z < worldloc.z + pageSize.z;
+				p.address.X * PageSize.X,
+				p.address.Y * PageSize.Y,
+				p.address.Z * PageSize.Z);
+			Rectangle pagerect = new Rectangle(new Point(worldloc.X, worldloc.Y), new Size(p.Size.X, p.Size.Y));
+			return pagerect.IntersectsWith(this.Viewport) && view.Z >= worldloc.Z && view.Z < worldloc.Z + PageSize.Z;
 		}
 
 		#region Entity Operations
@@ -395,30 +362,33 @@ namespace Sharplike.Mapping
 		{
 			Vector3 addr;
 			Vector3 newoff;
-			Vector3.Divide(ent.Location, this.pageSize, out addr, out newoff);
+			Vector3.Divide(ent.Location, this.PageSize, out addr, out newoff);
 
-			if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.z == view.z)
-				this.RegionTiles[ent.Location.x - view.x, ent.Location.y - view.y].AddGlyphProvider(ent);
+			if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.Z == view.Z) {
+				this.RegionTiles[ent.Location.X - view.X, ent.Location.Y - view.Y].AddGlyphProvider(ent);
+			}
 
 			AbstractPage p = Pages[addr];
-			if (p != null)
+			if (p != null) {
 				p.Entities.Add(ent);
+			}
 		}
 
 		internal void RemoveEntity(AbstractEntity ent)
 		{
 			Vector3 addr;
 			Vector3 newoff;
-			Vector3.Divide(ent.Location, this.pageSize, out addr, out newoff);
+			Vector3.Divide(ent.Location, this.PageSize, out addr, out newoff);
 
-			if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.z == view.z)
+			if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.Z == view.Z)
 			{
-				this.RegionTiles[ent.Location.x - view.x, ent.Location.y - view.y].RemoveGlyphProvider(ent);
+				this.RegionTiles[ent.Location.X - view.X, ent.Location.Y - view.Y].RemoveGlyphProvider(ent);
 			}
 
 			AbstractPage p = Pages[addr];
-			if (p != null)
+			if (p != null) {
 				p.Entities.Remove(ent);
+			}
 		}
 
 		public void SwapEntityCallbackOwner(AbstractEntity ent, AbstractPage oldpage, AbstractPage newpage)
@@ -434,8 +404,8 @@ namespace Sharplike.Mapping
 		{
 			Vector3 oldpageaddr, newpageaddr;
 			Vector3 oldpageloc, newpageloc;
-			Vector3.Divide(oldloc, this.pageSize, out oldpageaddr, out oldpageloc);
-			Vector3.Divide(newloc, this.pageSize, out newpageaddr, out newpageloc);
+			Vector3.Divide(oldloc, this.PageSize, out oldpageaddr, out oldpageloc);
+			Vector3.Divide(newloc, this.PageSize, out newpageaddr, out newpageloc);
 
 			AbstractPage oldpage;
 			AbstractPage newpage;
@@ -444,10 +414,10 @@ namespace Sharplike.Mapping
 			{
 				if (Pages.TryGetValue(oldpageaddr, out oldpage))
 				{
-					if (oldloc.IntersectsWith(this.Viewport) && oldloc.z == view.z)
+					if (oldloc.IntersectsWith(this.Viewport) && oldloc.Z == view.Z)
 					{
-						int x = oldloc.x - view.x;
-						int y = oldloc.y - view.y;
+						int x = oldloc.X - view.X;
+						int y = oldloc.Y - view.Y;
 						this.RegionTiles[x, y].RemoveGlyphProvider(ent);
 					}
 					if (!oldpageaddr.Equals(newpageaddr)) 
@@ -457,8 +427,9 @@ namespace Sharplike.Mapping
 					}
 				}
 
-				if (newloc.IntersectsWith(this.Viewport) && ent.Location.z == view.z)
-					this.RegionTiles[newloc.x - view.x, newloc.y - view.y].AddGlyphProvider(ent);
+				if (newloc.IntersectsWith(this.Viewport) && ent.Location.Z == view.Z) {
+					this.RegionTiles[newloc.X - view.X, newloc.Y - view.Y].AddGlyphProvider(ent);
+				}
 				if (!oldpageaddr.Equals(newpageaddr))
 				{
 					newpage.Entities.Add(ent);
@@ -634,5 +605,48 @@ namespace Sharplike.Mapping
 			MessageHandler.AssertArgumentTypes(msg);
 		}
 		public readonly MessageHandler MessageHandler = new MessageHandler();
+
+		protected override void Render()
+		{
+			for (int screen_x = 0; screen_x < this.Size.Width; screen_x++) {
+				int world_x = screen_x + View.X;
+
+				for (int screen_y = 0; screen_y < this.Size.Height; screen_y++) {
+					int world_y = screen_y + View.Y;
+					this.RegionTiles[screen_x, screen_y].Reset();
+
+					AbstractSquare sq = this.GetSafeSquare(new Vector3(world_x, world_y, View.Z));
+					if (sq != null) {
+						this.RegionTiles[screen_x, screen_y].AddGlyphProvider(sq);
+					} else {
+						//Draw a nice red error tile if we're looking out of bounds in debug mode,
+						//but just black if we're in release mode.
+#if DEBUG
+						int n = 249; // circle
+						if (world_x % 2 == 0 && world_y % 2 == 0) n = 197; // +
+						if (world_x % 2 != 0 && world_y % 2 == 0) n = 196; // -
+						if (world_x % 2 == 0 && world_y % 2 != 0) n = 179; // |
+
+						this.RegionTiles[screen_x, screen_y].AddGlyphProvider(new ErrorSquare(n));
+#else
+						this.RegionTiles[screen_x, screen_y].AddGlyphProvider(new EmptySquare());
+#endif
+					}
+
+				}
+			}
+
+			Vector3 addr;
+			Vector3 newoff;
+			Vector3.Divide(this.View, this.PageSize, out addr, out newoff);
+
+			foreach (AbstractPage p in GetPagesInRange(View, new Vector3(this.Size.Width, this.Size.Height, 1))) {
+				foreach (AbstractEntity ent in p.Entities) {
+					if (ent.Location.IntersectsWith(this.Viewport) && ent.Location.Z == view.Z) {
+						this.RegionTiles[ent.Location.X - view.X, ent.Location.Y - view.Y].AddGlyphProvider(ent);
+					}
+				}
+			}
+		}
 	}
 }
