@@ -15,6 +15,13 @@ namespace Sharplike.Frontend.Rendering
 			get { return _window; }
 		}
 
+		/// <summary>
+		/// Creates a new Window, or returns the existing one (ignoring input parameters if one already exists).
+		/// </summary>
+		/// <param name="displayDimensions">Size of the window.</param>
+		/// <param name="palette">Glyph settings to use.</param>
+		/// <param name="context">Control requesting window?</param>
+		/// <returns>A new window the first time it is called, or the existing window on subsequent calls.</returns>
 		public override AbstractWindow CreateWindow(Size displayDimensions, GlyphPalette palette, Object context)
 		{
 			if (_window == null) {

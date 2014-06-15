@@ -9,7 +9,7 @@ namespace Sharplike.Mapping
 		public ColdPage(Vector3 size)
 		{
 			cacheMode = CachingMode.Cold;
-			this.size = size;
+			this.Size = size;
 		}
 
 		public override void Build()

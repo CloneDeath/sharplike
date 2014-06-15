@@ -19,7 +19,7 @@ namespace Sharplike.UI.Controls
 			this.Text = text;
 		}
 
-		public override void Render()
+		protected override void Render()
 		{
 			this.Clear();
 			int y = 0;

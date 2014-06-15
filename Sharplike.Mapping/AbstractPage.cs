@@ -19,12 +19,11 @@ namespace Sharplike.Mapping
 	{
 		private Int64 lastCallTime;
 
-		protected AbstractSquare[,,] map;
-		protected Vector3 size;
+		private AbstractSquare[,,] map;
 		public Vector3 address;
 
 		[NonSerialized]
-		public AbstractMap parentMap;
+		public AbstractMap ParentMap;
 
 		private List<AbstractEntity> ents = new List<AbstractEntity>();
 
@@ -42,24 +41,24 @@ namespace Sharplike.Mapping
 			this.lastCallTime = Game.Time;
 		}
 
-		public AbstractPage(Vector3 pageSize) : this(pageSize.x, pageSize.y, pageSize.z)
+		public AbstractPage(Vector3 pageSize) : this(pageSize.X, pageSize.Y, pageSize.Z)
 		{
 		}
 
 		public AbstractPage(Int32 width, Int32 height, Int32 depth) : this()
 		{
-			this.size = new Vector3(width, height, depth);
-			map = new AbstractSquare[size.x, size.y, size.x];
-			/*for (int x = 0; x < size.x; ++x)
+			this.Size = new Vector3(width, height, depth);
+			map = new AbstractSquare[this.Size.X, this.Size.Y, this.Size.X];
+			for (int x = 0; x < this.Size.X; ++x)
 			{
-				for (int y = 0; y < size.y; ++y)
+				for (int y = 0; y < this.Size.Y; ++y)
 				{
-					for (int z = 0; z < size.z; ++z)
+					for (int z = 0; z < this.Size.Z; ++z)
 					{
 						map[x, y, z] = new EmptySquare();
 					}
 				}
-			}*/
+			}
 
 			aiDispatchTable = new Dictionary<Int64, List<PageCallbackInfo>>();
 			this.lastCallTime = Game.Time;
@@ -67,10 +66,8 @@ namespace Sharplike.Mapping
 
 		public Vector3 Size
 		{
-			get
-			{
-				return this.size;
-			}
+			get;
+			protected set;
 		}
 
 		public List<AbstractEntity> Entities
@@ -81,55 +78,72 @@ namespace Sharplike.Mapping
 			}
 		}
 		
+		/// <summary>
+		/// This is called when it is time to generate the page.
+		/// </summary>
 		public abstract void Build();
 		
 		public virtual AbstractSquare this[Int32 x, Int32 y]
 		{
 			get
 			{
-				return this.map[x, y, 0];
+				return this.GetSquare(x, y, 0);
 			}
 			protected set
 			{
-				this.map[x, y, 0] = value;
+				this.SetSquare(x, y, 0, value);
 			}
 		}
 		public virtual AbstractSquare this[Point p]
 		{
 			get
 			{
-				return this.map[p.X, p.Y, 0];
+				return this.GetSquare(p.X, p.Y, 0);
 			}
 			set
 			{
-				this.map[p.X, p.Y, 0] = value;
+				this.SetSquare(p.X, p.Y, 0, value);
 			}
 		}
 		public virtual AbstractSquare this[Int32 x, Int32 y, Int32 z]
 		{
 			get
 			{
-				return this.map[x, y, z];
+				return this.GetSquare(x, y, z);
 			}
 			protected set
 			{
-				this.map[x, y, z] = value;
+				this.SetSquare(x, y, z, value);
 			}
 		}
 		public virtual AbstractSquare this[Vector3 p]
 		{
 			get
 			{
-				return this.map[p.x, p.y, p.z];
+				return this.GetSquare(p.X, p.Y, p.Z);
 			}
 			set
 			{
-				this.map[p.x, p.y, p.z] = value;
+				this.SetSquare(p.X, p.Y, p.Z, value);
 			}
 		}
 
-		public void SetSquare(Int32 x, Int32 y, Int32 z, AbstractSquare sq) { this.map[x, y, z] = sq; }
-		public AbstractSquare GetSquare(Int32 x, Int32 y, Int32 z) { return this.map[x, y, z]; }
+		/// <summary>
+		/// Sets a square in this page to a clone of the passed in square.
+		/// </summary>
+		/// <param name="x">The X position to place the square.</param>
+		/// <param name="y">The Y position to place the square.</param>
+		/// <param name="z">The Z position to place the square.</param>
+		/// <param name="sq">The square to clone.</param>
+		public void SetSquare(Int32 x, Int32 y, Int32 z, AbstractSquare sq) {
+			AbstractSquare newsq = sq.Clone();
+			this.map[x, y, z] = newsq;
+			newsq.Map = this.ParentMap;
+			newsq.Location = new Vector3(x, y, z);
+		}
+		public AbstractSquare GetSquare(Int32 x, Int32 y, Int32 z) { 
+			return this.map[x, y, z]; 
+		}
 		
 		public AbstractSquare LocateNeighbor(Vector3 p, Direction d)
 		{
@@ -155,27 +169,27 @@ namespace Sharplike.Mapping
 				case Direction.West:
 					offset = new Vector3(-1,0,0);
 					break;
-				case Direction.Northeast:
+				case Direction.NorthEast:
 					offset = new Vector3(1,-1,0);
 					break;
-				case Direction.Northwest:
+				case Direction.NorthWest:
 					offset = new Vector3(-1,-1,0);
 					break;
-				case Direction.Southeast:
+				case Direction.SouthEast:
 					offset = new Vector3(1,1,0);
 					break;
-				case Direction.Southwest:
+				case Direction.SouthWest:
 					offset = new Vector3(-1,1,0);
 					break;
 			}
 			Vector3 neighborPosition = p + offset;
-			if (neighborPosition.x >= 0 && neighborPosition.x <= map.GetUpperBound(0) &&
-				neighborPosition.y >= 0 && neighborPosition.y <= map.GetUpperBound(1) &&
-				neighborPosition.z >= 0 && neighborPosition.z <= map.GetUpperBound(2)) 
+			if (neighborPosition.X >= 0 && neighborPosition.X <= map.GetUpperBound(0) &&
+				neighborPosition.Y >= 0 && neighborPosition.Y <= map.GetUpperBound(1) &&
+				neighborPosition.Z >= 0 && neighborPosition.Z <= map.GetUpperBound(2)) 
 			{
-				return map[p.x, p.y, p.z];
+				return map[p.X, p.Y, p.Z];
 			} else {
-				return parentMap.GetSquare(this, neighborPosition);
+				return ParentMap.GetSquare(this, neighborPosition);
 			}
 		}
 

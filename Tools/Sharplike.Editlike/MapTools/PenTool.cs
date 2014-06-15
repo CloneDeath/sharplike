@@ -41,8 +41,8 @@ namespace Sharplike.Editlike.MapTools
 		{
 			if (tile != lastloc)
 			{
-				Vector3 squareloc = new Vector3(tile.X + form.Map.View.x,
-								tile.Y + form.Map.View.y, form.Map.View.z);
+				Vector3 squareloc = new Vector3(tile.X + form.Map.View.X,
+								tile.Y + form.Map.View.Y, form.Map.View.Z);
 				EditorExtensionNode node = form.SelectedSquareType();
 				if (node != null)
 				{

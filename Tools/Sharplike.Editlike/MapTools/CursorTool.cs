@@ -29,8 +29,8 @@ namespace Sharplike.Editlike.MapTools
 
 		public void Start(Point tile)
 		{
-			Vector3 location = new Vector3(tile.X + form.Map.View.x,
-				tile.Y + form.Map.View.y, form.Map.View.z);
+			Vector3 location = new Vector3(tile.X + form.Map.View.X,
+				tile.Y + form.Map.View.Y, form.Map.View.Z);
 			Vector3 extents = new Vector3(1, 1, 1);
 			AbstractEntity[] ents = form.Map.EntitiesInRectangularRange(location, extents);
 
@@ -45,8 +45,8 @@ namespace Sharplike.Editlike.MapTools
 		{
 			if (ent != null)
 			{
-				Vector3 location = new Vector3(tile.X + form.Map.View.x,
-					tile.Y + form.Map.View.y, form.Map.View.z);
+				Vector3 location = new Vector3(tile.X + form.Map.View.X,
+					tile.Y + form.Map.View.Y, form.Map.View.Z);
 				ent.Location = location;
 			}
 		}

@@ -17,31 +17,31 @@ namespace Sharplike.Mapping
 
 		public Vector3(int x, int y, int z)
 		{
-			this.x = x;
-			this.y = y;
-			this.z = z;
+			this.X = x;
+			this.Y = y;
+			this.Z = z;
 		}
 		public Vector3(Point p)
 		{
-			this.x = p.X;
-			this.y = p.Y;
-			this.z = 0;
+			this.X = p.X;
+			this.Y = p.Y;
+			this.Z = 0;
 		}
 		
 		public override string ToString ()
 		{
-			return string.Format("(" + x + "," + y + "," + z + ")");
+			return string.Format("(" + X + "," + Y + "," + Z + ")");
 		}
 
 		
 		public static void Divide(Vector3 a, Vector3 b, out Vector3 q, out Vector3 r)
 		{
-			int x = (int)Math.Floor((double)a.x / (double)b.x);
-			int y = (int)Math.Floor((double)a.y / (double)b.y);
-			int z = (int)Math.Floor((double)a.z / (double)b.z);
-			int xr = a.x - b.x * x;
-			int yr = a.y - b.y * y;
-			int zr = a.z - b.z * z;
+			int x = (int)Math.Floor((double)a.X / (double)b.X);
+			int y = (int)Math.Floor((double)a.Y / (double)b.Y);
+			int z = (int)Math.Floor((double)a.Z / (double)b.Z);
+			int xr = a.X - b.X * x;
+			int yr = a.Y - b.Y * y;
+			int zr = a.Z - b.Z * z;
 			
 			q = new Vector3(x,y,z);
 			r = new Vector3(xr,yr,zr);
@@ -58,55 +58,55 @@ namespace Sharplike.Mapping
 
 		public static Vector3 operator +(Vector3 a, Vector3 b)
 		{
-			return new Vector3(a.x + b.x,
-							   a.y + b.y,
-							   a.z + b.z);
+			return new Vector3(a.X + b.X,
+							   a.Y + b.Y,
+							   a.Z + b.Z);
 		}
 		public static Vector3 operator +(Vector3 a, Point b)
 		{
-			return new Vector3(a.x + b.X,
-								a.y + b.Y,
-								a.z);
+			return new Vector3(a.X + b.X,
+								a.Y + b.Y,
+								a.Z);
 		}
 
 		public static Vector3 operator -(Vector3 a, Vector3 b)
 		{
-			return new Vector3(a.x - b.x,
-							   a.y - b.y,
-							   a.z - b.z);
+			return new Vector3(a.X - b.X,
+							   a.Y - b.Y,
+							   a.Z - b.Z);
 		}
 
 		public static Vector3 operator /(Vector3 a, Vector3 b)
 		{
-			return new Vector3(a.x / b.x,
-								a.y / b.y,
-								a.z / b.z);
+			return new Vector3(a.X / b.X,
+								a.Y / b.Y,
+								a.Z / b.Z);
 		}
 
 		public static Vector3 operator /(Vector3 a, int b)
 		{
-			return new Vector3(a.x / b,
-								a.y / b,
-								a.z / b);
+			return new Vector3(a.X / b,
+								a.Y / b,
+								a.Z / b);
 		}
 
 		public static Vector3 operator *(Vector3 a, int b)
 		{
-			return new Vector3(a.x * b,
-								a.y * b,
-								a.z * b);
+			return new Vector3(a.X * b,
+								a.Y * b,
+								a.Z * b);
 		}
 
 		public double SquaredDistanceTo(Vector3 target)
 		{
 			target = target - this;
-			return (target.x * target.x) +
-				(target.y * target.y) +
-				(target.z * target.z);
+			return (target.X * target.X) +
+				(target.Y * target.Y) +
+				(target.Z * target.Z);
 		}
 		
 		
-		public readonly int x, y, z;
+		public readonly int X, Y, Z;
 
 		public override Boolean Equals(object obj)
 		{
@@ -114,7 +114,7 @@ namespace Sharplike.Mapping
 			{
 				Vector3 v = (Vector3)obj;
 
-				return this.x == v.x && this.y == v.y && this.z == v.z;
+				return this.X == v.X && this.Y == v.Y && this.Z == v.Z;
 			}
 			else
 			{
@@ -124,34 +124,34 @@ namespace Sharplike.Mapping
 
 		bool IEquatable<Vector3>.Equals(Vector3 other)
 		{
-			return (this.x == other.x && this.y == other.y && this.z == other.z);
+			return (this.X == other.X && this.Y == other.Y && this.Z == other.Z);
 		}
 
 		public override int GetHashCode()
 		{
-			return (x << 22) + (y << 11) + (z << 0);
+			return (X << 22) + (Y << 11) + (Z << 0);
 		}
 
 		public bool IntersectsWith(Rectangle r)
 		{
-			return this.x >= r.Left && this.x < r.Right && this.y >= r.Top && this.y < r.Bottom;
+			return this.X >= r.Left && this.X < r.Right && this.Y >= r.Top && this.Y < r.Bottom;
 		}
 
 		public bool IntersectsWithEllipse(Vector3 location, Vector3 range)
 		{
 			Vector3 test = this - location;
 			return
-				((double)(test.x * test.x) / (range.x * range.x)) +
-				((double)(test.y * test.y) / (range.y * range.y)) +
-				((double)(test.z * test.z) / (range.z * range.z))
+				((double)(test.X * test.X) / (range.X * range.X)) +
+				((double)(test.Y * test.Y) / (range.Y * range.Y)) +
+				((double)(test.Z * test.Z) / (range.Z * range.Z))
 				<= 1;
 		}
 
 		public bool IntersectsWithExtents(Vector3 location, Vector3 range)
 		{
 			Vector3 test = this - location;
-			return test.x < range.x && test.y < range.y && test.z < range.z && 
-				test.x >= 0 && test.y >= 0 && test.z >= 0;
+			return test.X < range.X && test.Y < range.Y && test.Z < range.Z && 
+				test.X >= 0 && test.Y >= 0 && test.Z >= 0;
 		}
 	}
 }

@@ -30,14 +30,19 @@ namespace Sharplike.Mapping
 
 		public virtual AbstractMap Map
 		{
-			get { return null; }
-			set { }
+			get;
+			set;
 		}
 
 		public virtual Vector3 Location
 		{
 			get { return Vector3.Zero; }
 			set { }
+		}
+
+		public virtual AbstractSquare Clone()
+		{
+			return (AbstractSquare)this.MemberwiseClone();
 		}
 	}
 }

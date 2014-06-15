@@ -18,7 +18,7 @@ namespace Sharplike.Tests.Sandbox
 		static Vector3 cameraVector = new Vector3(0, 0, 0);
 		static Boolean cameraMoved = true;
 		static MapStack map;
-		static ZColdCachingAlgorithm cache;
+		//static ZColdCachingAlgorithm cache;
 
 
 		//[STAThread]
@@ -65,11 +65,10 @@ namespace Sharplike.Tests.Sandbox
 			map.AddPage(new YellowWallPage(map.PageSize), new Vector3(1, 1, 1));
 			map.AddPage(new YellowWallPage(map.PageSize), new Vector3(-1, 0, 1));
 
-			cache = new ZColdCachingAlgorithm(map);
+			//cache = new ZColdCachingAlgorithm(map);
 
-			ent = new WanderingEntity();
+			ent = new WanderingEntity(map);
 			ent.Location = new Vector3(2, 2, 0);
-			ent.Map = map;
 
 			Sharplike.UI.Controls.Label l = new UI.Controls.Label(map);
 			l.Size = new Size(50, 1);
@@ -95,38 +94,38 @@ namespace Sharplike.Tests.Sandbox
 		{
 			map.BroadcastMessage(cameraVector, new Vector3(5, 5, 1), "Ping");
 
-			cache.ActiveLevel = cameraVector.z;
-			cache.AssessCache();
+			//cache.ActiveLevel = cameraVector.z;
+			//cache.AssessCache();
 
 			switch (e.CommandData.Command) {
 				case "move_left":
-					cameraVector = new Vector3(cameraVector.x - 1,
-										cameraVector.y, cameraVector.z);
+					cameraVector = new Vector3(cameraVector.X - 1,
+										cameraVector.Y, cameraVector.Z);
 					cameraMoved = true;
 					break;
 				case "move_right":
-					cameraVector = new Vector3(cameraVector.x + 1,
-										cameraVector.y, cameraVector.z);
+					cameraVector = new Vector3(cameraVector.X + 1,
+										cameraVector.Y, cameraVector.Z);
 					cameraMoved = true;
 					break;
 				case "move_up":
-					cameraVector = new Vector3(cameraVector.x,
-										cameraVector.y - 1, cameraVector.z);
+					cameraVector = new Vector3(cameraVector.X,
+										cameraVector.Y - 1, cameraVector.Z);
 					cameraMoved = true;
 					break;
 				case "move_down":
-					cameraVector = new Vector3(cameraVector.x,
-										cameraVector.y + 1, cameraVector.z);
+					cameraVector = new Vector3(cameraVector.X,
+										cameraVector.Y + 1, cameraVector.Z);
 					cameraMoved = true;
 					break;
 				case "move_in":
-					cameraVector = new Vector3(cameraVector.x,
-										cameraVector.y, cameraVector.z + 1);
+					cameraVector = new Vector3(cameraVector.X,
+										cameraVector.Y, cameraVector.Z + 1);
 					cameraMoved = true;
 					break;
 				case "move_out":
-					cameraVector = new Vector3(cameraVector.x,
-										cameraVector.y, cameraVector.z - 1);
+					cameraVector = new Vector3(cameraVector.X,
+										cameraVector.Y, cameraVector.Z - 1);
 					cameraMoved = true;
 					break;
 				case "spacebar":

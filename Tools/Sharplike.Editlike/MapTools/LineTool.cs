@@ -50,8 +50,8 @@ namespace Sharplike.Editlike.MapTools
 			{
 				foreach (Point p in Line(start, tile))
 				{
-					Vector3 loc = new Vector3(p.X + form.Map.View.x,
-						p.Y + form.Map.View.y, form.Map.View.z);
+					Vector3 loc = new Vector3(p.X + form.Map.View.X,
+						p.Y + form.Map.View.Y, form.Map.View.Z);
 					AbstractSquare sq = (AbstractSquare)node.CreateInstance();
 					change.AddOperation(form.Map.GetSafeSquare(loc), sq, loc);
 					form.Map.SetSquare(loc,	sq);

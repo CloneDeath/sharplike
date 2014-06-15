@@ -22,7 +22,7 @@ namespace Sharplike.Mapping
 		public ErrorSquare (Int32 g)
 		{
 			glyphs = new Glyph[1];
-			glyphs[0] = new Glyph(g, Color.Red);
+			glyphs[0] = new Glyph(g, Color.DarkRed);
 		}
 	}
 }

@@ -36,6 +36,8 @@ namespace Sharplike.Mapping.Squares
 
 		private Glyph CalculateAdjacencyGlyph(Vector3 myLoc)
 		{
+			if (Map == null) return new Glyph(0xC5, WallColor); //Solid block glyph
+
 			WallSquare north = Map.GetSafeSquare(myLoc + Vector3.North) as WallSquare;
 			WallSquare south = Map.GetSafeSquare(myLoc + Vector3.South) as WallSquare;
 			WallSquare east = Map.GetSafeSquare(myLoc + Vector3.East) as WallSquare;

@@ -91,7 +91,11 @@ namespace Sharplike.Frontend.Rendering
 		void Control_Paint(object sender, PaintEventArgs e)
 		{
 			Control.MakeCurrent();
-			DrawWindow();
+			try {
+				DrawWindow();
+			} catch (Exception ex) {
+				MessageBox.Show("Failed to repaint window. Reason: " + ex.Message + "\nStackTrace: " + ex.StackTrace);
+			}
 			Control.SwapBuffers();
 		}
 

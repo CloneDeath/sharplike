@@ -95,7 +95,7 @@ namespace Sharplike.Editlike
 		void Main_DragOver(object sender, DragEventArgs e)
 		{
 			Point tile = ScreenToTile(SharplikeView.PointToClient(new Point(e.X, e.Y)));
-			AbstractSquare sq = Map.GetSafeSquare(new Vector3(tile.X + Map.View.x, tile.Y + Map.View.y, Map.View.z));
+			AbstractSquare sq = Map.GetSafeSquare(new Vector3(tile.X + Map.View.X, tile.Y + Map.View.Y, Map.View.Z));
 			if (sq != null && sq.IsPassable(Direction.Here))
 			{
 				e.Effect = DragDropEffects.Copy;
@@ -110,7 +110,7 @@ namespace Sharplike.Editlike
 		{
 			Point tile = ScreenToTile(SharplikeView.PointToClient(new Point(e.X, e.Y)));
 
-			Vector3 maploc = new Vector3(tile.X + Map.View.x, tile.Y + Map.View.y, Map.View.z);
+			Vector3 maploc = new Vector3(tile.X + Map.View.X, tile.Y + Map.View.Y, Map.View.Z);
 			AbstractSquare sq = Map.GetSafeSquare(maploc);
 			if (sq != null && sq.IsPassable(Direction.Here))
 			{

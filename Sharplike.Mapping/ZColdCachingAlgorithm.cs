@@ -25,7 +25,7 @@ namespace Sharplike.Mapping
 
 			foreach (AbstractPage page in pages)
 			{
-				if (page.address.z == this.ActiveLevel)
+				if (page.address.Z == this.ActiveLevel)
 				{
 					this.SetPageMode(page, CachingMode.Active);
 				}
