@@ -7,11 +7,11 @@ using OpenTK;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 
-namespace Sharplike.Audio.TK
+namespace Sharplike.OpenTK.Audio
 {
-	public class OpenTKAudioCue : AbstractAudioCue
+	internal class TKAudioCue : AbstractAudioCue
 	{
-		internal OpenTKAudioCue(Stream data, AudioContext ac)
+		internal TKAudioCue(Stream data, AudioContext ac)
 		{
 			this.ac = ac;
 

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Addin id="Sharplike.OpenTK" author="Sharplike Team" version="1.0">
+	<Runtime>
+		<Import assembly="OpenTK.dll" />
+		<Import assembly="OpenTK.GLControl.dll" />
+		<Import assembly="Sharplike.OpenTK.dll" />
+	</Runtime>
+
+	<Dependencies>
+		<Addin id="Sharplike.Core" version="1.0" />
+	</Dependencies>
+
+	<Extension path="/Sharplike/Rendering">
+		<Engine name="OpenTK Rendering Engine" id="OpenTK" type="Sharplike.OpenTK.Rendering.TKRenderSystem" />
+	</Extension>
+	
+	<Extension path="/Sharplike/Input">
+		<Provider name="OpenTK Input Provider" id="OpenTK" type="Sharplike.OpenTK.Input.TKInputProvider" />
+	</Extension>
+
+  <Extension path="/Sharplike/Audio">
+    <Engine name="OpenTK Audio Engine" id="OpenTK" type="Sharplike.OpenTK.Audio.TKAudioEngine" />
+  </Extension>
+</Addin>

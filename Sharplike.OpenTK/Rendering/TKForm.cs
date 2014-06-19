@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Sharplike.Frontend.Rendering
+namespace Sharplike.OpenTK.Rendering
 {
 	partial class TKForm : Form
 	{

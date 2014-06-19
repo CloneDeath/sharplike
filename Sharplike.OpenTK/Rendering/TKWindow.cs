@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using Sharplike.Core;
 using Sharplike.Core.Rendering;
 
-namespace Sharplike.Frontend.Rendering
+namespace Sharplike.OpenTK.Rendering
 {
 	/// <summary>
 	/// A display window that uses OpenGL (via OpenTK) to render the game display.
@@ -60,7 +60,7 @@ namespace Sharplike.Frontend.Rendering
 			BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
-				OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
+				global::OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmp_data.Scan0);
 
 			bmp.UnlockBits(bmp_data);
 

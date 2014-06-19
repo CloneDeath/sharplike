@@ -92,17 +92,17 @@
       <Project>{564891ED-C475-48C7-99F9-F3801C06EB14}</Project>
       <Name>Sharplike.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sharplike.Frontend.TK\Sharplike.Frontend.TK.csproj">
+    <ProjectReference Include="..\Sharplike.OpenTK\Sharplike.OpenTK.csproj">
       <Project>{2B82557B-4746-4260-BB15-6374016D4D1C}</Project>
-      <Name>Sharplike.Frontend.TK</Name>
+      <Name>Sharplike.OpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sharplike.Mapping\Sharplike.Mapping.csproj">
+    <ProjectReference Include="..\Sharplike.Core.Mapping\Sharplike.Core.Mapping.csproj">
       <Project>{B822FFE1-D0E3-401E-9854-EA9135A585F4}</Project>
-      <Name>Sharplike.Mapping</Name>
+      <Name>Sharplike.Core.Mapping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sharplike.UI\Sharplike.UI.csproj">
+    <ProjectReference Include="..\Sharplike.Core.UI\Sharplike.Core.UI.csproj">
       <Project>{A1594427-AD60-4A97-8606-E784D9287043}</Project>
-      <Name>Sharplike.UI</Name>
+      <Name>Sharplike.Core.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

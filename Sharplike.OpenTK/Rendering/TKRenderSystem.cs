@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Sharplike.Core.Rendering;
 
-namespace Sharplike.Frontend.Rendering
+namespace Sharplike.OpenTK.Rendering
 {
 	public class TKRenderSystem : AbstractRenderSystem
 	{

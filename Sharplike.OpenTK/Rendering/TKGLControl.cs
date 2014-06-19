@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using OpenTK;
 
-namespace Sharplike.Frontend.Rendering
+namespace Sharplike.OpenTK.Rendering
 {
-	public class TKGLControl : OpenTK.GLControl
+	public class TKGLControl : GLControl
 	{
 		protected override bool IsInputKey(Keys keyData)
 		{

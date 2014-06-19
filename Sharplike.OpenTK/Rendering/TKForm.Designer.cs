@@ -1,4 +1,4 @@
-﻿namespace Sharplike.Frontend.Rendering
+﻿namespace Sharplike.OpenTK.Rendering
 {
 	partial class TKForm
 	{

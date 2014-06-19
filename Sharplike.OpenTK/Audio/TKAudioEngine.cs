@@ -5,18 +5,18 @@ using System.IO;
 using Sharplike.Core.Audio;
 using OpenTK.Audio;
 
-namespace Sharplike.Audio.TK
+namespace Sharplike.OpenTK.Audio
 {
-	public class OpenTKAudioEngine : AbstractAudioEngine
+	internal class TKAudioEngine : AbstractAudioEngine
 	{
-		public OpenTKAudioEngine()
+		public TKAudioEngine()
 		{
 			ac = new AudioContext();
 			ac.CheckErrors();
 		}
 		public override AbstractAudioCue BuildAudioCue(Stream audioData)
 		{
-			return new OpenTKAudioCue(audioData, ac);
+			return new TKAudioCue(audioData, ac);
 		}
 
 		public override void Process()

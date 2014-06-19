@@ -4,12 +4,11 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using OpenTK;
-using Sharplike.Core;
 using Sharplike.Core.Input;
-using Sharplike.Frontend;
-using Sharplike.Frontend.Rendering;
+using Sharplike.OpenTK.Rendering;
+using Sharplike.Core;
 
-namespace Sharplike.Frontend.Input
+namespace Sharplike.OpenTK.Input
 {
 	public class TKInputProvider : AbstractInputProvider
 	{
