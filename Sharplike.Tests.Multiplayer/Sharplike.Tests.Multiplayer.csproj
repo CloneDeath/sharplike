@@ -5,18 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{02291E61-9AD1-4330-97A0-7589459C7581}</ProjectGuid>
+    <ProjectGuid>{08F5E7D3-5EC0-40BB-A146-AEF5E9D64846}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sharplike.Tests.UI</RootNamespace>
-    <AssemblyName>Sharplike.Tests.UI</AssemblyName>
+    <RootNamespace>Sharplike.Tests.Multiplayer</RootNamespace>
+    <AssemblyName>Sharplike.Tests.Multiplayer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Sharplike.Tests.UI.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>bin\Debug\Sharplike.Tests.Multiplayer.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -40,7 +36,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Sharplike.Tests.UI.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>bin\Release\Sharplike.Tests.Multiplayer.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -54,7 +50,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,7 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainMenuState2.cs" />
     <Compile Include="MainMenuState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,14 +70,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sharplike.Core\Sharplike.Core.csproj">
-      <Project>{564891ED-C475-48C7-99F9-F3801C06EB14}</Project>
-      <Name>Sharplike.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sharplike.OpenTK\Sharplike.OpenTK.csproj">
-      <Project>{2B82557B-4746-4260-BB15-6374016D4D1C}</Project>
-      <Name>Sharplike.OpenTK</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sharplike.Core.Mapping\Sharplike.Core.Mapping.csproj">
       <Project>{B822FFE1-D0E3-401E-9854-EA9135A585F4}</Project>
       <Name>Sharplike.Core.Mapping</Name>
@@ -92,12 +78,20 @@
       <Project>{A1594427-AD60-4A97-8606-E784D9287043}</Project>
       <Name>Sharplike.Core.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sharplike.Core\Sharplike.Core.csproj">
+      <Project>{564891ED-C475-48C7-99F9-F3801C06EB14}</Project>
+      <Name>Sharplike.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharplike.Multiplayer\Sharplike.Multiplayer.csproj">
+      <Project>{E762DD78-0DA4-4B08-BC9A-1CB4E6EE0F92}</Project>
+      <Name>Sharplike.Multiplayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharplike.OpenTK\Sharplike.OpenTK.csproj">
+      <Project>{2B82557B-4746-4260-BB15-6374016D4D1C}</Project>
+      <Name>Sharplike.OpenTK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

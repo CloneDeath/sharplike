@@ -1,0 +1,4 @@
+https://code.google.com/p/lidgren-network-gen3/
+
+Still waiting for official NuGet package... In the meantime, here's the binaries.
+Replace these with the NuGet package once Michael Lidgren releases them.
